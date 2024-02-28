@@ -1,0 +1,30 @@
+name: lab1-sample
+
+on:
+    push:
+        branches:
+            - "**lab1**"
+    pull_request:
+        branches:
+            - "**lab1**"
+
+jobs:
+    build:
+        runs-on: ${{ matrix.os }}
+        strategy:
+            matrix:
+                os: [ubuntu-22.04]
+            fail-fast: false
+        steps:
+            - uses: actions/checkout@v1
+              with:
+                  fetch-depth: 1
+            - name: dependency (ubuntu)
+              run: |
+                  curl -fsSL https://deb.nodesource.com/setup_21.x | sudo -E bash - &&\
+                  sudo apt-get install -y nodejs
+            - name: grading
+              run: |
+                  echo "cd lab1"
+                  cd lab1
+                  ./validate.sh
