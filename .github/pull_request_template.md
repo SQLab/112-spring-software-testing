@@ -12,3 +12,4 @@
 - [ ] From your specific branch (***not master***) merging to your branch
 - [ ] Excluding any irrelevant files, such as binaries, text files, or dot files
 - [ ] Passing tests/CI
+- [ ] Add proper label for this PR

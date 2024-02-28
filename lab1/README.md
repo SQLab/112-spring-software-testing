@@ -2,15 +2,16 @@
 
 ## Introduction
 
-In this lab, you must write unit tests for functions implemented in `main.js`. You can learn how to use classes and functions in it by uncommenting the code in `main.js.` However, you must not alter any lines in it when you handle your code.
+In this lab, you will write unit tests for functions implemented in `main.js`. You can learn how to use classes and functions in it by uncommenting the code in `main.js.`
 
 ## Requirement
 
-1. Write test cases in `main_test.js` and make it to pass the test.
-2. Achieve 100% code coverage.
-3. Add a badge and make it show `passing` in `README.md` in the root folder.
+1. Write test cases in `main_test.js` and achieve 100% code coverage. (90%)
+2. Add a badge and make it show `passing` in `README.md` in the root folder. (10%)
 
 You can run `validate.sh` in your local to test if you satisfy the requirements.
+
+Please note that you must not alter files other than `main_test.js`. You will get 0 points if you modify other files to achieve requirements.
 
 ## Submission
 
