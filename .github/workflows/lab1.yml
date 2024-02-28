@@ -1,15 +1,12 @@
-name: lab1-sample
+name: lab1
 
 on:
-    push:
-        branches:
-            - "**lab1**"
     pull_request:
-        branches:
-            - "**lab1**"
+        types: [labeled]
 
 jobs:
     build:
+        if: ${{ github.event.label.name == 'lab1' }}
         runs-on: ${{ matrix.os }}
         strategy:
             matrix:
