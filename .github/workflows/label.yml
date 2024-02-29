@@ -1,0 +1,23 @@
+name: Automatic PR Labeler
+on:
+    pull_request:
+        types: [opened, reopened, edited]
+
+jobs:
+    labeler:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Label PR
+              uses: actions/github-script@v5
+              with:
+                  script: |
+                      const { owner, repo, number: issue_number } = context.issue;
+                      const pr = await github.rest.pulls.get({ owner, repo, pull_number: issue_number });
+                      const title = pr.data.title;
+                      const labRegex = /\[LAB(\d+)\]/i;
+
+                      const match = title.match(labRegex);
+                      if (match) {
+                        const labelToAdd = 'lab' + match[1];
+                        await github.rest.issues.addLabels({ owner, repo, issue_number, labels: [labelToAdd] });
+                      }
