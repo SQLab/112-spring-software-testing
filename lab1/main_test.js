@@ -4,20 +4,39 @@ const { MyClass, Student } = require('./main');
 
 test("Test MyClass's addStudent", () => {
     // TODO
-    throw new Error("Test not implemented");
+    const cls = new(MyClass)
+    assert.strictEqual(-1, cls.addStudent(555)) //not the type of Student instance
+    assert.strictEqual(0, cls.addStudent(new Student())) //add 1 student , should return 0
+    assert.strictEqual(1, cls.addStudent(new Student()))
+    assert.strictEqual(2, cls.addStudent(new Student()))
 });
 
 test("Test MyClass's getStudentById", () => {
     // TODO
-    throw new Error("Test not implemented");
+    const cls = new(MyClass)
+
 });
 
 test("Test Student's setName", () => {
     // TODO
-    throw new Error("Test not implemented");
+    const s = new Student()
+    assert.strictEqual(undefined, s.name)
+
+    s.setName(123456)
+    assert.strictEqual(undefined, s.name)
+
+    const str = "Ian"
+    s.setName(str)
+    assert.strictEqual(str, s.name)
+
 });
 
 test("Test Student's getName", () => {
     // TODO
-    throw new Error("Test not implemented");
+    const s = new Student()
+    assert.strictEqual('', s.getName())
+    const str = "Ian"
+    s.setName(str)
+    assert.strictEqual(str, s.getName())
+    
 });
