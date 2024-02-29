@@ -46,6 +46,10 @@ test("Test Student's setName", () => {
 });
 
 test("Test Student's getName", () => {
-    // TODO
-    throw new Error("Test not implemented");
+    const student = new Student();
+    // Test if getName returns empty string if name is undefined
+    assert.strictEqual(student.getName(), '');
+    // Test if getName returns the name set by setName
+    student.setName('John');
+    assert.strictEqual(student.getName(), 'John');
 });
