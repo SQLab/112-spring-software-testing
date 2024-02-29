@@ -4,7 +4,7 @@ const { MyClass, Student } = require('./main');
 
 test("Test MyClass's addStudent", () => {
     // TODO
-    throw new Error("Test not implemented");
+    throw new Error("Test not implemented");;;
 });
 
 test("Test MyClass's getStudentById", () => {
