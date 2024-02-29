@@ -3,7 +3,8 @@ const assert = require('assert');
 const { MyClass, Student } = require('./main');
 
 test("Test MyClass's addStudent", () => {
-    // TODO
+    //TODO
+    testetest;
     throw new Error("Test not implemented");
 });
 
