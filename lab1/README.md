@@ -6,8 +6,7 @@ In this lab, you will write unit tests for functions implemented in `main.js`. Y
 
 ## Requirement
 
-1. Write test cases in `main_test.js` and achieve 100% code coverage. (90%)
-2. Add a badge and make it show `passing` in `README.md` in the root folder. (10%)
+1. Write test cases in `main_test.js` and achieve 100% code coverage. (100%)
 
 You can run `validate.sh` in your local to test if you satisfy the requirements.
 
