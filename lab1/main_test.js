@@ -16,7 +16,6 @@ test("Test MyClass's addStudent", () => {
         assert.strictEqual(myClass.students.length, i+1);
         assert.strictEqual(stdid, i);
     }
-    // throw new Error("Test not implemented");
 });
 
 test("Test MyClass's getStudentById", () => {
@@ -37,7 +36,6 @@ test("Test MyClass's getStudentById", () => {
     assert.strictEqual(student, null);
     let student2 = myClass.getStudentById(100);
     assert.strictEqual(student2, null);
-    // throw new Error("Test not implemented");
 });
 
 test("Test Student's setName", () => {
@@ -50,8 +48,6 @@ test("Test Student's setName", () => {
         student.setName(name);
         assert.strictEqual(student.getName(), name);
     }
-
-    // throw new Error("Test not implemented");
 });
 
 test("Test Student's getName", () => {
@@ -62,6 +58,4 @@ test("Test Student's getName", () => {
         student.setName(name);
         assert.strictEqual(student.getName(), name);
     }
-
-    // throw new Error("Test not implemented");
 });
