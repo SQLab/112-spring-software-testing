@@ -4,7 +4,7 @@ const { MyClass, Student } = require('./main');
 
 test("Test MyClass's addStudent", () => {
     //TODO
-    const myclass = new MyClass();
+    const a = new MyClass();
     assert.strictEqual(myclass.addStudent(), 0);
     assert.strictEqual(myclass.addStudent(), 1);
     assert.strictEqual("Return -1", -1);
@@ -35,7 +35,7 @@ test("Test MyClass's getStudentById", () => {
 test("Test Student's setName", () => {
     // TODO
     const student = new Student();
-    assert.strictEqual(student.name("std1"), undefined);
+    assert.strictEqual(student.name, undefined);
     student.setName("std1");
     assert.strictEqual(student.name, "std1");
     throw new Error("Test not implemented");
