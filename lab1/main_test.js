@@ -28,7 +28,7 @@ test("Test MyClass's getStudentById", () => {
 
     let foundStudent = myClass.getStudentById(0);
     assert.strictEqual(foundStudent.getName(), "one", "getStudentById should return the correct student for a valid id");
-
+    
     foundStudent = myClass.getStudentById(-1);
     assert.strictEqual(foundStudent, null, "getStudentById should return null for an invalid id");
 
