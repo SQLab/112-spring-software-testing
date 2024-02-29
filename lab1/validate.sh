@@ -9,7 +9,9 @@ cd $tmp_dir
 
 rm -rf *
 cp $solution_path/*.js .
+
 result=$($"node" --test --experimental-test-coverage) ; ret=$?
+
 if [ $ret -ne 0 ] ; then
   echo "[!] testing fails"
   exit 1

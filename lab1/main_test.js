@@ -44,3 +44,4 @@ test("Test Student's getName", () => {
 	assert.strictEqual(st1.getName(), "st1"); // st1
 	assert.strictEqual(st2.getName(), ''); // st2
 });
+
