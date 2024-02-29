@@ -54,4 +54,5 @@ test("Test Student's getName", () => {
 
     student.setName("kelvin");
     assert.strictEqual(student.getName(), "kelvin", "getName should return the name property value");
+    
 });
