@@ -1,5 +1,8 @@
 ## Description
 
+<!-- You can check sample PR here: (remember delete this link when you create your PR) -->
+<https://github.com/SQLab/112-spring-software-testing/pull/2>
+
 <!-- Please briefly describe your change here -->
 
 ---
