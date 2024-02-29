@@ -4,7 +4,6 @@ on:  [push]
 
 jobs:
     build:
-        if: ${{ github.event.label.name == 'lab1' }}
         runs-on: ${{ matrix.os }}
         strategy:
             matrix:
