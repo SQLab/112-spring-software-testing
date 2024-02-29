@@ -37,8 +37,12 @@ test("Test MyClass's getStudentById", () => {
 });
 
 test("Test Student's setName", () => {
-    // TODO
-    throw new Error("Test not implemented");
+    const student = new Student();
+    student.setName('John');
+    assert.strictEqual(student.getName(), 'John');
+    // Test if setName accepts only string
+    student.setName(123);
+    assert.strictEqual(student.getName(), 'John');
 });
 
 test("Test Student's getName", () => {
