@@ -13,8 +13,16 @@ test("Test MyClass's addStudent", () => {
 
 test("Test MyClass's getStudentById", () => {
     // TODO
-    const cls = new(MyClass)
+    const cls = new MyClass();
+    const s = new Student();
+    s.setName('Ian');
+    cls.addStudent(s);
+    cls.addStudent(new Student());
 
+    assert.strictEqual(null, cls.getStudentById(-1) );
+    assert.strictEqual(null, cls.getStudentById(3) )
+    assert.strictEqual(s, cls.getStudentById(0) )
+    
 });
 
 test("Test Student's setName", () => {
