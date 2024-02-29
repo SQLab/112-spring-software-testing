@@ -19,8 +19,21 @@ test("Test MyClass's addStudent", () => {
 });
 
 test("Test MyClass's getStudentById", () => {
-    // TODO
-    throw new Error("Test not implemented");
+    const myClass = new MyClass();
+    // if id is less than 0, return null
+    assert.strictEqual(myClass.getStudentById(-1), null);
+
+    // normal case
+    const names = ['John', 'Jane', 'Doe', 'Smith'];
+    names.forEach(name => {
+        const student = new Student();
+        student.setName(name);
+        const newStudentId = myClass.addStudent(student);
+        const newStudent = myClass.getStudentById(newStudentId);
+        assert.strictEqual(student, newStudent);
+    });
+    // if id is greater than or equal to the length of students, return null
+    assert.strictEqual(myClass.getStudentById(names.length), null);
 });
 
 test("Test Student's setName", () => {
