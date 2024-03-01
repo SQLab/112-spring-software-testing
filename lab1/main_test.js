@@ -11,7 +11,11 @@ test("Test MyClass's getStudentById", () => {
 });
 
 test("Test Student's setName", () => {
-    
+    let student = new Student();
+    student.setName("John");
+    assert.strictEqual(student.name, "John");
+    student.setName(123);
+    assert.strictEqual(student.name, "John");
 });
 
 test("Test Student's getName", () => {
