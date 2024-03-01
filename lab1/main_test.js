@@ -3,7 +3,10 @@ const assert = require('assert');
 const { MyClass, Student } = require('./main');
 
 test("Test MyClass's addStudent", () => {
-    
+    let class1 = new MyClass();
+    assert.strictEqual(class1.addStudent(123), -1);
+    let student = new Student();
+    assert.strictEqual(class1.addStudent(student), 0);
 });
 
 test("Test MyClass's getStudentById", () => {
