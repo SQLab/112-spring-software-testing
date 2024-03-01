@@ -10,7 +10,11 @@ test("Test MyClass's addStudent", () => {
 });
 
 test("Test MyClass's getStudentById", () => {
-    
+    let class1 = new MyClass();
+    let student = new Student();
+    class1.addStudent(student);
+    assert.strictEqual(class1.getStudentById(-1), null);
+    assert.strictEqual(class1.getStudentById(0), student);
 });
 
 test("Test Student's setName", () => {
