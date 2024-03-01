@@ -19,5 +19,8 @@ test("Test Student's setName", () => {
 });
 
 test("Test Student's getName", () => {
-    
+    let student = new Student();
+    assert.strictEqual(student.getName(), "");
+    student.setName("John");
+    assert.strictEqual(student.getName(), "John");
 });
