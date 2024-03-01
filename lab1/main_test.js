@@ -54,6 +54,9 @@ test("Test Student's setName", () => {
 		student.setName(name);
 		assert.strictEqual(student.getName(), name);
 	});
+	
+	const student = new Student();
+	assert.strictEqual(student.setName(12345), undefined);
 
 });
 
