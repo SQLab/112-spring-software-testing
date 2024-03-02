@@ -52,7 +52,7 @@ test("Test Student's getName", () => {
     student2.setName(name);
     const ret_str2 = student2.getName();
 
-    assert.strictEqual(ret_str1, '', "setName failed, should be empty");
-    assert.strictEqual(ret_str2, name, "setName failed, should be Jane");
+    assert.strictEqual(ret_str1, '', "getName failed, should be empty");
+    assert.strictEqual(ret_str2, name, "getName failed, should be Jane");
 
 });
