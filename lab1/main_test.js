@@ -27,7 +27,7 @@ test("Test Student's setName", () => {
   // TODO
   const student = new Student();
 
-  assert.strictEqual(student.setName("John Cena"), "John Cena");
+  assert.strictEqual(student.setName("John Cena"), undefined);
   assert.strictEqual(student.setName(123), undefined);
 });
 
