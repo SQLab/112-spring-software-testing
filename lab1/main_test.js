@@ -27,6 +27,8 @@ test("Test Student's setName", () => {
 
     const student = new Student();
     assert.strictEqual(student.setName("stu"),undefined);
+    assert.strictEqual(student.getName(),"stu");
+    assert.strictEqual(student.setName(123),undefined);
     // TODO
     //throw new Error("Test not implemented");
 });
