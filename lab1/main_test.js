@@ -2,7 +2,7 @@ const test = require('node:test');
 const assert = require('assert');
 const { MyClass, Student } = require('./main');
 
-// I didn't change anything but still comit it for demo
+// I didn't change anything but still commit it for demo
 
 test("Test MyClass's addStudent", () => {
     // TODO
