@@ -8,7 +8,7 @@ test("Test MyClass's addStudent", () => {
 });
 
 test("Test MyClass's getStudentById", () => {
-    // TODO 
+    // TODO
     throw new Error("Test not implemented");
 });
 
