@@ -12,7 +12,8 @@ test("Test MyClass's addStudent", () => {
     assert.strictEqual(myClass.students.length, 1);
     assert.strictEqual(myClass.getStudentById(0), student);
 
-
+    const index2 = myClass.addStudent("Not student type");
+    assert.strictEqual(index2, -1);
 });
 
 test("Test MyClass's getStudentById", () => {
@@ -25,24 +26,31 @@ test("Test MyClass's getStudentById", () => {
 
     assert.strictEqual(retrievedStudent, student);
 
+    const retrievedStudent2 = myClass.getStudentById(-100);
+    assert.strictEqual(retrievedStudent2, null);
+
+
 });
 
 test("Test Student's setName", () => {
 
     const student = new Student();
     student.setName("Charlie");
-
     assert.strictEqual(student.name, "Charlie");
+
+    student.setName(123);
+    assert.strictEqual(student.name, "Charlie")
 
 });
 
 test("Test Student's getName", () => {
 
     const student = new Student();
-    student.setName("David");
-
     const name = student.getName();
+    assert.strictEqual(name, "");
 
-    assert.strictEqual(name, "David");
+    student.setName("David");
+    const name2 = student.getName();
+    assert.strictEqual(name2, "David");
 
 });
