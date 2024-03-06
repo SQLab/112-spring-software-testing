@@ -42,14 +42,14 @@ class Student {
     }
 }
 
-// const myClass = new MyClass();
-// const names = ['John', 'Jane', 'Doe', 'Smith'];
-// names.forEach(name => {
-//     const student = new Student();
-//     student.setName(name);
-//     const newStudentId = myClass.addStudent(student);
-//     const newStudentName = myClass.getStudentById(newStudentId).getName();
-//     console.log('[+] Added student with id: %d, name: %s', newStudentId, newStudentName);
-// });
+const myClass = new MyClass();
+const names = ['John', 'Jane', 'Doe', 'Smith'];
+names.forEach(name => {
+    const student = new Student();
+    student.setName(name);
+    const newStudentId = myClass.addStudent(student);
+    const newStudentName = myClass.getStudentById(newStudentId).getName();
+    console.log('[+] Added student with id: %d, name: %s', newStudentId, newStudentName);
+});
 
 module.exports = { MyClass, Student };
