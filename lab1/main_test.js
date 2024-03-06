@@ -3,21 +3,46 @@ const assert = require('assert');
 const { MyClass, Student } = require('./main');
 
 test("Test MyClass's addStudent", () => {
-    // TODO
-    throw new Error("Test not implemented");
+
+    const myClass = new MyClass();
+    const student = new Student();
+    const index = myClass.addStudent(student);
+
+    assert.strictEqual(index, 0);
+    assert.strictEqual(myClass.students.length, 1);
+    assert.strictEqual(myClass.getStudentById(0), student);
+
+
 });
 
 test("Test MyClass's getStudentById", () => {
-    // TODO
-    throw new Error("Test not implemented");
+
+    const myClass = new MyClass();
+    const student = new Student();
+    myClass.addStudent(student);
+
+    const retrievedStudent = myClass.getStudentById(0);
+
+    assert.strictEqual(retrievedStudent, student);
+
 });
 
 test("Test Student's setName", () => {
-    // TODO
-    throw new Error("Test not implemented");
+
+    const student = new Student();
+    student.setName("Charlie");
+
+    assert.strictEqual(student.name, "Charlie");
+
 });
 
 test("Test Student's getName", () => {
-    // TODO
-    throw new Error("Test not implemented");
+
+    const student = new Student();
+    student.setName("David");
+
+    const name = student.getName();
+
+    assert.strictEqual(name, "David");
+
 });
