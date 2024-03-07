@@ -1,4 +1,4 @@
-# Lab1
+# Lab2
 
 ## Introduction
 
