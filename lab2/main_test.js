@@ -4,8 +4,6 @@ const { Application, MailSystem } = require('./main');
 const fs = require('fs');
 const util = require('util');
 const writeFile = util.promisify(fs.writeFile);
-// TODO: write your tests here
-// Remember to use Stub, Mock, and Spy when necessary
 test('test mailsystem', (t) =>{
     const mailsystem = new MailSystem();
     const name = 'Jim';
