@@ -12,17 +12,11 @@ for branch in $(git branch -r | grep -v HEAD); do
             echo "Checkout failed for branch $branch"
             exit 1
         fi
-        git pull origin "$branch"
-        if [[ $? -ne 0 ]]; then
-            echo "Pull failed for branch $branch"
-            exit 1
-        fi
         git rebase main
         if [[ $? -ne 0 ]]; then
             echo "Rebase failed for branch $branch"
             exit 1
         fi
-        git push origin "$branch"
     fi
 done
 
