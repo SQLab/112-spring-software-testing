@@ -1,5 +1,13 @@
 #!/bin/bash
 
+# Check for unwanted files
+for file in *; do
+  if [[ $file != "main.js" && $file != "main_test.js" && $file != "README.md" && $file != "validate.sh" ]]; then
+    echo "[!] Unwanted file detected: $file."
+    exit 1
+  fi
+done
+
 node=$(which node)
 test_path="${BASH_SOURCE[0]}"
 solution_path="$(realpath .)"
