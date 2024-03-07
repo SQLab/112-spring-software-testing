@@ -15,4 +15,3 @@
 - [ ] From your specific branch (***not main or other's branch***) merging to your branch
 - [ ] Excluding any irrelevant files, such as binaries, text files, or dot files
 - [ ] Passing tests/CI
-- [ ] Add proper label for this PR
