@@ -1,0 +1,60 @@
+name: PR automation
+on:
+    pull_request_target:
+        types: [opened, reopened, edited, ready_for_review]
+
+jobs:
+    labeler:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Label PR
+              uses: actions/github-script@v5
+              with:
+                  github-token: ${{ secrets.PAT }}
+                  script: |
+                      const { owner, repo, number: issue_number } = context.issue;
+                      const pr = await github.rest.pulls.get({ owner, repo, pull_number: issue_number });
+                      const title = pr.data.title;
+                      const labRegex = /\[LAB(\d+)\]/;
+                      const titleRegex = /^\[LAB\d+\] [\da-zA-Z]+$/;
+
+                      if (!titleRegex.test(title)) {
+                        core.setFailed('PR title does not match the required format. Please use the format [LAB#] student#.');
+                      }
+
+                      if (pr.data.head.ref !== pr.data.base.ref) {
+                        core.setFailed('The source branch and target branch must be the same.');
+                      }
+
+                      if (pr.data.base.ref === 'main') {
+                        core.setFailed('The target branch cannot be main.');
+                      }
+
+                      const match = title.match(labRegex);
+                      if (match) {
+                        const labelToAdd = 'lab' + match[1];
+                        await github.rest.issues.addLabels({ owner, repo, issue_number, labels: [labelToAdd] });
+                      } else {
+                        core.setFailed('No match found in PR title. Please add a label in the format [LAB#] to the PR title.');
+                      }
+    checklist-check:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Check PR description
+              uses: actions/github-script@v5
+              with:
+                  github-token: ${{ secrets.GITHUB_TOKEN }}
+                  script: |
+                      const { owner, repo, number: issue_number } = context.issue;
+                      const pr = await github.rest.pulls.get({ owner, repo, pull_number: issue_number });
+                      const body = pr.data.body;
+
+                      const checkboxes = body.match(/\- \[[x ]\]/g);
+                      if (!checkboxes || checkboxes.length !== 5) {
+                        core.setFailed('The PR description must contain exactly 5 checkboxes.');
+                      }
+
+                      const unchecked = body.match(/\- \[ \]/g);
+                      if (unchecked && unchecked.length > 0) {
+                        core.setFailed(`There are ${unchecked.length} unchecked items in the PR description.`);
+                      }
