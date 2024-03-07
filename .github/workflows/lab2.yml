@@ -1,4 +1,4 @@
-name: lab1 autograding
+name: lab2 autograding
 
 on:
     pull_request:
@@ -6,7 +6,7 @@ on:
 
 jobs:
     build:
-        if: contains(github.event.pull_request.labels.*.name, 'lab1')
+        if: contains(github.event.pull_request.labels.*.name, 'lab2')
         runs-on: ${{ matrix.os }}
         strategy:
             matrix:
@@ -22,5 +22,5 @@ jobs:
                   sudo apt-get install -y nodejs
             - name: grading
               run: |
-                  cd lab1
+                  cd lab2
                   ./validate.sh
