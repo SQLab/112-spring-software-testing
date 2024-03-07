@@ -16,7 +16,7 @@ jobs:
                       const pr = await github.rest.pulls.get({ owner, repo, pull_number: issue_number });
                       const title = pr.data.title;
                       const labRegex = /\[LAB(\d+)\]/;
-                      const titleRegex = /\[LAB\d+\] [\da-zA-Z]+/;
+                      const titleRegex = /^\[LAB\d+\] [\da-zA-Z]+$/;
 
                       if (!titleRegex.test(title)) {
                         core.setFailed('PR title does not match the required format. Please use the format [LAB#] student#.');
