@@ -1,9 +1,17 @@
 #!/bin/bash
 
+# Check for unwanted files
+for file in *; do
+  if [[ $file != "main.js" && $file != "main_test.js" && $file != "README.md" && $file != "validate.sh" ]]; then
+    echo "[!] Unwanted file detected: $file."
+    exit 1
+  fi
+done
+
 node=$(which node)
 test_path="${BASH_SOURCE[0]}"
 solution_path="$(realpath .)"
-tmp_dir=$(mktemp -d -t lab1-XXXXXXXXXX)
+tmp_dir=$(mktemp -d -t lab2-XXXXXXXXXX)
 
 cd $tmp_dir
 
@@ -15,7 +23,6 @@ if [ $ret -ne 0 ] ; then
   exit 1
 else
   coverage=$(echo "$result" | grep 'all files' | awk -F '|' '{print $2}' | sed 's/ //g')
-  echo $result
   if (( $(echo "$coverage < 100" | bc -l) )); then
     echo "[!] Coverage is only $coverage%"
     exit 1
