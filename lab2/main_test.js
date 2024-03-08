@@ -23,10 +23,15 @@ const fs = require('fs');
 const util = require('util');
 const writeFile = util.promisify(fs.writeFile);
 
-test('test application', async (t) => {
-    const application = new Application();
+test('create file', async (t) => {
     const file_content = "Gary\nPeter";
     await writeFile('name_list.txt', file_content, 'utf-8');   // create a fake file
+});
+
+test('test application', async (t) => {
+    const application = new Application();
+    // const file_content = "Gary\nPeter";
+    // await writeFile('name_list.txt', file_content, 'utf-8');   // create a fake file
 
     // ========================== getName =============================
 
@@ -79,5 +84,7 @@ test('test application', async (t) => {
     assert.strictEqual(notify_respond, undefined);
 
     // ================================================================
+
+    fs.unlinkSync('name_list.txt'); // delete test file
 });
 
