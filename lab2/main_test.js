@@ -2,92 +2,92 @@ const test = require('node:test');
 const assert = require('assert');
 const { Application, MailSystem } = require('./main');
 
-var lastLog;
-console.oldLog = console.log;
-console.log = function(str){
-    console.oldLog(str);
-    lastLog = str;
-}
+const fs = require('fs');
+const util = require('util');
+const writeFile = util.promisify(fs.writeFile);
 
-test('selected should be []', () => {
-    const app = new Application();
-    app.getNames().then(([people, selected]) => {
-        assert(app.selected.length == 0, "Test not implemented");
-    });
+test('test MailSystem', (t) => {
+    const mailsystem = new MailSystem();
+    n = 'John'
+    function write(){
+        return mailsystem.write(n)
+    }function send(){
+        context = mailsystem.write(n);
+        return mailsystem.send(n, context);
+    }
+
+    fn = t.mock.fn(write);
+    assert.strictEqual(fn(), 'Congrats, John!');
+    fn.mock.mockImplementation(send);
+    Math.random = () => 0.6;
+    assert.strictEqual(fn(), true);
+    Math.random = () => 0.4;
+    assert.strictEqual(fn(), false);
 });
 
-test('should return a random person from the list', () => {
+test('test getNames', async() =>{
+    const name_list = 'John\nMay\nAlex\nJay\nPeggy';
+    await writeFile('name_list.txt', name_list, 'utf-8');
     const app = new Application();
-    app.getNames().then(([people, selected]) => {
-        assert((app.people.length == 0) ^ (app.people.indexOf(app.getRandomPerson()) != -1), "Test not implemented");
-    });
+    const [people, selected] = await app.getNames();
+
+    assert.deepStrictEqual(people, ['John','May','Alex','Jay','Peggy']);
+    assert.deepStrictEqual(selected, []);
 });
 
-test('should return a random person from the list', () => {
+test('test getRandomPerson', async() =>{
+    const name_list = 'John\nMay\nAlex\nJay\nPeggy';
+    await writeFile('name_list.txt', name_list, 'utf-8');
     const app = new Application();
-    var rep;
-    app.getNames().then(([people, selected]) => {
-        for(var i=0; i<=app.people.length; i++){
-            person = app.selectNextPerson();
-            if(app.people.length == i)
-                rep = 1;
-            else
-                rep = app.people.includes(person) && app.selected.includes(person);
-            assert(rep, "Test not implemented");
-        }
-        assert(app.selectNextPerson() == null, "Test not implemented");
-    });
+    const [people, selected] = await app.getNames();
+
+    for(var i=0; i<app.people.length; i++){
+        person = app.getRandomPerson();
+        assert(people.includes(person));
+    }
 });
 
-test('notifySelected() should send the right number', () => {
+
+test('test selectNextPerson', async(t) =>{
+    const name_list = 'John\nMay';
+    await writeFile('name_list.txt', name_list, 'utf-8');
+    const app = new Application();
+    const [people, selected] = await app.getNames();
+    flag = 0;
+    app.getRandomPerson = () => {
+        flag++;
+        if (flag % 2) return 'John';
+        else return 'May';
+    }
+
+    person = app.selectNextPerson();
+    assert.strictEqual(person, 'John');
+    assert.deepStrictEqual(app.selected[0], 'John');
+
+    flag = 0;
+    person = app.selectNextPerson();
+    assert.strictEqual(person, 'May');
+    assert.deepStrictEqual(app.selected[1], 'May');
+
+    person = app.selectNextPerson();
+    assert.strictEqual(person, null);
+});
+
+test('test notifySelected', async() =>{
+    const name_list = 'John';
+    await writeFile('name_list.txt', name_list, 'utf-8');
     const app = new Application();
     const mailSystemMock = new MailSystemMock();
     app.mailSystem = mailSystemMock;
-    var person = [];
-    var rep;
+    const [people, selected] = await app.getNames();
 
-    app.getNames().then(([people, selected]) => {
-        for(var i=0; i<app.people.length; i++)
-            person.push(app.selectNextPerson());
-        app.notifySelected();
-        for(var i=0; i<=app.people.length; i++){
-            rep = mailSystemMock.writeCalls[i] == person[i];
-            assert(rep, "Test not implemented");
-        }
-        assert.strictEqual(mailSystemMock.writeCalls.length, app.people.length);
-        assert.strictEqual(mailSystemMock.sendCalls.length, app.people.length);
-    });
-});
+    Math.random = () => 0.1;
+    app.selectNextPerson();
+    app.notifySelected();
+    assert.strictEqual(mailSystemMock.writeCalls.length, 1);
+    assert.strictEqual(mailSystemMock.sendCalls.length, 1);
 
-test('Application.notifySelected should notify all selected people', () => {
-    const app = new Application();
-    const mailSystemMock = new MailSystemMock();
-    app.mailSystem = mailSystemMock;
-    var rep;
-    var last_message = [];
-
-    app.getNames().then(([people, selected]) => {
-        for(var i=0; i<=app.people.length; i++){
-            app.selectNextPerson();
-            app.notifySelected();
-            last_message.push(lastLog);
-        }
-        rep_idx = -1
-        for(var i=0; i<=app.people.length; i++){
-            if(i == app.people.length)
-                rep = 1;
-            else{
-                rep = mailSystemMock.sendResults[rep_idx+i+1] ? last_message[i] == 'mail sent': last_message[i] == 'mail failed';
-                rep_idx = rep_idx + i + 1;
-            }
-            assert(rep, "Test not implemented");
-        }
-        
-        console.log(mailSystemMock.sendResults);
-        console.log(last_message);
-        //con = 'Congrats, ' + person + '\r!';
-        //assert(mailSystemMock.contextCalls[0] == con, "Test not implemented");
-    });
+    fs.unlinkSync('name_list.txt');
 });
 
 class MailSystemMock extends MailSystem {
@@ -95,19 +95,12 @@ class MailSystemMock extends MailSystem {
         super();
         this.writeCalls = [];
         this.sendCalls = [];
-        this.sendResults = [];
-    }
-
-    write(name) {
+    }write(name){
         this.writeCalls.push(name);
         return super.write(name);
-    }
-
-    send(name, context) {
-        this.sendCalls.push({ name, context });
-        const success = super.send(name, context);
-        this.sendResults.push(success);
-        return success
+    }send(name, context){
+        this.sendCalls.push({name, context});
+        return super.send(name, context);
     }
 };
 
