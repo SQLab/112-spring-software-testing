@@ -30,8 +30,6 @@ test('create file', async (t) => {
 
 test('test application', async (t) => {
     const application = new Application();
-    // const file_content = "Gary\nPeter";
-    // await writeFile('name_list.txt', file_content, 'utf-8');   // create a fake file
 
     // ========================== getName =============================
 
@@ -63,18 +61,17 @@ test('test application', async (t) => {
     assert.strictEqual(respond3, null);
 
 
-
-    let cnt = 0;
+    let first = 1;
     application.getRandomPerson = () => {
-        if (cnt == 0) {
-            cnt++;
+        if (first == 1) {
+            first--;
             return "Gary";
         }
         else
-            return "Pater";
+            return "Peter";
     }
     application.selected = ["Gary"];
-    assert.strictEqual(application.selectNextPerson(), "Pater");     // force into while loop
+    assert.strictEqual(application.selectNextPerson(), "Peter");     // force into while loop
 
     // ================================================================
 
