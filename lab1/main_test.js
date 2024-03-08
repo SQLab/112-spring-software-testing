@@ -1,6 +1,7 @@
 const test = require('node:test');
 const assert = require('assert');
 const { MyClass, Student } = require('./main');
+
 const cs = new MyClass();
 const john = new Student();
 john.setName("John");
