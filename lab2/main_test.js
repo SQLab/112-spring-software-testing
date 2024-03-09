@@ -56,15 +56,15 @@ test("Test Application's getRandomPerson", async () => {
     assert.deepStrictEqual(ctx[0], ["JJ", "EE"]);
     assert.deepStrictEqual(ctx[1], []);
 
-    // Math.random = () => 0.3;
+    Math.random = () => 0.3;
     let rdmPeople = await app.getRandomPerson();
     assert.ok(app.people.includes(rdmPeople));
-    // assert.strictEqual(rdmPeople, "JJ");
+    assert.strictEqual(rdmPeople, "JJ");
 
-    // Math.random = () => 0.6;
+    Math.random = () => 0.6;
     rdmPeople = await app.getRandomPerson();
     assert.ok(app.people.includes(rdmPeople));
-    // assert.strictEqual(rdmPeople, "EE");
+    assert.strictEqual(rdmPeople, "EE");
 
     fs.unlinkSync(fn_);
 });
@@ -81,20 +81,43 @@ test("Test Application's selectNextPerson", async () => {
     assert.deepStrictEqual(ctx[0], ["JJ", "EE"]);
     assert.deepStrictEqual(ctx[1], []);
 
+    const orgsnp = app.getRandomPerson;
+
+    app.getRandomPerson = () => "JJ";
     let rdperson = app.selectNextPerson();
+    assert.strictEqual(rdperson, "JJ");
     assert.ok(app.people.includes(rdperson));
     assert.ok(app.selected.includes(rdperson));
+    assert.deepStrictEqual(app.selected, ["JJ"]);
     assert.strictEqual(app.selected.length, 1);
 
+    app.getRandomPerson = () => "EE";
     rdperson = app.selectNextPerson();
+    assert.strictEqual(rdperson, "EE");
     assert.ok(app.people.includes(rdperson));
     assert.ok(app.selected.includes(rdperson));
+    assert.deepStrictEqual(app.selected, ["JJ","EE"]);
     assert.strictEqual(app.selected.length, 2);
 
+    app.getRandomPerson = orgsnp;
     rdperson = app.selectNextPerson();
+    assert.strictEqual(rdperson, null);
     assert.strictEqual(rdperson, null);
     assert.strictEqual(app.selected.length, 2);
 
+    let cnt = 0;
+    app.getRandomPerson = () => {
+        if (cnt++ % 2 === 0) {
+            return 'JJ';
+        } else {
+            return 'EE';
+        }
+    }
+    app.selected = ['JJ'];
+    rdperson = app.selectNextPerson();
+    assert.strictEqual(rdperson, 'EE');
+    assert.deepStrictEqual(app.selected, ['JJ', 'EE']);
+    
     fs.unlinkSync(fn_);
 });
 
