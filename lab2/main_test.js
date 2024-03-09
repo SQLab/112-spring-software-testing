@@ -117,7 +117,7 @@ test("Test Application's notifySelected", async () => {
     assert.strictEqual(person, "EE");
     assert.deepStrictEqual(app.selected, ["JJ", "EE"]);
 
-    test.mock.method(app.mailSystem, 'write', (name) => "Congrats, "+name+"!");
+    test.mock.method(app.mailSystem, 'write', (name) => "Congrats, " + name + "!");
     test.mock.method(app.mailSystem, 'send', () => true);
 
     app.notifySelected();
