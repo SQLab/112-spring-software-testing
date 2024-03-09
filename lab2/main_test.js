@@ -44,23 +44,23 @@ test("Test Application's getNames", async () => {
 
 test("Test Application's getRandomPerson", async () => {
     const fn_ = path.join(process.cwd(), 'name_list.txt');
-    const data_ = "JJ\nEE\nRR\nYY";
+    const data_ = "JJ\nEE";
     await writeFile(fn_, data_, "utf-8");
 
     const app = new Application();
 
     let ctx = new Array([],[]);
     ctx = await app.getNames();
-    assert.deepStrictEqual(ctx[0], ["JJ", "EE", "RR", "YY"]);
+    assert.deepStrictEqual(ctx[0], ["JJ", "EE"]);
     assert.deepStrictEqual(ctx[1], []);
 
     Math.random = () => 0.3;
     let rdmPeople = app.getRandomPerson();
-    assert.strictEqual(rdmPeople, "EE");
+    assert.strictEqual(rdmPeople, "JJ");
 
-    Math.random = () => 0.99;
+    Math.random = () => 0.6;
     rdmPeople = app.getRandomPerson();
-    assert.strictEqual(rdmPeople, "YY");
+    assert.strictEqual(rdmPeople, "EE");
 
     fs.unlinkSync(fn_);
 });
