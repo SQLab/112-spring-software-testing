@@ -59,13 +59,20 @@ test('Application getRandomPerson function', async (t) => {
 });
 
 test('Application selectNextPerson function', async (t) => {
-    // mock Math.floor to control the return value
-    const mock_floor = t.mock.method(Math, 'floor');
+    // mock getRandomPerson to control the return value
     const application = new Application();
+    application.count = 0;
+    const mock_getRandomPerson = t.mock.method(application, 'getRandomPerson');
+    mock_getRandomPerson.mock.mockImplementation(() => {
+        if (application.count !== 2) {
+            application.count++;
+            return 'John';
+        } else {
+            return 'Jane';
+        }
+    });
     await application.getNames();
-    mock_floor.mock.mockImplementation(() => 0);
     assert.strictEqual(application.selectNextPerson(), 'John');
-    mock_floor.mock.mockImplementation(() => 1);
     assert.strictEqual(application.selectNextPerson(), 'Jane');
     assert.strictEqual(application.selectNextPerson(), null);
 });
@@ -79,5 +86,6 @@ test('Application notifySelected function', (t) => {
     application.notifySelected();
     assert.strictEqual(spy_send.mock.calls.length, 2);
     assert.strictEqual(spy_write.mock.calls.length, 2);
+}).then(() => {
+    fs.unlinkSync('name_list.txt');
 });
-
