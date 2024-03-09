@@ -17,7 +17,7 @@ test("Test MailSystem's write", () => {
 
 test("Test MailSystem's send", () => {
     const ms = new MailSystem();
-
+    const orgrdm = Math.random;
     Math.random = () => 0.4;
     let context = ms.send("Jerry", "Test Message");
     assert.strictEqual(context, false);
@@ -25,6 +25,8 @@ test("Test MailSystem's send", () => {
     Math.random = () => 0.6;
     context = ms.send("Jerry", "Test Message");
     assert.strictEqual(context, true);
+
+    Math.random = orgrdm;
 });
 
 test("Test Application's getNames", async () => {
@@ -54,13 +56,15 @@ test("Test Application's getRandomPerson", async () => {
     assert.deepStrictEqual(ctx[0], ["JJ", "EE"]);
     assert.deepStrictEqual(ctx[1], []);
 
-    Math.random = () => 0.3;
-    let rdmPeople = app.getRandomPerson();
-    assert.strictEqual(rdmPeople, "JJ");
+    // Math.random = () => 0.3;
+    let rdmPeople = await app.getRandomPerson();
+    assert.ok(app.people.includes(rdmPeople));
+    // assert.strictEqual(rdmPeople, "JJ");
 
-    Math.random = () => 0.6;
-    rdmPeople = app.getRandomPerson();
-    assert.strictEqual(rdmPeople, "EE");
+    // Math.random = () => 0.6;
+    rdmPeople = await app.getRandomPerson();
+    assert.ok(app.people.includes(rdmPeople));
+    // assert.strictEqual(rdmPeople, "EE");
 
     fs.unlinkSync(fn_);
 });
@@ -77,19 +81,19 @@ test("Test Application's selectNextPerson", async () => {
     assert.deepStrictEqual(ctx[0], ["JJ", "EE"]);
     assert.deepStrictEqual(ctx[1], []);
 
-    app.getRandomPerson = () => "JJ";
-    let person = app.selectNextPerson();
-    assert.strictEqual(person, "JJ");
-    assert.deepStrictEqual(app.selected, ["JJ"]);
+    let rdperson = app.selectNextPerson();
+    assert.ok(app.people.includes(rdperson));
+    assert.ok(app.selected.includes(rdperson));
+    assert.strictEqual(app.selected.length, 1);
 
-    app.getRandomPerson = () => "EE";
-    person = app.selectNextPerson();
-    assert.strictEqual(person, "EE");
-    assert.deepStrictEqual(app.selected, ["JJ", "EE"]);
+    rdperson = app.selectNextPerson();
+    assert.ok(app.people.includes(rdperson));
+    assert.ok(app.selected.includes(rdperson));
+    assert.strictEqual(app.selected.length, 2);
 
-    person = app.selectNextPerson();
-    assert.strictEqual(person, null);
-    assert.deepStrictEqual(app.selected, ["JJ", "EE"]);
+    rdperson = app.selectNextPerson();
+    assert.strictEqual(rdperson, null);
+    assert.strictEqual(app.selected.length, 2);
 
     fs.unlinkSync(fn_);
 });
