@@ -4,6 +4,7 @@ const fs = require('fs');
 const util = require('util');
 const writeFile = util.promisify(fs.writeFile);
 const { Application, MailSystem } = require('./main');
+const path = require('node:path'); 
 
 // TODO: write your tests here
 // Remember to use Stub, Mock, and Spy when necessary
@@ -16,6 +17,7 @@ test("Test MailSystem's write", () => {
 
 test("Test MailSystem's send", () => {
     const ms = new MailSystem();
+
     Math.random = () => 0.4;
     let context = ms.send("Jerry", "Test Message");
     assert.strictEqual(context, false);
@@ -25,26 +27,27 @@ test("Test MailSystem's send", () => {
     assert.strictEqual(context, true);
 });
 
-test("Test Application's getNames", async() => {
-    const app = new Application();
-
-    const fn_ = "name_list.txt";
+test("Test Application's getNames", async () => {
+    const fn_ = path.join(process.cwd(), 'name_list.txt');
     const data_ = "JJ\nEE\nRR\nYY";
     await writeFile(fn_, data_, "utf-8");
+    
+    const app = new Application();
 
     let ctx = new Array([],[]);
     ctx = await app.getNames();
     assert.deepStrictEqual(ctx[0], ["JJ", "EE", "RR", "YY"]);
     assert.deepStrictEqual(ctx[1], []);
+    
     fs.unlinkSync(fn_);
 });
 
-test("Test Application's getRandomPerson", async() => {
-    const app = new Application();
-
-    const fn_ = "name_list.txt";
+test("Test Application's getRandomPerson", async () => {
+    const fn_ = path.join(process.cwd(), 'name_list.txt');
     const data_ = "JJ\nEE\nRR\nYY";
     await writeFile(fn_, data_, "utf-8");
+
+    const app = new Application();
 
     let ctx = new Array([],[]);
     ctx = await app.getNames();
@@ -58,15 +61,16 @@ test("Test Application's getRandomPerson", async() => {
     Math.random = () => 0.99;
     rdmPeople = app.getRandomPerson();
     assert.strictEqual(rdmPeople, "YY");
+
     fs.unlinkSync(fn_);
 });
 
-test("Test Application's selectNextPerson", async() => {
-    const app = new Application();
-
-    const fn_ = "name_list.txt";
+test("Test Application's selectNextPerson", async () => {
+    const fn_ = path.join(process.cwd(), 'name_list.txt');
     const data_ = "JJ\nEE";
     await writeFile(fn_, data_, "utf-8");
+
+    const app = new Application();
 
     let ctx = new Array([],[]);
     ctx = await app.getNames();
@@ -90,12 +94,13 @@ test("Test Application's selectNextPerson", async() => {
     fs.unlinkSync(fn_);
 });
 
-test("Test Application's notifySelected", async() => {
-    const app = new Application();
+test("Test Application's notifySelected", async () => {
     
-    const fn_ = "name_list.txt";
+    const fn_ = 'name_list.txt';
     const data_ = "JJ\nEE";
     await writeFile(fn_, data_, "utf-8");
+
+    const app = new Application();
 
     let ctx = new Array([],[]);
     ctx = await app.getNames();
