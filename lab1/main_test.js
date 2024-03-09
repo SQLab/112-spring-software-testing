@@ -30,7 +30,7 @@ test("Test Student's setName", () => {
     assert.strictEqual(student.name, undefined);
     student.setName(name);
     assert.strictEqual(student.name, name);
-    
+
 });
 
 test("Test Student's getName", () => {
@@ -41,4 +41,5 @@ test("Test Student's getName", () => {
     assert.strictEqual(student.getName(), "");
     student.setName(name);
     assert.strictEqual(student.getName(), name);
+
 });
