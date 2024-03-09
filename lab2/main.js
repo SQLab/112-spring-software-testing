@@ -53,6 +53,7 @@ class Application {
             return null;
         }
         let person = this.getRandomPerson();
+        console.log(person);
         while (this.selected.includes(person)) {
             person = this.getRandomPerson();
         }
