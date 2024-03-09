@@ -9,22 +9,17 @@ test("Test MailSystem write", () => {
     assert.strictEqual(mail_.write("Ben"),'Congrats, Ben!');
 });
 
-test("Test MailSystem send", (t) => {
+test("Test MailSystem send", () => {
     const mail_ = new MailSystem();
-    function send() {
-        return mail_.send("Frank","Congrats, Frank!");
-    }
-    const fn = t.mock.fn(send);
     Math.random = () => 0.6;
-    assert.strictEqual(fn(),true);
+    assert.strictEqual(mail_.send("Frank","Congrats, Frank!"),true);
     Math.random = () => 0.3;
-    assert.strictEqual(fn(),false);
+    assert.strictEqual(mail_.send("Frank","Congrats, Frank!"),false);
 });
 
 test("Test Applicaiton getNames", () => {
     fs.writeFile('name_list.txt', content, async () => {
             const application_ = new Application();
-            // const [people,select] = await application_.getNames();
             assert.deepStrictEqual(await application_.getNames(), [['Amy', 'Bob', 'Cindy', 'Danny'],[]]);
             fs.unlink('name_list.txt', ()=> {});
     });
@@ -63,8 +58,31 @@ test("Test Applicaiton selectNextPerson", async () => {
     assert.deepStrictEqual(application_.selected,["Amy","Bob"]);
 });
 
-test("Test Applicaiton notifySelected", async () => {
+test("Test Applicaiton notifySelected", async (t) => {
     const application_ = new Application();
+    function write(name){
+        //fake func for test
+        return 0;
+    };
+    function send(name,context){
+        //fake func for test
+        return 0;
+    };
+    const fn_write = t.mock.fn(write);
+    application_.mailSystem.write = fn_write;
+    const fn_send = t.mock.fn(send);
+    application_.mailSystem.send = fn_send;
+
+    application_.selected = [];
+    application_.notifySelected();
+    assert.strictEqual(fn_write.mock.calls.length,0);
+    assert.strictEqual(fn_send.mock.calls.length,0);
+
+        
     application_.selected = ['Amy', 'Bob'];
     application_.notifySelected();
+    assert.strictEqual(fn_write.mock.calls.length,2);
+    assert.strictEqual(fn_send.mock.calls.length,2);
+
+    mock.reset();
 });
