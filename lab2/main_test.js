@@ -3,35 +3,35 @@ const assert = require('assert');
 const { Application, MailSystem } = require('./main');
 
 const fs = require('fs');
+const util = require('util');
+const writeFile = util.promisify(fs.writeFile);
+
 
 test ("Test MailSystem", (t)=>{
     const MyMailSystem = new MailSystem();
     function write() {
         return MyMailSystem.write('Jane');
     }
-    function send_true() {
-        Math.random = () => 0.9;
-        return MyMailSystem.send('Jane', 'Hello World!');
-    }
-    function send_false() {
-        Math.random = () => 0.1;
-        return MyMailSystem.send('Jane', 'Hello World!');
+    function send() {
+        return MyMailSystem.send('Jane', 'Congrats, Jane!');
     }
     
     const fn = t.mock.fn(write);
     assert.strictEqual(fn(), 'Congrats, Jane!', 'write() failed');
     
-    fn.mock.mockImplementation(send_true);
+    Math.random = () => 0.9;
+    fn.mock.mockImplementation(send);
     assert.strictEqual(fn(), true, 'send() failed');
     
-    fn.mock.mockImplementation(send_false);
+    Math.random = () => 0.1;
+    fn.mock.mockImplementation(send);
     assert.strictEqual(fn(), false, 'send() failed');
 }); 
 
-test ("Test Application", async(t)=>{
-    const arr = ['Jane','Emma','Dora','Alexandra','Eric'];
-    const name_list = 'Jane\nEmma\nDora\nAlexandra\nEric';
-    fs.writeFileSync('name_list.txt', name_list, 'utf-8');
+test ("Test Application", async()=>{
+    const arr = ['Jane','Emma'];
+    const name_list = "Jane\nEmma";
+    await writeFile('name_list.txt', name_list, 'utf-8');
     const app = new Application();
     const [people, selected] = await app.getNames();
     
@@ -39,43 +39,41 @@ test ("Test Application", async(t)=>{
     assert.deepStrictEqual(people, arr, 'getNames() failed');
     assert.deepStrictEqual(selected, [], 'getNames() failed');
     
-    console.log('this.people.length is ', people.length);
-
-    function getRandomPerson() {
-        Math.random = () => 0.1;
-        app.getRandomPerson();
-    }
-
-    function getRandomPerson() {
-        Math.random = () => 0.1;
-        return app.getRandomPerson();
-    }
-
-    function selectNextPerson() {
-        Math.random = () => 0.1;
-        return app.selectNextPerson();
-    }
-
-    function notifySelected() {
-        Math.random = () => 0.9;
-        app.notifySelected();
-    }
-    
-    const fn = t.mock.fn(getRandomPerson);
 
     // test for getRandomPerson()
-    assert.strictEqual(fn(), 'Jane', 'getRandomPerson() failed');
+    const ret1 = app.getRandomPerson();
+    assert(people.includes(ret1));
     
-    // test for selectNextPerson()
-    fn.mock.mockImplementation(selectNextPerson);
-    assert.strictEqual(fn(), 'Jane', 'selectNextPerson() failed');
-    assert.strictEqual(app.selected.length, 1, 'selectNextPerson() failed');
-    app.selected = arr;
-    fn.mock.mockImplementation(selectNextPerson);
-    assert.strictEqual(fn(), null);
 
-    // // test for notifySelected()
-    fn.mock.mockImplementation(notifySelected);
-    assert.strictEqual(fn(), undefined);
+    // test for selectNextPerson()
+    app.getRandomPerson = () => 'Jane';
+    const ret2 = app.selectNextPerson();
+    assert.strictEqual(ret2, 'Jane', 'selectNextPerson() failed');
+
+    app.getRandomPerson = () => 'Emma';
+    const ret3 = app.selectNextPerson();
+    assert.strictEqual(ret3, 'Emma', 'selectNextPerson() failed');
+
+    app.selected = ['Jane'];
+    var cnt=0;
+    app.getRandomPerson = () => {
+        if (cnt%2==0) {
+            cnt++;
+            return 'Jane';
+        }
+        else {
+            cnt--;
+            return 'Emma';
+        }
+    }
+    const ret4 = app.selectNextPerson();
+    assert.strictEqual(ret4, 'Emma', 'selectNextPerson() failed');
+
+    const ret5 = app.selectNextPerson();
+    assert.strictEqual(ret5, null);
+
+    // test for notifySelected()
+    const ret6 = app.notifySelected();
+    assert.strictEqual(ret6, undefined);
     fs.unlinkSync('name_list.txt');
 });
