@@ -48,12 +48,16 @@ test('Test on Application.getRandomPerson', async (t) => {
     await writeFile('name_list.txt', name_list, 'utf8');
     const app = new Application();
     app.people = ['Naruto', 'Sasuke', 'Sakura'];
+    function getRandomPerson() {
+        return app.getRandomPerson();
+    }
+    const fn = t.mock.fn(getRandomPerson);
     Math.random = () => 0;
-    assert.strictEqual(app.getRandomPerson(), 'Naruto');
+    assert.strictEqual(fn(), 'Naruto');
     Math.random = () => 0.4;
-    assert.strictEqual(app.getRandomPerson(), 'Sasuke');
+    assert.strictEqual(fn(), 'Sasuke');
     Math.random = () => 0.8;
-    assert.strictEqual(app.getRandomPerson(), 'Sakura');
+    assert.strictEqual(fn(), 'Sakura');
     // Remove 'name_list.txt'
     fs.unlinkSync('name_list.txt');
 });
@@ -82,9 +86,31 @@ test('Test on Application.notifySelected', async (t) => {
     // Create 'name_list.txt'
     await writeFile('name_list.txt', name_list, 'utf8');
     const app = new Application();
-    app.selected = ['Naruto', 'Sasuke', 'Sakura'];
-    assert.strictEqual(app.notifySelected(), undefined);
+    app.people = ['Naruto', 'Sasuke', 'Sakura'];
     app.selected = [];
+    assert.strictEqual(app.notifySelected(), undefined);
+    function selectNextPerson() {
+        return app.selectNextPerson();
+    }
+    const fn = test.mock.fn(selectNextPerson);
+    let cnt = 0;
+    app.getRandomPerson = () => {
+        if(cnt % 3 == 0) {
+            cnt++;
+            return 'Naruto';
+        } else if (cnt % 3 == 1) {
+            cnt++;
+            return 'Sasuke';
+        } else {
+            cnt++;
+            return 'Sakura';
+        }
+    };
+    app.selected = ['Naruto'];
+    assert.strictEqual(app.notifySelected(), undefined);
+    assert.strictEqual(fn(), 'Sasuke');
+    assert.strictEqual(app.notifySelected(), undefined);
+    assert.strictEqual(fn(), 'Sakura');
     assert.strictEqual(app.notifySelected(), undefined);
     // Remove 'name_list.txt'
     fs.unlinkSync('name_list.txt');
