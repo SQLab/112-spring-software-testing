@@ -18,20 +18,15 @@ test('mailSystem write', () => {
 
 test('mailSystem send', () => {
     const mailSystem = new MailSystem();
-    const success = mailSystem.send('name', 'context');
-    assert.ok(success === true || success === false);
+    Math.random = () =>  0.6;
+    const success1 = mailSystem.send('name', 'context');
+    assert.strictEqual(success1, true);
+    Math.random = () =>  0.4;
+    const success2 = mailSystem.send('name', 'context');
+    assert.strictEqual(success2, false);
 });
 
 // application
-test('application getNames', async () => {
-    await writeFile('name_list.txt', fakenames, 'utf8');
-    const application = new Application();
-    const [people, selected] = await application.getNames();
-    assert.deepStrictEqual(people, ['Jones', 'Eusden', 'Battlebrian', 'Martial Hebert']);
-    assert.deepStrictEqual(selected, []);
-    await util.promisify(fs.unlink)('name_list.txt');
-});
-
 test('application getNames', async () => {
     await writeFile('name_list.txt', fakenames, 'utf8');
     const application = new Application();
@@ -54,12 +49,24 @@ test('application selectNextPerson', async () => {
     await writeFile('name_list.txt', fakenames, 'utf8');
     const application = new Application();
     application.people = ['Jones', 'Eusden', 'Battlebrian', 'Martial Hebert'];
-    application.selected = ['Jones'];
-    const person = application.selectNextPerson();
-    assert.ok(application.people.includes(person));
     application.selected = ['Jones', 'Eusden', 'Battlebrian', 'Martial Hebert'];
-    const person2 = application.selectNextPerson();
-    assert.strictEqual(person2, null);
+    let person = application.selectNextPerson();
+    assert.strictEqual(person, null);
+
+    application.selected = ['Jones', 'Eusden', 'Battlebrian'];
+    let test = false;
+    application.getRandomPerson = () => {
+        if (!test) {
+            test = true;
+            return 'Jones';
+        }
+        else {
+            return 'Martial Hebert';
+        }
+    }
+    person = application.selectNextPerson();
+    assert.strictEqual(person, 'Martial Hebert');
+    
     await util.promisify(fs.unlink)('name_list.txt');
 });
 
@@ -95,9 +102,9 @@ test('spies on a mailsystem', async () => {
         assert.strictEqual(mailSystemSpy.write.mock.calls[x].arguments[0], application.selected[x]);
         assert.strictEqual(mailSystemSpy.send.mock.calls[x].arguments[0], application.selected[x]);
     }
-    console.log(mailSystemSpy.send.mock.calls);
   
     // Reset the globally tracked mocks.
     test.mock.reset();
     await util.promisify(fs.unlink)('name_list.txt');
   });
+
