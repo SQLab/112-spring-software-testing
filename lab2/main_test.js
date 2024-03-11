@@ -6,12 +6,6 @@ const util = require('util');
 const readFile = util.promisify(fs.readFile);
 const writeFile = util.promisify(fs.writeFile);
 
-//mock the readFile function and with implementation return the data using mock.method
-// mock.method(fs, 'readFile',  () => {
-//     return "Alice\nBob\nCathy";
-// })
-
-
 
 test("test mailsystem's write", () => {
     const mailSystem = new MailSystem();
@@ -105,8 +99,9 @@ test("test Application's notifySelected", () => {
     //assert the function call  times
     assert.strictEqual(spy_write.mock.calls.length, 2);
     assert.strictEqual(spy_send.mock.calls.length, 2);
-    assert.strictEqual(message, expected_logs);
     //assert the message
+    assert.strictEqual(message, expected_logs);
+
 
     
     
