@@ -107,6 +107,12 @@ test("Test selectNextPerson", async (t) => {
       "--select next person--"
     );
   }
+  assert.strictEqual(app.selectNextPerson(), null);
+  assert.strictEqual(
+    console.log.mock.calls[8].arguments[0],
+    "--select next person--"
+  );
+  assert.strictEqual(console.log.mock.calls[9].arguments[0], "all selected");
 });
 
 test("Test notifySelected", async (t) => {
