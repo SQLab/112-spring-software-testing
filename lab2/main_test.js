@@ -25,9 +25,27 @@ function init_test(testcase) {
 // Remember to use Stub, Mock, and Spy when necessary
 
 test("Test MailSystem's write", (t) => {
+    const mailSys = new MailSystem();
+    // 1. test return type
+    assert.strictEqual(typeof mailSys.write("Amy"), "string");
+    // 2. validate legality of context returned
+    assert.strictEqual(mailSys.write("Amy"), "Congrats, Amy!");
 });
 
 test("Test MailSystem's send", (t) => {
+    const mailSys = new MailSystem();
+    // 1. test return type
+    assert.strictEqual(typeof mailSys.send("testing", "random test"), "boolean");
+    var success = false, failure = false;
+    for(let i = 0; i < 10; i++) {
+        if (mailSys.send("testing", "random test")) {
+            success = true;
+        } else {
+            failure = true;
+        }
+    }
+    // 2. check if the sys
+    assert(success && failure);
 });
 
 test("Test Application's getNames", (t) => {
