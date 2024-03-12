@@ -2,11 +2,12 @@ const test = require('node:test');
 const assert = require('assert');
 const fs = require('fs');
 // Stub Failed: Leave Application.people empty
-// test.mock.method(fs, 'readFile', (a, b) =>'Amy\nBenson\nCharlie');
+test.mock.method(fs, 'readFile', (a, b) =>'Amy\nBenson\nCharlie');
 // test.mock.method(util, 'promisify', (a) => a);
 const { Application, MailSystem } = require('./main');
 
-// Alternative
+// Alternative of Stub: Write File
+/*
 function init_test(testcase) {
     if (!testcase instanceof Array) {
         return -1;
@@ -20,11 +21,12 @@ function init_test(testcase) {
     }
     return 0;
 }
+*/
 
 // TODO: write your tests here
 // Remember to use Stub, Mock, and Spy when necessary
 
-test("Test MailSystem's write", (t) => {
+test("Test MailSystem's write", () => {
     const mailSys = new MailSystem();
     // 1. test return type
     assert.strictEqual(typeof mailSys.write("Amy"), "string");
@@ -36,16 +38,15 @@ test("Test MailSystem's send", (t) => {
     const mailSys = new MailSystem();
     // 1. test return type
     assert.strictEqual(typeof mailSys.send("testing", "random test"), "boolean");
-    var success = false, failure = false;
-    for(let i = 0; i < 10; i++) {
-        if (mailSys.send("testing", "random test")) {
-            success = true;
-        } else {
-            failure = true;
-        }
+    // 2. Asume that Math.random() works, check if the function provide a valid output
+    t.mock.method(Math, "random", () => 1.0);
+    for(let i = 0; i < 5; i++) {
+        assert.strictEqual(mailSys.send("testing", "random test"), true);
     }
-    // 2. check if the sys
-    assert(success && failure);
+    t.mock.method(Math, "random", () => 0.0);
+    for(let i = 0; i < 5; i++) {
+        assert.strictEqual(mailSys.send("testing", "random test"), false);
+    }
 });
 
 test("Test Application's getNames", (t) => {
