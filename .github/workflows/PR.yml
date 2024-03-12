@@ -49,12 +49,12 @@ jobs:
                       const pr = await github.rest.pulls.get({ owner, repo, pull_number: issue_number });
                       const body = pr.data.body;
 
-                      const checkboxes = body.match(/\- \[[x ]\]/g);
+                      const checkboxes = body.match(/^\ ?(-|*) \[[x ]\]/gi);
                       if (!checkboxes || checkboxes.length !== 5) {
                         core.setFailed('The PR description must contain exactly 5 checkboxes.');
                       }
 
-                      const unchecked = body.match(/\- \[ \]/g);
+                      const unchecked = body.match(/^\ ?(-|*) \[ \]/g);
                       if (unchecked && unchecked.length > 0) {
                         core.setFailed(`There are ${unchecked.length} unchecked items in the PR description.`);
                       }
