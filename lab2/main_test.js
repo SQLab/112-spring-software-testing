@@ -4,19 +4,7 @@ const fs = require('fs');
 test.mock.method(fs, 'readFile', (a, b, callback) => callback(null, "Amy\nBenson\nCharlie"));
 const { Application, MailSystem } = require('./main');
 
-// Alternative of Stub: Write File
-// async function init_test(testcase) {
-//     if (!testcase instanceof Array) {
-//         return -1;
-//     }
-//     text = testcase.toString().replace(/,/g, "\n");
-//     await writeFile("name_list.txt", test, "utf-8");
-//     return 0;
-// }
-
-// TODO: write your tests here
 // Remember to use Stub, Mock, and Spy when necessary
-
 test("Test MailSystem's write", () => {
     const mailSys = new MailSystem();
     // 1. test return type
@@ -29,7 +17,7 @@ test("Test MailSystem's send", (t) => {
     const mailSys = new MailSystem();
     // 1. test return type
     assert.strictEqual(typeof mailSys.send("testing", "random test"), "boolean");
-    // 2. Asume that Math.random() works, check if the function provide a valid output (spy?)
+    // 2. Asume that Math.random() works, check if the tested function provide a valid output (spy?)
     t.mock.method(Math, "random", () => 1.0, { times: 5 });
     for(let i = 0; i < 5; i++) {
         assert.strictEqual(mailSys.send("testing", "random test"), true);
@@ -41,7 +29,8 @@ test("Test MailSystem's send", (t) => {
 });
 
 test("Test Application's getNames", async () => {
-    // Stub?
+    // Stub inputs via mocking fs.writeFile
+    // Assume fs.writeFile works functionally, the tested function would have a correct behaviour.
     const app = new Application();
     const [people, selected] = await app.getNames();
     assert.deepStrictEqual(people, ['Amy', 'Benson', 'Charlie']);
@@ -50,15 +39,17 @@ test("Test Application's getNames", async () => {
 
 test("Test Application's getRandomPerson", (t) => {
     const app = new Application();
+    // Stub
     testcase = ['Amy', 'Benson', 'Charlie'];
-    app.people = testcase;// Stub
-    // Spy on output
+    app.people = testcase;
+    // Spy on output via mocking Math.random()
     t.mock.method(Math, "random", () => 0.3, { times: 1 });
     assert.strictEqual(app.getRandomPerson(), "Amy");
     t.mock.method(Math, "random", () => 0.6, { times: 1 });
     assert.strictEqual(app.getRandomPerson(), "Benson");
     t.mock.method(Math, "random", () => 0.9, { times: 1 });
     assert.strictEqual(app.getRandomPerson(), "Charlie");
+    // Spy on output via mocking Math.floor()
     t.mock.method(Math, "floor", (_) => 0, { times: 1 });
     assert.strictEqual(app.getRandomPerson(), "Amy");
     t.mock.method(Math, "floor", (_) => 1, { times: 1 });
@@ -69,10 +60,10 @@ test("Test Application's getRandomPerson", (t) => {
 
 test("Test Application's selectNextPerson", (t) => {
     const app = new Application();
+    //Stub
     testcase = ['Amy', 'Benson', 'Charlie'];
-    app.people = testcase;// Stub
+    app.people = testcase;
     assert(app.people.includes(app.selectNextPerson()));
-
     // Mock Implementation: call the selected person for five times
     const proxy = t.mock.method(app, "getRandomPerson", ()=>app.selected[0], { times: 5 });
     assert(app.people.includes(app.selectNextPerson()));
@@ -80,33 +71,28 @@ test("Test Application's selectNextPerson", (t) => {
     for (let i = 0; i < 5; i++) {
         assert.strictEqual(proxy.mock.calls[i].result, app.selected[0]);
     }
-
+    // All the people are selected
     assert(app.people.includes(app.selectNextPerson()));
     assert.deepStrictEqual(app.people.toSorted(), app.selected.toSorted());
     assert.strictEqual(app.selectNextPerson(), null);
 });
 
 test("Test Application's notifySelected", (t) => {
-    // Mock cross-platform API
     const app = new Application();
-
     // Stub
     testcase = ['Amy', 'Benson', 'Charlie'];
     app.people = testcase;
     app.selected = testcase;
-
+    // Mock cross-platform API
     const ms_write = test.mock.method(app.mailSystem, "write");
     const ms_send = test.mock.method(app.mailSystem, "send");
-
+    // Call tested function once and Examine info about function calls and data returned
     app.notifySelected(); 
-
     assert.strictEqual(ms_write.mock.calls.length, app.selected.length);
     assert.strictEqual(ms_send.mock.calls.length, app.selected.length);
-
     for (let i = 0; i < app.selected.length; i++) {
         assert.strictEqual(ms_write.mock.calls[i].result, 'Congrats, ' + app.selected[i] + '!');
         assert.strictEqual(ms_write.mock.calls[i].result, ms_send.mock.calls[i].arguments[1]);
         assert.strictEqual(ms_send.mock.calls[i].arguments[0], ms_send.mock.calls[i].arguments[0]);
     }
-
 });
