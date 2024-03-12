@@ -1,27 +1,18 @@
 const test = require('node:test');
 const assert = require('assert');
 const fs = require('fs');
-// Stub Failed: Leave Application.people empty
-test.mock.method(fs, 'readFile', (a, b) =>'Amy\nBenson\nCharlie');
-// test.mock.method(util, 'promisify', (a) => a);
+test.mock.method(fs, 'readFile', (a, b, callback) => callback(null, "Amy\nBenson\nCharlie"));
 const { Application, MailSystem } = require('./main');
 
 // Alternative of Stub: Write File
-/*
-function init_test(testcase) {
+async function init_test(testcase) {
     if (!testcase instanceof Array) {
         return -1;
     }
     text = testcase.toString().replace(/,/g, "\n");
-    try {
-        fs.writeFileSync("name_list.txt", text, "utf-8");
-    } catch (error) {
-        console.log(error);
-        return -1;
-    }
+    await writeFile("name_list.txt", test, "utf-8");
     return 0;
 }
-*/
 
 // TODO: write your tests here
 // Remember to use Stub, Mock, and Spy when necessary
@@ -49,7 +40,11 @@ test("Test MailSystem's send", (t) => {
     }
 });
 
-test("Test Application's getNames", (t) => {
+test("Test Application's getNames", async () => {
+    const app = new Application();
+    const [people, selected] = await app.getNames();
+    assert.deepStrictEqual(people, ['Amy', 'Benson', 'Charlie']);
+    assert.deepStrictEqual(selected, []);
 });
 
 test("Test Application's getRandomPerson", (t) => {
