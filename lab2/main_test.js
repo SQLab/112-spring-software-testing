@@ -5,14 +5,14 @@ test.mock.method(fs, 'readFile', (a, b, callback) => callback(null, "Amy\nBenson
 const { Application, MailSystem } = require('./main');
 
 // Alternative of Stub: Write File
-async function init_test(testcase) {
-    if (!testcase instanceof Array) {
-        return -1;
-    }
-    text = testcase.toString().replace(/,/g, "\n");
-    await writeFile("name_list.txt", test, "utf-8");
-    return 0;
-}
+// async function init_test(testcase) {
+//     if (!testcase instanceof Array) {
+//         return -1;
+//     }
+//     text = testcase.toString().replace(/,/g, "\n");
+//     await writeFile("name_list.txt", test, "utf-8");
+//     return 0;
+// }
 
 // TODO: write your tests here
 // Remember to use Stub, Mock, and Spy when necessary
@@ -72,13 +72,15 @@ test("Test Application's selectNextPerson", (t) => {
     testcase = ['Amy', 'Benson', 'Charlie'];
     app.people = testcase;// Stub
     assert(app.people.includes(app.selectNextPerson()));
-    //app.getRandomPerson = t.mock.fn(app.getRandomPerson, ()=>app.selected[0], {times:2});
+
+    // Mock Implementation: call the selected person for five times
     const proxy = t.mock.method(app, "getRandomPerson", ()=>app.selected[0], { times: 5 });
     assert(app.people.includes(app.selectNextPerson()));
-    assert.strictEqual(proxy.mock.calls.length, 5);// call the selected person for five times
+    assert.strictEqual(proxy.mock.calls.length, 5);
     for (let i = 0; i < 5; i++) {
         assert.strictEqual(proxy.mock.calls[i].result, app.selected[0]);
     }
+
     assert(app.people.includes(app.selectNextPerson()));
     assert.deepStrictEqual(app.people.toSorted(), app.selected.toSorted());
     assert.strictEqual(app.selectNextPerson(), null);
@@ -86,6 +88,25 @@ test("Test Application's selectNextPerson", (t) => {
 
 test("Test Application's notifySelected", (t) => {
     // Mock cross-platform API
-    // app.mailSystem.write = test.mock.fn(app.mailSystem.write);
-    // app.mailSystem.send = test.mock.fn(app.mailSystem.send);
+    const app = new Application();
+
+    // Stub
+    testcase = ['Amy', 'Benson', 'Charlie'];
+    app.people = testcase;
+    app.selected = testcase;
+
+    const ms_write = test.mock.method(app.mailSystem, "write");
+    const ms_send = test.mock.method(app.mailSystem, "send");
+
+    app.notifySelected(); 
+
+    assert.strictEqual(ms_write.mock.calls.length, app.selected.length);
+    assert.strictEqual(ms_send.mock.calls.length, app.selected.length);
+
+    for (let i = 0; i < app.selected.length; i++) {
+        assert.strictEqual(ms_write.mock.calls[i].result, 'Congrats, ' + app.selected[i] + '!');
+        assert.strictEqual(ms_write.mock.calls[i].result, ms_send.mock.calls[i].arguments[1]);
+        assert.strictEqual(ms_send.mock.calls[i].arguments[0], ms_send.mock.calls[i].arguments[0]);
+    }
+
 });
