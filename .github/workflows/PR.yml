@@ -70,7 +70,7 @@ jobs:
                       const pr = await github.rest.pulls.get({ owner, repo, pull_number: issue_number });
                       const files = await github.rest.pulls.listFiles({ owner, repo, pull_number: issue_number });
                       const changedFiles = files.data.map((file) => file.filename);
-                      echo changedFiles;
+                      console.log(changedFiles);
 
                       const allowedFiles = [
                         'lab1/main_test.js',
