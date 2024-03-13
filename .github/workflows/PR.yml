@@ -53,6 +53,9 @@ jobs:
                       const pr = await github.rest.pulls.get({ owner, repo, pull_number: issue_number });
                       const body = pr.data.body;
 
+                      console.log('[*] PR body:');
+                      console.log(pr.data.body);
+
                       const checkboxes = body.match(/^ ?(-|\*) \[[x ]\]/gi);
                       if (!checkboxes || checkboxes.length !== 5) {
                         core.setFailed('The PR description must contain exactly 5 checkboxes.');
