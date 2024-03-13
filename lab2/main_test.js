@@ -12,6 +12,7 @@ test.mock.method(fs, 'readFile', (path, encoding, callback) => {
 const { Application, MailSystem } = require('./main');
 const { type } = require('os');
 
+// test data
 const test_people = ['Alice', 'Bob', 'Charlie'];
 const test_file_data = test_people.join('\n');
 
@@ -20,26 +21,24 @@ test('MailSystem.write', () => {
     const name = test_people[0];
     const expected = 'Congrats, ' + name + '!';
 
-    const context = mailSystem.write(name);
-    assert.strictEqual(context, expected);
+    const actual = mailSystem.write(name);
+    assert.strictEqual(actual, expected);
 });
 
 test('MailSystem.send', () => {
     const mailSystem = new MailSystem();
     const name = test_people[0];
     const context = 'Congrats, ' + name + '!';
-
-    // use test.mock to simulate Math.random() with return value = 1
+    
+    // use stub to simulate Math.random() with return value = 1
     test.mock.method(Math, 'random', () => 1);
-    let success = mailSystem.send(name, context);
-    assert.strictEqual(success, true);
+    let actual = mailSystem.send(name, context);
+    assert.strictEqual(actual, true);
 
-    // use test.mock to simulate Math.random() with return value = 0
+    // use stub to simulate Math.random() with return value = 0
     test.mock.method(Math, 'random', () => 0);
-    success = mailSystem.send(name, context);
-    assert.strictEqual(success, false);
-
-    test.mock.restoreAll();
+    actual = mailSystem.send(name, context);
+    assert.strictEqual(actual, false);
 });
 
 test('Application.getNames', async () => { 
@@ -54,21 +53,24 @@ test('Application.getRandomPerson', async () => {
     const application = new Application();
     const [people, selected] = await application.getNames();
 
+    // use stub to simulate Math.random() with return value = 0
     test.mock.method(Math, 'random', () => 0);
     const person = application.getRandomPerson();
     assert.strictEqual(person, test_people[0]);
-
-    test.mock.restoreAll();
 });
 
 test('Application.selectNextPerson', async () => {
     const application = new Application();
     const [people, selected] = await application.getNames();
 
-    test.mock.method(Math, 'random', () => 0);
+    // use stub to simulate application.getRandomPerson() with return value = test_people[0]
+    test.mock.method(application, 'getRandomPerson', () => {
+        return test_people[0];
+    });
     const person = application.selectNextPerson();
     assert.strictEqual(person, test_people[0]);
-
+    test.mock.restoreAll(); 
+    
     // for the case when getRandomPerson returns the person that has already been selected
     let dup = true;
     test.mock.method(application, 'getRandomPerson', () => {
@@ -81,13 +83,15 @@ test('Application.selectNextPerson', async () => {
         }
     });
     const person_after_dup = application.selectNextPerson();
-
-    // reset test.mock
     test.mock.restoreAll();
-    // select all people (except the two which are already selected before)
-    for (let i = 0; i < people.length-2; i++) {
-        let person_temp = application.selectNextPerson();
-    }
+
+    // use stub to simulate application.getRandomPerson() with return value = test_people[2]
+    test.mock.method(application, 'getRandomPerson', () => {
+        return test_people[2];
+    });
+    
+    // select all people (adding the last one)
+    const last_person = application.selectNextPerson();
 
     // when all people are already selected
     const person_null = application.selectNextPerson();
@@ -99,12 +103,19 @@ test ('Application.notifySelected', async () => {
     const application = new Application();
     const [people, selected] = await application.getNames();
 
-    test.mock.method(Math, 'random', () => 0);
+    test.mock.method(application, 'getRandomPerson', () => {
+        return test_people[0];
+    });
     const person = application.selectNextPerson();
 
-    // set random to 1 to simulate mail sent successfully
-    test.mock.method(Math, 'random', () => 1);
-    application.notifySelected();
+    // use spy to check if mailSystem.write/send is called
+    const writeSpy = test.mock.fn(() => 'Congrats, ' + person + '!');
+    test.mock.method(application.mailSystem, 'write', writeSpy);
+    const sendSpy = test.mock.fn(() => true);
+    test.mock.method(application.mailSystem, 'send', sendSpy);
 
-    test.mock.restoreAll();
+    const actual = application.notifySelected();
+    assert.strictEqual(writeSpy.mock.calls.length, 1);
+    assert.strictEqual(sendSpy.mock.calls.length, 1);
+    assert.strictEqual(actual, undefined);
 });
