@@ -1,7 +1,7 @@
 name: Autograding
 
 on:
-    pull_request:
+    pull_request_target:
         types: [labeled, synchronize, opened, reopened, ready_for_review]
 
 jobs:
