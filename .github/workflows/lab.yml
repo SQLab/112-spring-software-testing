@@ -1,0 +1,43 @@
+name: Autograding
+
+on:
+    pull_request:
+        types: [labeled, synchronize, opened, reopened, ready_for_review]
+
+jobs:
+    build:
+        runs-on: ${{ matrix.os }}
+        strategy:
+            matrix:
+                os: [ubuntu-22.04]
+            fail-fast: false
+        steps:
+            - uses: actions/checkout@v1
+              with:
+                  fetch-depth: 1
+            - uses: actions/setup-node@v4
+              with:
+                  node-version: latest
+            - name: Extract lab number
+              id: lab
+              run: echo "::set-output name=number::$(echo ${GITHUB_EVENT_PATH} | jq -r .pull_request.labels[0].name)"
+            - name: Grading
+              run: |
+                  cd lab${{ steps.lab.outputs.number }}
+                  ./validate.sh
+            - name: Check no changes other than specific files
+              uses: actions/github-script@v5
+              with:
+                  github-token: ${{ secrets.GITHUB_TOKEN }}
+                  script: |
+                      const { owner, repo, number: issue_number } = context.issue;
+                      const pr = await github.rest.pulls.get({ owner, repo, pull_number: issue_number });
+                      const files = await github.rest.pulls.listFiles({ owner, repo, pull_number: issue_number });
+                      const changedFiles = files.data.map((file) => file.filename);
+
+                      const allowedFiles = [
+                        `lab${{ steps.lab.outputs.number }}/main_test.js`,
+                      ];
+                      if (!changedFiles.every((file) => allowedFiles.includes(file))) {
+                        core.setFailed('The PR contains changes to files other than the allowed files.');
+                      }
