@@ -18,26 +18,37 @@ jobs:
             - uses: actions/setup-node@v4
               with:
                   node-version: latest
-            - name: Extract lab number
-              id: lab
-              run: echo "::set-output name=number::$(echo ${GITHUB_EVENT_PATH} | jq -r .pull_request.labels[0].name)"
-            - name: Grading
-              run: |
-                  cd lab${{ steps.lab.outputs.number }}
-                  ./validate.sh
-            - name: Check no changes other than specific files
+            - name: Extract lab number and Check no changes other than specific files
               uses: actions/github-script@v5
+              id: lab
               with:
                   github-token: ${{ secrets.GITHUB_TOKEN }}
                   script: |
                       const { owner, repo, number: issue_number } = context.issue;
                       const pr = await github.rest.pulls.get({ owner, repo, pull_number: issue_number });
+                      const labels = pr.data.labels;
+                      const lab = labels.find((label) => label.name.startsWith('lab'));
+                      if (!lab) {                        
+                        core.setFailed('No lab label found on the PR.');
+                        return { number: 0 };
+                      }
+                      const labNumberMatch = lab.name.match(/lab(\d+)/);
+                      if (!labNumberMatch) {
+                        core.setFailed('Invalid lab label found on the PR.');
+                        return { number: 0 };
+                      }
+                      const labNumber = labNumberMatch[1];
+
                       const files = await github.rest.pulls.listFiles({ owner, repo, pull_number: issue_number });
                       const changedFiles = files.data.map((file) => file.filename);
-
                       const allowedFiles = [
-                        `lab${{ steps.lab.outputs.number }}/main_test.js`,
+                        `lab${labNumber}/main_test.js`,
                       ];
                       if (!changedFiles.every((file) => allowedFiles.includes(file))) {
                         core.setFailed('The PR contains changes to files other than the allowed files.');
                       }
+                      return { number: labNumber };
+            - name: Grading
+              run: |
+                  cd lab${{ steps.lab.outputs.number }}
+                  ./validate.sh
