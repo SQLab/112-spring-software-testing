@@ -1,10 +1,11 @@
 const test = require('node:test');
 const assert = require('assert');
 const fs = require('fs');
-const { Application, MailSystem } = require('./main');  
- 
-// TODO: write your tests here 
-// Remember to use Stub, Mock, and Spy when necessary 
+const { Application, MailSystem } = require('./main');
+
+// TODO: write your tests here
+// Remember to use Stub, Mock, and Spy when necessary
+const originalMathRandom = Math.random;
 test("Test MailSystem's write", () => {
     const mailsystem = new MailSystem();
     assert.strictEqual(mailsystem.write("John"), 'Congrats, John!');
@@ -75,6 +76,36 @@ test("Test Application's selectNextPerson", async() => {
         //fs.unlink('name_list.txt', () => {});
 });
 
+test("Test Application's selectNextPerson2", async() => {
+    let app = new Application();
+    [app.people,app.selected] = await app.getNames();
+    //const originalMathRandom = Math.random;
+        //Math.random = () => 0;
+        Math.random = originalMathRandom;
+        let oneFlag = false;
+        Math.random = () => {
+            if (app.selected.includes('John') && oneFlag) {
+                return 0.5;
+            }
+            if (app.selected.includes('John')) {
+                oneFlag = true;
+                return 0;
+            }
+            else {
+                return 0;
+            }
+        }
+        assert.deepStrictEqual(app.selectNextPerson(), 'John');
+        //Math.random = originalMathRandom;
+        assert.deepStrictEqual(app.selectNextPerson(), 'Jane');
+        //Math.random = () => 0.9;
+        Math.random = originalMathRandom;
+        assert.deepStrictEqual(app.selectNextPerson(), 'Doe');
+        assert.deepStrictEqual(app.selectNextPerson(), null);
+        assert.deepStrictEqual(app.selectNextPerson(), null);
+        assert.deepStrictEqual(app.selectNextPerson(), null);
+        //fs.unlink('name_list.txt', () => {});
+});
 test("Test Application's notifySelected", async(t) => {
     let app = new Application();
     [app.people,app.selected] = await app.getNames();
