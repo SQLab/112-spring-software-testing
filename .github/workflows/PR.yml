@@ -19,7 +19,7 @@ jobs:
                       const titleRegex = /^\[LAB(\d+)\] [a-zA-Z]?\d+$/;
                       const match = title.match(titleRegex);
 
-                      const labNumberStr = undefined;
+                      let labNumberStr = undefined;
                       if (match) {
                         labNumberStr = match[1];
                       } else {
