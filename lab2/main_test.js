@@ -3,8 +3,6 @@ const assert = require('assert');
 const fs=require('fs');
 const { Application, MailSystem } = require('./main');
 
-// TODO: write your tests here
-// Remember to use Stub, Mock, and Spy when necessary
 
 test('mailsystem write',(t)=>{
 	const ms=new MailSystem();
