@@ -9,9 +9,11 @@ const { Application, MailSystem } = require('./main');
 
 const unlink = util.promisify(fs.unlink);
 const writeFile = util.promisify(fs.writeFile);
-const content = 'Quan\nHenry\nBilly';
+// const content = 'Quan\nHenry\nBilly';
 
-// test.mock.method(fs, "readFile", (path, options, callback) => callback(null, content));
+// test.mock.method(fs, "readFile", (path, encoding, callback) => {
+//     callback(null, content)
+// });
 
 
 test('should write a mail for a given name', () => {
@@ -41,14 +43,17 @@ test('create Application instance', async () => {
     const content = 'Quan\nHenry\nBilly';
     const fileName = 'name_list.txt';
     fs.writeFileSync(fileName, content, 'utf8');
-
+    // test.mock.method(fs, "readFile", (path, encoding, callback) => {
+    //     callback(null, content)
+    // });
+    
     const app = new Application();
 
     const people = await app.getNames();
     assert.deepStrictEqual(people, [['Quan', 'Henry', 'Billy'], []]);
     assert.deepStrictEqual(app.people.length, 3);
     assert.deepStrictEqual(app.selected.length, 0);
-
+    fs.unlinkSync(fileName);    
 })
 
 test('get random person', async () => {
