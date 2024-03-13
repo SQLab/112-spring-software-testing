@@ -22,6 +22,7 @@ jobs:
               uses: actions/github-script@v5
               id: lab
               with:
+                  result-encoding: string
                   github-token: ${{ secrets.GITHUB_TOKEN }}
                   script: |
                       const { owner, repo, number: issue_number } = context.issue;
@@ -38,6 +39,7 @@ jobs:
                         return { number: 0 };
                       }
                       const labNumber = labNumberMatch[1];
+                      console.log(`Lab number: ${labNumber}`)
 
                       const files = await github.rest.pulls.listFiles({ owner, repo, pull_number: issue_number });
                       const changedFiles = files.data.map((file) => file.filename);
