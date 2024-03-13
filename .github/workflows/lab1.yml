@@ -16,10 +16,9 @@ jobs:
             - uses: actions/checkout@v1
               with:
                   fetch-depth: 1
-            - name: dependency (ubuntu)
-              run: |
-                  curl -fsSL https://deb.nodesource.com/setup_21.x | sudo -E bash - &&\
-                  sudo apt-get install -y nodejs
+            - uses: actions/setup-node@v4
+              with:
+                  node-version: latest
             - name: grading
               run: |
                   cd lab1
