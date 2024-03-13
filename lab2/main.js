@@ -12,7 +12,6 @@ class MailSystem {
     send(name, context) {
         console.log('--send mail to ' + name + '--');
         // Interact with mail system and send mail
-        sleep(1000);
         // random success or failure
         const success = Math.random() > 0.5;
         if (success) {
@@ -81,3 +80,8 @@ module.exports = {
 // app.selectNextPerson();
 // app.selectNextPerson();
 // app.notifySelected();
+
+module.exports = {
+    Application,
+    MailSystem,
+};
