@@ -70,7 +70,6 @@ test('select next person', async () => {
     const [people, selected] = await app.getNames()
 
     const fn = mock.method(app, 'getRandomPerson');
-    const index = Math.floor(0 * people.length)
 
 
     // all people are selected
