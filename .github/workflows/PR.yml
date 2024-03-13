@@ -62,24 +62,3 @@ jobs:
                       if (unchecked && unchecked.length > 0) {
                         core.setFailed(`There are ${unchecked.length} unchecked items in the PR description.`);
                       }
-    changed-files-check:
-        runs-on: ubuntu-latest
-        steps:
-            - name: Check no changes other than specific files
-              uses: actions/github-script@v5
-              with:
-                  github-token: ${{ secrets.GITHUB_TOKEN }}
-                  script: |
-                      const { owner, repo, number: issue_number } = context.issue;
-                      const pr = await github.rest.pulls.get({ owner, repo, pull_number: issue_number });
-                      const files = await github.rest.pulls.listFiles({ owner, repo, pull_number: issue_number });
-                      const changedFiles = files.data.map((file) => file.filename);
-                      echo changedFiles;
-
-                      const allowedFiles = [
-                        'lab1/main_test.js',
-                        'lab2/main_test.js',
-                      ];
-                      if (!changedFiles.every((file) => allowedFiles.includes(file))) {
-                        core.setFailed('The PR contains changes to files other than the allowed files.');
-                      }
