@@ -49,8 +49,9 @@ jobs:
                       if (!changedFiles.every((file) => allowedFiles.includes(file))) {
                         core.setFailed('The PR contains changes to files other than the allowed files.');
                       }
-                      return { number: labNumber };
+                      return labNumber;
             - name: Grading
               run: |
-                  cd lab${{ steps.lab.outputs.number }}
+                  echo "${{steps.lab.outputs.result}}"
+                  cd lab${{ steps.lab.outputs.result }}
                   ./validate.sh
