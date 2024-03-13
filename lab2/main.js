@@ -69,12 +69,6 @@ class Application {
     }
 }
 
-
-module.exports = {
-    Application,
-    MailSystem
-};
-
 // const app = new Application();
 // app.selectNextPerson();
 // app.selectNextPerson();
