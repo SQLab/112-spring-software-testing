@@ -13,7 +13,7 @@ class MailSystem {
         console.log('--send mail to ' + name + '--');
         // Interact with mail system and send mail
         // random success or failure
-        const success = Math.random() > 0.5;
+        const success = Math.random() > 0.5;  //如果生成的随机数大于 0.5，则 success 被赋值为 true，否则被赋值为 false。
         if (success) {
             console.log('mail sent');
         } else {
@@ -52,9 +52,10 @@ class Application {
             console.log('all selected');
             return null;
         }
-        let person = this.getRandomPerson();
-        while (this.selected.includes(person)) {
-            person = this.getRandomPerson();
+        let person = this.getRandomPerson();  //将调用 getRandomPerson 方法的返回值存储在名为 person 的变量中
+
+        while (this.selected.includes(person)) {   //直到选取到一个不在 selected 数组中的人名。将选取到的人名 person 添加到 selected 数组中。
+            person = this.getRandomPerson();  //通过调用 getRandomPerson() 方法重新获取一个随机选取的人名，并将其赋值给 person 变量。
         }
         this.selected.push(person);
         return person;
