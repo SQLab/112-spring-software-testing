@@ -5,23 +5,23 @@ const { Application, MailSystem } = require('./main');
  
 // TODO: write your tests here 
 // Remember to use Stub, Mock, and Spy when necessary 
-// test("Test MailSystem's write", () => {
-//     const mailsystem = new MailSystem();
-//     assert.strictEqual(mailsystem.write("John"), 'Congrats, John!');
-// });
-// test("Test MailSystem's send",()=>{
-//     //test('should send mail successfully', () => {
-//         const mailsystem = new MailSystem();
-//         const name = 'John';
-//         Math.random = () => 0.7;
-//         const result = mailsystem.send(name,mailsystem.write(name));
-//         assert.strictEqual(result,true);
-//         Math.random = originalMathRandom;
+test("Test MailSystem's write", () => {
+    const mailsystem = new MailSystem();
+    assert.strictEqual(mailsystem.write("John"), 'Congrats, John!');
+});
+test("Test MailSystem's send",()=>{
+    //test('should send mail successfully', () => {
+        const mailsystem = new MailSystem();
+        const name = 'John';
+        Math.random = () => 0.7;
+        const result = mailsystem.send(name,mailsystem.write(name));
+        assert.strictEqual(result,true);
+        Math.random = originalMathRandom;
 
-//         Math.random = () => 0.3;
-//         const result_ = mailsystem.send(name,mailsystem.write(name));
-//         assert.strictEqual(result_,false);
-// });
+        Math.random = () => 0.3;
+        const result_ = mailsystem.send(name,mailsystem.write(name));
+        assert.strictEqual(result_,false);
+});
 
 const data = 'John\nJane\nDoe';
 
