@@ -12,8 +12,9 @@ jobs:
                 os: [ubuntu-22.04]
             fail-fast: false
         steps:
-            - uses: actions/checkout@v1
+            - uses: actions/checkout@v4
               with:
+                  ref: "${{ github.event.pull_request.merge_commit_sha }}"
                   fetch-depth: 1
             - uses: actions/setup-node@v4
               with:
