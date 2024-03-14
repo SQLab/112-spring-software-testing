@@ -7,7 +7,7 @@ const { Application, MailSystem } = require('./main');
 // TODO: write your tests here
 // Remember to use Stub, Mock, and Spy when necessary
 
-const unlink = util.promisify(fs.unlink);
+// const unlink = util.promisify(fs.unlink);
 const writeFile = util.promisify(fs.writeFile);
 
 test('should write a mail for a given name', () => {
@@ -28,6 +28,7 @@ test('send email to a given name', (context) => {
     mock.method(Math, 'random', () => 0.4);
     const failure = mailSystem.send(name, context);
     assert.strictEqual(failure, false);
+
 })
 
 
@@ -37,18 +38,21 @@ test('create Application instance', async () => {
     const fileName = 'name_list.txt';
 
     // await writeFile(fileName, content, 'utf8');
-    fs.writeFileSync(fileName, content, 'utf8');
+    await writeFile(fileName, content, 'utf8');
     // test.mock.method(fs, "readFile", (path, encoding, callback) => {
     //     callback(null, content)
     // });
     
     const app = new Application();
 
-    const people = await app.getNames();
-    assert.deepStrictEqual(people, [['Quan', 'Henry', 'Billy'], []]);
+    const res = await app.getNames();
     assert.deepStrictEqual(app.people.length, 3);
     assert.deepStrictEqual(app.selected.length, 0);
-    fs.unlinkSync(fileName);    
+    assert.deepStrictEqual(res, [['Quan', 'Henry', 'Billy'], []]);
+    assert.deepStrictEqual(app.people, ['Quan', 'Henry', 'Billy']);
+    assert.deepStrictEqual(app.selected, []);
+
+    fs.unlinkSync(fileName);   
 })
 
 test('get random person', async () => {
@@ -58,7 +62,7 @@ test('get random person', async () => {
 
     const app = new Application();
     const [people, selected] = await app.getNames()
-
+    
     mock.method(Math, 'random', () => 0.5);
     const index = Math.floor(0.5 * people.length)
     const person = app.getRandomPerson();
@@ -68,7 +72,7 @@ test('get random person', async () => {
 
     // fs.unlinkSync(fileName);
     
-    await unlink(fileName);
+    fs.unlinkSync(fileName);   
 })
 
 
@@ -87,7 +91,7 @@ test('notify selected', async () => {
     app.notifySelected();
     assert.deepStrictEqual(write.mock.calls.length, 3);
     assert.deepStrictEqual(send.mock.calls.length, 3);
-    await unlink(fileName);
+    fs.unlinkSync(fileName);   
 })
 
 test('select next person', async () => {
@@ -116,5 +120,6 @@ test('select next person', async () => {
     const person = app.selectNextPerson();
     assert.strictEqual(person, 'Henry');
     assert.deepStrictEqual(app.selected.length, 2);
-    await unlink(fileName);
+    
+    fs.unlinkSync(fileName);   
 })
