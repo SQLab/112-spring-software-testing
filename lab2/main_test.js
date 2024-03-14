@@ -1,66 +1,40 @@
 const {mock, test} = require('node:test');
 const assert = require('assert');
+const fs = require('fs');
+
+mock.method(fs, 'readFile', (path, encoding, callback) => {
+    callback(null, 'John\nDoe');
+});
+
 const { Application, MailSystem } = require('./main');
 
 // TODO: write your tests here
 // Remember to use Stub, Mock, and Spy when necessary
 
-const fs = require('fs');
-const filePath = 'name_list.txt';
-
-function writeFile(content) {
-    return new Promise((resolve) => {
-        fs.writeFile(filePath, content, resolve);
-    });
-}
-
-function unlink() {
-    return new Promise((resolve) => {
-        fs.unlink(filePath, resolve);
-    });
-}
-
 test('Test Application\'s getNames', async (t) => {
-    const fn = t.mock.fn(writeFile);
-    await fn('John\nDoe');
-
     let myApp = new Application();
-    await fn('John\nDoe');
     assert.deepEqual(await myApp.getNames(), [['John', 'Doe'], []]);
-
-    fn.mock.mockImplementation(unlink);
-    await fn();
 });
 
 test('Test Application\'s getRandomPerson', async (t) => {
-    const fn = t.mock.fn(writeFile);
-    await fn('John\nDoe');
     let myApp = new Application();
-    myApp.people = ['John', 'Doe'];
+    await new Promise((resolve) => { setTimeout(resolve, 1); });
 
     const floor = t.mock.method(Math, 'floor');
     const random = t.mock.method(Math, 'random');
-    assert.strictEqual(floor.mock.callCount(), 0);
-    assert.strictEqual(random.mock.callCount(), 0);
+    let length = myApp.people.length;
 
-    for (let i = 0; i < 20; i++) {
+    for (let i = 0; i < length; i++) {
+        Math.random.mock.mockImplementation(() => i / length);
         result = myApp.getRandomPerson();
-        assert.strictEqual(floor.mock.callCount(), i + 1);
-        assert.strictEqual(random.mock.callCount(), i + 1);
-
-        resultIndex = floor.mock.calls[i].result;
         assert.strictEqual(myApp.people.includes(result), true);
-        assert.strictEqual(myApp.people[resultIndex], result);
+        assert.strictEqual(result, myApp.people[i]);
     }
-    fn.mock.mockImplementation(unlink);
-    await fn();
 });
 
 test('Test Application\'s selectNextPerson', async (t) => {
-    const fn = t.mock.fn(writeFile);
-    await fn('John\nDoe');
     myApp = new Application();
-    myApp.people = ['John', 'Doe', 'Amy', 'Mark', 'Jane'];
+    await new Promise((resolve) => { setTimeout(resolve, 1); });
 
     for (let i = 0; i < myApp.people.length + 1; i++) {
         count = myApp.selected.length;
@@ -68,21 +42,19 @@ test('Test Application\'s selectNextPerson', async (t) => {
 
         if (count < myApp.people.length) {
             assert.strictEqual(myApp.selected.length, count + 1);
+            assert.strictEqual(myApp.selected.includes(result), true);
         }
         else
         {
             assert.strictEqual(myApp.selected.length, count);
         }
     }
-    fn.mock.mockImplementation(unlink);
-    await fn();
 });
 
 test('Test Application\'s notifySelected', async (t) => {
-    const fn = t.mock.fn(writeFile);
-    await fn('John\nDoe');
     myApp = new Application();
-    myApp.selected = ['John', 'Doe', 'Amy', 'Mark', 'Jane'];
+    await new Promise((resolve) => { setTimeout(resolve, 1); });
+    myApp.selected = myApp.people;
     myApp.mailSystem = new MailSystem();
 
     const notifySelected = t.mock.method(myApp, 'notifySelected');
@@ -97,9 +69,6 @@ test('Test Application\'s notifySelected', async (t) => {
     assert.strictEqual(notifySelected.mock.callCount(), 1);
     assert.strictEqual(send.mock.calls.length, myApp.selected.length);
     assert.strictEqual(write.mock.calls.length, myApp.selected.length);
-
-    fn.mock.mockImplementation(unlink);
-    await fn();
 });
 
 test('Test MailSystem\'s write', (t) => {
@@ -112,11 +81,13 @@ test('Test MailSystem\'s send', (t) => {
     const random = t.mock.method(Math, 'random');
     assert.strictEqual(random.mock.callCount(), 0);
 
-    for (let i = 0; i < 20; i++) {
-        result = myMailSystem.send(null, null);
-        assert.strictEqual(random.mock.callCount(), i + 1);
-        
-        const call = random.mock.calls[i];
-        assert.strictEqual(result, call.result > 0.5);
-    }
+    Math.random.mock.mockImplementation(() => 0.6);
+    result = myMailSystem.send(null, null);
+    assert.strictEqual(random.mock.callCount(), 1);
+    assert.strictEqual(result, true);
+
+    Math.random.mock.mockImplementation(() => 0.4);
+    result = myMailSystem.send(null, null);
+    assert.strictEqual(random.mock.callCount(), 2);
+    assert.strictEqual(result, false);
 });
