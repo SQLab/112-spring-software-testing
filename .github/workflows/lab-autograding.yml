@@ -20,7 +20,7 @@ jobs:
               with:
                   node-version: latest
             - name: Extract lab number and Check no changes other than specific files
-              uses: actions/github-script@v5
+              uses: actions/github-script@v7
               id: lab
               with:
                   result-encoding: string
