@@ -10,8 +10,6 @@ const { Application, MailSystem } = require('./main');
 const unlink = util.promisify(fs.unlink);
 const writeFile = util.promisify(fs.writeFile);
 
-
-
 test('should write a mail for a given name', () => {
     const mailSystem = new MailSystem();
     const name = 'John';
@@ -22,7 +20,6 @@ test('should write a mail for a given name', () => {
 test('send email to a given name', (context) => {
     const mailSystem = new MailSystem();
     const name = 'John';
-    const res = 'Congrats, John!';
 
     mock.method(Math, 'random', () => 0.6);
     const success = mailSystem.send(name, context);
@@ -41,6 +38,9 @@ test('create Application instance', async () => {
 
     // await writeFile(fileName, content, 'utf8');
     fs.writeFileSync(fileName, content, 'utf8');
+    // test.mock.method(fs, "readFile", (path, encoding, callback) => {
+    //     callback(null, content)
+    // });
     
     const app = new Application();
 
@@ -48,13 +48,13 @@ test('create Application instance', async () => {
     assert.deepStrictEqual(people, [['Quan', 'Henry', 'Billy'], []]);
     assert.deepStrictEqual(app.people.length, 3);
     assert.deepStrictEqual(app.selected.length, 0);
-    await unlink(fileName);    
+    fs.unlinkSync(fileName);    
 })
 
 test('get random person', async () => {
     const content = 'Quan\nHenry\nBilly';
     const fileName = 'name_list.txt'
-    fs.writeFileSync(fileName, content, 'utf8');
+    await writeFile(fileName, content, 'utf8');
 
     const app = new Application();
     const [people, selected] = await app.getNames()
@@ -62,9 +62,11 @@ test('get random person', async () => {
     mock.method(Math, 'random', () => 0.5);
     const index = Math.floor(0.5 * people.length)
     const person = app.getRandomPerson();
+    // console.log(person);
 
     assert.strictEqual(person, people[index])
 
+    // fs.unlinkSync(fileName);
     
     await unlink(fileName);
 })
@@ -74,7 +76,7 @@ test('get random person', async () => {
 test('notify selected', async () => {
     const content = 'Quan\nHenry\nBilly';
     const fileName = 'name_list.txt';
-    fs.writeFileSync(fileName, content, 'utf8');
+    await writeFile(fileName, content, 'utf8');
 
     const app = new Application();
 
@@ -89,9 +91,9 @@ test('notify selected', async () => {
 })
 
 test('select next person', async () => {
-    const content = 'Quan\nHenry\nBilly'
-    const fileName = 'name_list.txt'
-    fs.writeFileSync(fileName, content, 'utf8');
+    const content = 'Quan\nHenry\nBilly';
+    const fileName = 'name_list.txt';
+    await writeFile(fileName, content, 'utf8');
 
     const app = new Application();
     const [people, selected] = await app.getNames()
