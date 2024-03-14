@@ -25,9 +25,9 @@ class Calculator {
     }
 }
 
-// const calculator = new Calculator();
-// console.log(calculator.exp(87));
-// console.log(calculator.log(48763));
+const calculator = new Calculator();
+console.log(calculator.exp(2));
+console.log(NaN);
 
 module.exports = {
     Calculator
