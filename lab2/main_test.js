@@ -28,9 +28,9 @@ test("Test MailSystem's send", () => {
 	const context = "Congrats, Pisa!";
 	
 	// Mock
-	test.mock.method(Math, "random", () => 0.6); // Let Math.random() always return 0.6
+	test.mock.method(Math, "random", () => 0.9); // Let Math.random() always return 0.9
 	assert.strictEqual(mock_fn(name, context), true);
-	test.mock.method(Math, "random", () => 0.4); // Let Math.random() always return 0.4
+	test.mock.method(Math, "random", () => 0); // Let Math.random() always return 0
 	assert.strictEqual(mock_fn(name, context), false);
 	
 	// Reset Math.random
