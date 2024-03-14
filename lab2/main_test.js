@@ -9,7 +9,6 @@ const name = 'Deron';
 const context = 'Congrats, ' + name + '!';
 const name_list = 'Naruto\nSasuke\nSakura';
 
-
 test('Test on MailSystem.write', (t) => {
     const ms = new MailSystem();
     function write() {
