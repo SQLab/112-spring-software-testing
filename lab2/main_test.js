@@ -104,8 +104,8 @@ test('test notifySelected', async() => {
     application.notifySelected();
     assert.strictEqual(mailSystemSpy.writeCalls.length, 1, 'Write method should be called once');
     assert.strictEqual(mailSystemSpy.sendCalls.length, 1, 'Send method should be called once');
-    assert.strictEqual(mailSystemSpy.writeCalls[0], 'Kelvin', 'Write method should be called with John');
-    assert.strictEqual(mailSystemSpy.sendCalls[0], 'Kelvin', 'Send method should be called with John');
+    assert.strictEqual(mailSystemSpy.writeCalls[0], 'Kelvin', 'Write method should be called');
+    assert.strictEqual(mailSystemSpy.sendCalls[0], 'Kelvin', 'Send method should be called');
 
     // Clean up the test environment
     fs.unlinkSync('name_list.txt');
