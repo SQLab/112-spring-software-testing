@@ -34,3 +34,4 @@ const main_1 = require("./main");
     });
     assert_1.default.strictEqual(calc.log(5), Math.log(5));
 });
+
