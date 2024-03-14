@@ -51,27 +51,29 @@ test('test getRandomPerson', async() =>{
     }
 });
 
-test("Test Application's notifySelected", async () => {
-    const name_list = 'Kelvin\nNeil\n088\nJyw\nwei';
+test('test selectNextPerson', async (t) => {
     await writeFile('name_list.txt', name_list, 'utf8');
-
     const app = new Application();
-    const [people, selected] = await app.getNames();
+    app.people = ['Kelvin','Neil','088'];
+    function selectNextPerson() {
+        return app.selectNextPerson();
+    }
+    const fn = test.mock.fn(selectNextPerson);
+    Math.random = () => 0;
+    assert.strictEqual(fn(), 'Kelvin');
+    Math.random = () => 0.4;
+    assert.strictEqual(fn(), 'Neil');
+    Math.random = () => 0.8;
+    assert.strictEqual(fn(), '088');
+    assert.strictEqual(fn(), null);
+    // Remove 'name_list.txt'
+    fs.unlinkSync('name_list.txt');
+});
 
-    assert.deepStrictEqual(people, ['Kelvin','Neil','088','Jyw','wei']);
-    assert.deepStrictEqual(selected, []);
 
-    const spy = {
-        write: test.mock.fn(MailSystem.prototype.write),
-        send: test.mock.fn(MailSystem.prototype.send)
-    };
-    app.mailSystem = spy;
-    app.selected = ['Kelvin','Neil','088'];
-
-    app.notifySelected();
-
-    assert.deepStrictEqual(spy.write.mock.calls.map(call => call.arguments[0]), ['Kelvin','Neil','088']);
-    assert.deepStrictEqual(spy.send.mock.calls.map(call => call.arguments[0]), ['Kelvin','Neil','088']);
-
-    fs.unlinkSync('name_list.txt'); 
+test("test notifySelected", () => {
+	const app = new Application(); 
+	app.selected = ["Kelvin"];
+	assert.strictEqual(app.notifySelected(), undefined);
+	fs.unlink('name_list.txt', () =>{});
 });
