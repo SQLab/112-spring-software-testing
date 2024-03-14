@@ -78,7 +78,7 @@ test("Test Applicaiton selectNextPerson", (t) => {
 		}
 	});
 	app.selected = ["name1"];
-	app.selectNextPerson();
+	assert.strictEqual(app.selectNextPerson(), 'name2');
 
 	t.mock.reset();
 });
