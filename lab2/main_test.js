@@ -3,14 +3,13 @@ const assert = require('assert');
 const fs = require('fs');
 
 test.mock.method(fs, "readFile", (path, encoding, callback) => {
-    callback(null, "Amy\nJack\nJohn\nMary");
+    callback(null, "Amy\nJack");
 });
 
-const names = ['Amy', 'Jack', 'John', 'Mary'];
+const names = ['Amy', 'Jack'];
 
 const { Application, MailSystem } = require('./main');
-
-test.mock.method(fs, 'readFile', (path, options, callback) => callback(null, 'John\nMary'));
+const { count } = require('console');
 
 test("Test MailSystem's write", () => {
     
@@ -59,17 +58,27 @@ test("Test Application's getRandomPerson", () => {
 
 });
 
-test("Test Application's selectNextPerson", () => {
+test("Test Application's selectNextPerson", async () => {
 
     const application = new Application();
-    assert.strictEqual(application.selectNextPerson(), null);
-
     application.people = names;
 
-    for(let i = 0; i < names.length; i++) {
-        test.mock.method(application, "getRandomPerson", () => names[i]);
-        assert.strictEqual(application.selectNextPerson(), names[i]);
-    }
+    application.getRandomPerson = () => "Amy";
+    assert.strictEqual(application.selectNextPerson(),'Amy');
+    assert.deepStrictEqual(application.selected,["Amy"]);
+
+    let count = 1;
+    application.getRandomPerson = () => {
+        if (count % 2){
+            count++;
+            return "Amy";
+        }
+        return "Jack";
+    };
+    assert.strictEqual(application.selectNextPerson(),'Jack');
+    assert.deepStrictEqual(application.selected,["Amy","Jack"]);
+
+    assert.strictEqual(application.selectNextPerson(),null);
 
 });
 
@@ -89,12 +98,9 @@ test("Test Application's notifySelected", () => {
     assert.strictEqual(application.mailSystem.send.mock.calls[0].arguments[0], names[0]);
     assert.strictEqual(application.mailSystem.write.mock.calls[1].arguments[0], names[1]);
     assert.strictEqual(application.mailSystem.send.mock.calls[1].arguments[0], names[1]);
-    assert.strictEqual(application.mailSystem.write.mock.calls[2].arguments[0], names[2]);
-    assert.strictEqual(application.mailSystem.send.mock.calls[2].arguments[0], names[2]);
 
     // //check call times
     assert.strictEqual(application.mailSystem.write.mock.calls.length, names.length);
     assert.strictEqual(application.mailSystem.send.mock.calls.length, names.length);  
 
 });
-
