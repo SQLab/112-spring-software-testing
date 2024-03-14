@@ -1,12 +1,13 @@
-const { test, mock } = require("node:test");
-const assert = require("assert");
-const { Application, MailSystem } = require("./main");
-const fs = require('fs');
-const util = require('util');
-const writeFile = util.promisify(fs.writeFile);
+const test = require('node:test');
+const assert = require('assert');
+const { Application, MailSystem } = require('./main');
 
 // TODO: write your tests here
 // Remember to use Stub, Mock, and Spy when necessary
+
+const fs = require('fs');
+const util = require('util');
+const writeFile = util.promisify(fs.writeFile);
 
 test("Test MailSystem's write", () => {
     const system = new MailSystem();
