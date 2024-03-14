@@ -51,7 +51,6 @@ test('send email to a given name', (context) => {
 test('create Application instance', async (t) => {
     
    
-
     const fun = t.mock.fn(writeFile);
     await fun('Quan\nHenry\nBilly');
     
@@ -65,6 +64,8 @@ test('create Application instance', async (t) => {
     assert.deepStrictEqual(app.selected, []);
 
     // fs.unlinkSync(fileName);   
+    await unlink();
+
 })
 
 test('get random person', async (t) => {
@@ -81,10 +82,9 @@ test('get random person', async (t) => {
     // console.log(person);
 
     assert.strictEqual(person, people[index])
+    await unlink();
+ 
 
-    // fs.unlinkSync(fileName);
-    
-    // fs.unlinkSync(fileName);   
 })
 
 
@@ -94,8 +94,8 @@ test('notify selected', async (t) => {
     // const fileName = 'name_list.txt';
     // await writeFile(fileName, content, 'utf8');
 
-    const fn = t.mock.fn(writeFile);
-    await fn('Quan\nHenry\nBilly');
+    const fun = t.mock.fn(writeFile);
+    await fun('Quan\nHenry\nBilly');
 
     const app = new Application();
 
@@ -106,16 +106,16 @@ test('notify selected', async (t) => {
     app.notifySelected();
     assert.deepStrictEqual(write.mock.calls.length, 3);
     assert.deepStrictEqual(send.mock.calls.length, 3);
-    // fs.unlinkSync(fileName);   
+    await unlink();
+
 })
 
 test('select next person', async (t) => {
     const content = 'Quan\nHenry\nBilly';
-    // const fileName = 'name_list.txt';
-    // await writeFile(fileName, content, 'utf8');
+
 
     const fn = t.mock.fn(writeFile);
-    await fn('Quan\nHenry\nBilly');
+    await fn(content);
 
     const app = new Application();
     const [people, selected] = await app.getNames()
@@ -138,6 +138,7 @@ test('select next person', async (t) => {
     const person = app.selectNextPerson();
     assert.strictEqual(person, 'Henry');
     assert.deepStrictEqual(app.selected.length, 2);
+    await unlink();
     
     // fs.unlinkSync(fileName);   
 })
