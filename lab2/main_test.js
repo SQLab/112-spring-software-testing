@@ -9,11 +9,7 @@ const { Application, MailSystem } = require('./main');
 
 const unlink = util.promisify(fs.unlink);
 const writeFile = util.promisify(fs.writeFile);
-// const content = 'Quan\nHenry\nBilly';
 
-// test.mock.method(fs, "readFile", (path, encoding, callback) => {
-//     callback(null, content)
-// });
 
 
 test('should write a mail for a given name', () => {
@@ -42,7 +38,9 @@ test('create Application instance', async () => {
     
     const content = 'Quan\nHenry\nBilly';
     const fileName = 'name_list.txt';
-    fs.writeFileSync(fileName, content, 'utf8');
+
+    await writeFile(fileName, content, 'utf8');
+    // fs.writeFileSync(fileName, content, 'utf8');
     // test.mock.method(fs, "readFile", (path, encoding, callback) => {
     //     callback(null, content)
     // });
