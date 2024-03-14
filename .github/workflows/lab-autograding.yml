@@ -12,14 +12,14 @@ jobs:
                 os: [ubuntu-22.04]
             fail-fast: false
         steps:
-            - uses: actions/checkout@v1
+            - uses: actions/checkout@v4
               with:
                   fetch-depth: 1
             - uses: actions/setup-node@v4
               with:
                   node-version: latest
             - name: Extract lab number and Check no changes other than specific files
-              uses: actions/github-script@v5
+              uses: actions/github-script@v7
               id: lab
               with:
                   result-encoding: string
