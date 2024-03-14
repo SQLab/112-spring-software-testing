@@ -7,6 +7,15 @@ describe('MailSystem', () => {
         const mailSystem = new MailSystem();
         const context = mailSystem.write('John');
         assert.strictEqual(context, 'Congrats, John!');
+
+        const context2 = mailSystem.write(null);
+        assert.strictEqual(context2, 'Congrats, null!');
+
+        const context3 = mailSystem.write(undefined);
+        assert.strictEqual(context3, 'Congrats, undefined!');
+
+        const context4 = mailSystem.write(123);
+        assert.strictEqual(context4, 'Congrats, 123!');
     });
 
     it('send', (t) => {
