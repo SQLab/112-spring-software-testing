@@ -58,7 +58,7 @@ test('create Application instance', async () => {
 
 test('get random person', async () => {
     const content = 'Quan\nHenry\nBilly';
-    const fileName = 'name_list.txt';
+    const fileName = 'name_list.txt'
     await writeFile(fileName, content, 'utf8');
 
     const app = new Application();
