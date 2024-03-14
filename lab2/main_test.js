@@ -73,5 +73,5 @@ test("Test Application's notifySelected", async () => {
     assert.deepStrictEqual(spy.write.mock.calls.map(call => call.arguments[0]), ['Kelvin','Neil','088']);
     assert.deepStrictEqual(spy.send.mock.calls.map(call => call.arguments[0]), ['Kelvin','Neil','088']);
 
-    fs.unlinkSync('name_list.txt');
+    fs.unlinkSync('name_list.txt'); 
 });
