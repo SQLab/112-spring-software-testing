@@ -56,6 +56,29 @@ test("Test Application's getRandomPerson", () => {
 
 });
 
+test("Test Application's selectNextPerson", async () => {
+
+    const application = new Application();
+    application.people = names;
+
+    application.getRandomPerson = () => "Amy";
+    assert.strictEqual(application.selectNextPerson(),'Amy');
+    assert.deepStrictEqual(application.selected,["Amy"]);
+
+    let count = 1;
+    application.getRandomPerson = () => {
+        if (count % 2){
+            count++;
+            return "Amy";
+        }
+        return "Jack";
+    };
+    assert.strictEqual(application.selectNextPerson(),'Jack');
+    assert.deepStrictEqual(application.selected,["Amy","Jack"]);
+
+    assert.strictEqual(application.selectNextPerson(),null);
+
+});
 
 test("Test Application's notifySelected", () => {
 
