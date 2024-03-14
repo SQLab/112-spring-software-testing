@@ -19,9 +19,6 @@ jobs:
             - uses: actions/setup-node@v4
               with:
                   node-version: latest
-            - uses: actions/checkout@v1
-              with:
-                  fetch-depth: 1
             - name: Extract lab number and Check no changes other than specific files
               uses: actions/github-script@v5
               id: lab
@@ -52,9 +49,6 @@ jobs:
                         core.setFailed('The PR contains changes to files other than the allowed files.');
                       }
                       return labNumber;
-            - uses: actions/checkout@v1
-              with:
-                  fetch-depth: 1
             - name: Grading
               run: |
                   cd lab${{ steps.lab.outputs.result }}
