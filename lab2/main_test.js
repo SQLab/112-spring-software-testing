@@ -3,7 +3,7 @@ const assert = require('assert');
 const fs = require('fs');
 
 // Stub readFile to return 'John\nJane\n' when called with 'name_list.txt'
-const nameList = ['John', 'Jane'];
+const nameList = ['John', 'Jane', 'Joe'];
 mock.method(fs, 'readFile', (path, options, callback) => callback(null, nameList.join('\n')));
 const { Application, MailSystem } = require('./main');
 
@@ -21,6 +21,15 @@ describe('MailSystem', () => {
 
         const context4 = mailSystem.write(123);
         assert.strictEqual(context4, 'Congrats, 123!');
+
+        const context5 = mailSystem.write({});
+        assert.strictEqual(context5, 'Congrats, [object Object]!');
+
+        const context6 = mailSystem.write([]);
+        assert.strictEqual(context6, 'Congrats, !');
+
+        const context7 = mailSystem.write(true);
+        assert.strictEqual(context7, 'Congrats, true!');
     });
 
     it('send', (t) => {
@@ -39,7 +48,6 @@ describe('MailSystem', () => {
 });
 
 describe('Application', () => {
-    // Stub readFile to return 'John\nJane\n'
     it('getNames', async (t) => {
         const app = new Application();
         const names = await app.getNames();
@@ -57,27 +65,20 @@ describe('Application', () => {
         }
     });
 
-    describe('selectNextPerson', () => {
-        it('selectNextPerson', async (t) => {
-            const app = new Application();
-            const [people, selected] = await app.getNames();
-
-            for (let i = 0; i < people.length; i++) {
-                t.mock.method(Math, 'random', () => i / people.length);
-                const person = app.selectNextPerson();
-                assert.strictEqual(person, people[i]);
-                assert.deepStrictEqual(app.selected, people.slice(0, i + 1));
-            }
+    it('selectNextPerson', async (t) => {
+        const app = new Application();
+        app.people = nameList;
+        app.selected = [nameList[0]];
+        // test selectNextPerson while selected includes person
+        let count = 0;
+        t.mock.method(app, 'getRandomPerson', () => {
+            return nameList[count++];
         });
-
-        it('all selected', async (t) => {
-            const app = new Application();
-            const [people, selected] = await app.getNames();
-            app.selected = people;
-
-            const person = app.selectNextPerson();
-            assert.strictEqual(person, null);
-        });
+        for (let i = 1; i < nameList.length; i++) {
+            assert.strictEqual(app.selectNextPerson(), nameList[i]);
+            assert.deepStrictEqual(app.selected, nameList.slice(0, i + 1));
+        }
+        assert.strictEqual(app.selectNextPerson(), null);
     });
 
     it('notifySelected', async (t) => {
@@ -86,10 +87,10 @@ describe('Application', () => {
         app.selected = people;
 
         // count mail sent times
-        const mockSend = t.mock.method(MailSystem.prototype, 'send', () => true);
-        const mockWrite = t.mock.method(MailSystem.prototype, 'write', (name) => 'Congrats, ' + name + '!');
+        app.mailSystem.send = t.mock.fn(app.mailSystem.send);
+        app.mailSystem.write = t.mock.fn(app.mailSystem.write);
         app.notifySelected();
-        assert.strictEqual(mockSend.mock.calls.length, people.length);
-        assert.strictEqual(mockWrite.mock.calls.length, people.length);
+        assert.strictEqual(app.mailSystem.send.mock.calls.length, people.length);
+        assert.strictEqual(app.mailSystem.write.mock.calls.length, people.length);
     });
 });
