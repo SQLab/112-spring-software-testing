@@ -1,3 +1,4 @@
+
 // const {describe, it} = require('node:test');
 const test = require('node:test');
 const assert = require('assert');
@@ -54,3 +55,4 @@ test("Test Calculator.log()", () => {
         assert.throws(() => {cal.log(et.input)}, Error(et.expected));
     }
 });
+
