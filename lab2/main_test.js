@@ -3,7 +3,7 @@ const assert = require('assert');
 const fs = require('fs');
 
 // Stub readFile to return 'John\nJane\n' when called with 'name_list.txt'
-const nameList = ['John', 'Jane'];
+const nameList = ['John', 'Jane', 'Joe'];
 mock.method(fs, 'readFile', (path, options, callback) => callback(null, nameList.join('\n')));
 const { Application, MailSystem } = require('./main');
 
@@ -21,6 +21,15 @@ describe('MailSystem', () => {
 
         const context4 = mailSystem.write(123);
         assert.strictEqual(context4, 'Congrats, 123!');
+
+        const context5 = mailSystem.write({});
+        assert.strictEqual(context5, 'Congrats, [object Object]!');
+
+        const context6 = mailSystem.write([]);
+        assert.strictEqual(context6, 'Congrats, !');
+
+        const context7 = mailSystem.write(true);
+        assert.strictEqual(context7, 'Congrats, true!');
     });
 
     it('send', (t) => {
@@ -38,58 +47,64 @@ describe('MailSystem', () => {
     });
 });
 
-describe('Application', () => {
-    // Stub readFile to return 'John\nJane\n'
-    it('getNames', async (t) => {
+// describe('Application', () => {
+it('getNames', async (t) => {
+    const app = new Application();
+    const names = await app.getNames();
+    assert.deepStrictEqual(names, [nameList, []]);
+});
+
+it('getRandomPerson', async (t) => {
+    const app = new Application();
+    const [people, selected] = await app.getNames();
+
+    for (let i = 0; i < people.length; i++) {
+        t.mock.method(Math, 'random', () => i / people.length);
+        const person = app.getRandomPerson();
+        assert.strictEqual(person, people[i]);
+    }
+});
+
+describe('selectNextPerson', () => {
+    it('selectNextPerson', async (t) => {
         const app = new Application();
-        const names = await app.getNames();
-        assert.deepStrictEqual(names, [nameList, []]);
-    });
+        app.people = nameList;
+        app.selected = [nameList[0]];
 
-    it('getRandomPerson', async (t) => {
-        const app = new Application();
-        const [people, selected] = await app.getNames();
-
-        for (let i = 0; i < people.length; i++) {
-            t.mock.method(Math, 'random', () => i / people.length);
-            const person = app.getRandomPerson();
-            assert.strictEqual(person, people[i]);
-        }
-    });
-
-    describe('selectNextPerson', () => {
-        it('selectNextPerson', async (t) => {
-            const app = new Application();
-            const [people, selected] = await app.getNames();
-
-            for (let i = 0; i < people.length; i++) {
-                t.mock.method(Math, 'random', () => i / people.length);
-                const person = app.selectNextPerson();
-                assert.strictEqual(person, people[i]);
-                assert.deepStrictEqual(app.selected, people.slice(0, i + 1));
+        let count = 0;
+        t.mock.method(app, 'getRandomPerson', () => {
+            if (count == 0) {
+                count++;
+                return 'John'
+            } else if (count == 1) {
+                count++;
+                return 'Jane';
             }
-        });
+            else {
+                return 'Joe'
+            }
+        })
 
-        it('all selected', async (t) => {
-            const app = new Application();
-            const [people, selected] = await app.getNames();
-            app.selected = people;
+        assert.strictEqual(app.selectNextPerson(), 'Jane');
+        assert.deepStrictEqual(app.selected, ['John', 'Jane']);
 
-            const person = app.selectNextPerson();
-            assert.strictEqual(person, null);
-        });
-    });
+        assert.strictEqual(app.selectNextPerson(), 'Joe');
+        assert.deepStrictEqual(app.selected, ['John', 'Jane', 'Joe'])
 
-    it('notifySelected', async (t) => {
-        const app = new Application();
-        const [people, selected] = await app.getNames();
-        app.selected = people;
-
-        // count mail sent times
-        const mockSend = t.mock.method(MailSystem.prototype, 'send', () => true);
-        const mockWrite = t.mock.method(MailSystem.prototype, 'write', (name) => 'Congrats, ' + name + '!');
-        app.notifySelected();
-        assert.strictEqual(mockSend.mock.calls.length, people.length);
-        assert.strictEqual(mockWrite.mock.calls.length, people.length);
+        assert.strictEqual(app.selectNextPerson(), null);
     });
 });
+
+it('notifySelected', async (t) => {
+    const app = new Application();
+    const [people, selected] = await app.getNames();
+    app.selected = people;
+
+    // count mail sent times
+    app.mailSystem.send = t.mock.fn(app.mailSystem.send);
+    app.mailSystem.write = t.mock.fn(app.mailSystem.write);
+    app.notifySelected();
+    assert.strictEqual(app.mailSystem.send.mock.calls.length, people.length);
+    assert.strictEqual(app.mailSystem.write.mock.calls.length, people.length);
+});
+// });
