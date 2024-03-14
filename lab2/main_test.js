@@ -18,29 +18,33 @@ test("Test MailSystem's write", () => {
 test("Test MailSystem's send", () => {
     const system = new MailSystem();
     const oMathRandom = Math.random;
-    Math.random = () => 0.7;
+    Math.random = () => 1;
     const result = system.send('Kelvin', 'hi');
     assert.strictEqual(result, true);
 
-    Math.random = () => 0.4;
+    Math.random = () => 0;
     const result2 = system.send('Kelvin', 'hi');
     assert.strictEqual(result2, false);
     Math.random = oMathRandom;
 });
 
 test('test getNames', async() =>{
-    const name_list = 'Kelvin\nNeil\n088\nJyw\nwei';
+    const name_list = 'Kelvin\nNeil\n088';
     await writeFile('name_list.txt', name_list, 'utf-8');
     const app = new Application();
     const [people, selected] = await app.getNames();
 
-    assert.deepStrictEqual(people, ['Kelvin','Neil','088','Jyw','wei']);
+    assert.deepStrictEqual(people, ['Kelvin','Neil','088']);
     assert.deepStrictEqual(selected, []);
+    assert.strictEqual(app.people.length, 3);
+    assert.strictEqual(app.selected.length, 0);
+    fs.unlinkSync('name_list.txt');
+
 });
 
 
 test('test getRandomPerson', async() =>{
-    const name_list = 'Kelvin\nNeil\n088\nJyw\nwei';
+    const name_list = 'Kelvin\nNeil\n088';
     await writeFile('name_list.txt', name_list, 'utf-8');
     const app = new Application();
     const [people, selected] = await app.getNames();
@@ -52,7 +56,7 @@ test('test getRandomPerson', async() =>{
 });
 
 test('Test on Application.selectNextPerson', async (t) => {
-    const name_list = 'Kelvin\nNeil\n088\nJyw\nwei';
+    const name_list = 'Kelvin\nNeil\n088';
     await writeFile('name_list.txt', name_list, 'utf8');
     const app = new Application();
     app.people = ['Kelvin','Neil','088'];
@@ -64,7 +68,7 @@ test('Test on Application.selectNextPerson', async (t) => {
     assert.strictEqual(fn(), 'Kelvin');
     Math.random = () => 0.4;
     assert.strictEqual(fn(), 'Neil');
-    Math.random = () => 0.7;
+    Math.random = () => 0.8;
     assert.strictEqual(fn(), '088');
     assert.strictEqual(fn(), null);
 
