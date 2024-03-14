@@ -1,8 +1,8 @@
-const test = require('node:test');
+const {describe,it} = require('node:test');
 const assert = require('assert');
 const { Calculator } = require('./main');
 
-test("calculator exp test", () => {
+describe("calculator exp test", () => {
     const cal = new Calculator();
     const x = 'a'
     assert.throws(()=>cal.exp(x),Error('unsupported operand type'));
@@ -12,7 +12,7 @@ test("calculator exp test", () => {
     assert.strictEqual(cal.exp(z),1);
 });
 
-test("calculator log test",() => {
+describe("calculator log test",() => {
     const cal = new Calculator();
     const a = 'a'
     assert.throws(()=>cal.log(a),Error('unsupported operand type'));
