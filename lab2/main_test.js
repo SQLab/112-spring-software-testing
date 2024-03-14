@@ -7,9 +7,7 @@ test.mock.method(fs, "readFile", (path, encoding, callback) => {
 });
 
 const names = ['Amy', 'Jack'];
-
 const { Application, MailSystem } = require('./main');
-const { count } = require('console');
 
 test("Test MailSystem's write", () => {
     
