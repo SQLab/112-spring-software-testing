@@ -49,7 +49,7 @@ jobs:
                       ];
                       // if (!changedFiles.every((file) => allowedFiles.includes(file))) {
                       //   core.setFailed('The PR contains changes to files other than the allowed files.');
-                      // }
+                      // } 
                       return labNumber;
             - name: Grading
               run: |
