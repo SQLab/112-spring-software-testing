@@ -68,4 +68,3 @@ describe('calaulator log testing', () => {
         Math.log = buflog;
     })
 })
-
