@@ -15,27 +15,31 @@ jobs:
                       const { owner, repo, number: issue_number } = context.issue;
                       const pr = await github.rest.pulls.get({ owner, repo, pull_number: issue_number });
                       const title = pr.data.title;
-                      const labRegex = /\[LAB(\d+)\]/;
-                      const titleRegex = /^\[LAB\d+\] [\da-zA-Z]+$/;
 
-                      if (!titleRegex.test(title)) {
-                        core.setFailed('PR title does not match the required format. Please use the format [LAB#] student#.');
+                      const titleRegex = /^\[LAB(\d+)\] [a-zA-Z]?\d+$/;
+                      const match = title.match(titleRegex);
+
+                      let labNumberStr = undefined;
+                      if (match) {
+                        labNumberStr = match[1];
+                      } else {
+                        core.setFailed('PR title does not match the required format. Please use the format: [LAB#] <studentId>.');
                       }
 
-                      if (pr.data.head.ref !== pr.data.base.ref) {
-                        core.setFailed('The source branch and target branch must be the same.');
+                      const labelToAdd = `lab${labNumberStr}`;
+                      if (labNumberStr) {
+                        await github.rest.issues.addLabels({ owner, repo, issue_number, labels: [labelToAdd] });
                       }
 
                       if (pr.data.base.ref === 'main') {
                         core.setFailed('The target branch cannot be main.');
                       }
 
-                      const match = title.match(labRegex);
-                      if (match) {
-                        const labelToAdd = 'lab' + match[1];
-                        await github.rest.issues.addLabels({ owner, repo, issue_number, labels: [labelToAdd] });
-                      } else {
-                        core.setFailed('No match found in PR title. Please add a label in the format [LAB#] to the PR title.');
+                      if (labNumberStr < 3 && pr.data.head.ref !== pr.data.base.ref) {
+                        core.setFailed('The source branch and target branch must be the same.');
+                      }
+                      if (labNumberStr >= 3 && pr.data.head.ref !== labelToAdd) {
+                        core.setFailed(`The source branch must be '${labelToAdd}'`);
                       }
     checklist-check:
         runs-on: ubuntu-latest
@@ -49,12 +53,12 @@ jobs:
                       const pr = await github.rest.pulls.get({ owner, repo, pull_number: issue_number });
                       const body = pr.data.body;
 
-                      const checkboxes = body.match(/\- \[[x ]\]/g);
+                      const checkboxes = body.match(/^ ?(-|\*) \[[x ]\]/gmi);
                       if (!checkboxes || checkboxes.length !== 5) {
                         core.setFailed('The PR description must contain exactly 5 checkboxes.');
                       }
 
-                      const unchecked = body.match(/\- \[ \]/g);
+                      const unchecked = body.match(/^ ?(-|\*) \[ \]/gm);
                       if (unchecked && unchecked.length > 0) {
-                        core.setFailed(`There are ${unchecked.length} unchecked items in the PR description.`);
+                        core.setFailed(`There are ${unchecked.length} unchecked item(s) in the PR description.`);
                       }
