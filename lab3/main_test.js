@@ -3,7 +3,6 @@ const assert = require('assert');
 const { Calculator } = require('./main');
 
 // TODO: write your tests here
-
 describe('Calculator.exp', ()=>{
     const calculator = new Calculator();
     const inputs = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
