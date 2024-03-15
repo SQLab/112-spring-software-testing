@@ -21,3 +21,5 @@ test("Test Student's getName", () => {
     // TODO
     throw new Error("Test not implemented");
 });
+
+console.log('This is lab1.');
