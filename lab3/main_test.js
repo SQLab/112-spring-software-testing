@@ -2,10 +2,6 @@ const {describe, it} = require('node:test');
 const assert = require('assert');
 const { Calculator } = require('./main');
 
-
-
-
-// TODO: write your tests here
 describe('Calculator', () => {
     it('exp paramaterize testing', () => {
         const calculator = new Calculator();
