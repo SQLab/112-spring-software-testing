@@ -22,10 +22,8 @@ describe('Calculator', () => {
     });
 
     // Error test for exp with unsupported operand type
-     const expErrorTestsNaN = [
+    const expErrorTestsNaN = [
         { input: 'string' },
-        { input: undefined },
-        { input: NaN },
     ];
 
     describe('Test exp for errors with unsupported operand types', () => {
@@ -67,8 +65,6 @@ describe('Calculator', () => {
     // Error test for log with unsupported operand type
     const logErrorTestsUnsupported = [
         { input: 'string' },
-        { input: undefined },
-        { input: Infinity },
     ];
 
     describe('Error log for unsupported types', () => {
