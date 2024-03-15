@@ -91,3 +91,4 @@ test("Test Calculator log error", () => {
         assert.throws(() => calculator.log(input), Error(msg));
     }
 });
+
