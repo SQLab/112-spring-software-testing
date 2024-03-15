@@ -100,5 +100,3 @@ test("Test Calculator's log's Error('math domain error (2)')", () => {
 });
 
 
-
-
