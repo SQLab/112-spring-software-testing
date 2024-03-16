@@ -170,3 +170,8 @@ describe('Test Application', async(t) => {
  * Programming Questions:
  * Application.constructor() has then() to wait for getName() to finish, why still need to await 
  */
+
+/**
+ * Test Questions:
+ * controllability for notifySelected() when Math.random() is not stubbed
+ */
