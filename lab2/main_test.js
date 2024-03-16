@@ -24,9 +24,13 @@ test('Test on MailSystem.send', (t) => {
         return ms.send(name, context);
     }
     const fn = t.mock.fn(send);
-    Math.random = () => 1;
+    t.mock.method(Math, 'random', () => {
+        return 1;
+    });
     assert.strictEqual(fn(), true);
-    Math.random = () => 0;
+    t.mock.method(Math, 'random', () => {
+        return 0;
+    });
     assert.strictEqual(fn(), false);
 });
 
@@ -52,11 +56,17 @@ test('Test on Application.getRandomPerson', async (t) => {
         return app.getRandomPerson();
     }
     const fn = t.mock.fn(getRandomPerson);
-    Math.random = () => 0;
+    t.mock.method(Math, 'random', () => {
+        return 0;
+    });
     assert.strictEqual(fn(), 'Naruto');
-    Math.random = () => 0.4;
+    t.mock.method(Math, 'random', () => {
+        return 0.4;
+    });
     assert.strictEqual(fn(), 'Sasuke');
-    Math.random = () => 0.8;
+    t.mock.method(Math, 'random', () => {
+        return 0.8;
+    });
     assert.strictEqual(fn(), 'Sakura');
     // Remove 'name_list.txt'
     fs.unlinkSync('name_list.txt');
@@ -71,11 +81,17 @@ test('Test on Application.selectNextPerson', async (t) => {
         return app.selectNextPerson();
     }
     const fn = test.mock.fn(selectNextPerson);
-    Math.random = () => 0;
+    t.mock.method(Math, 'random', () => {
+        return 0;
+    });
     assert.strictEqual(fn(), 'Naruto');
-    Math.random = () => 0.4;
+    t.mock.method(Math, 'random', () => {
+        return 0.4;
+    });
     assert.strictEqual(fn(), 'Sasuke');
-    Math.random = () => 0.8;
+    t.mock.method(Math, 'random', () => {
+        return 0.8;
+    });
     assert.strictEqual(fn(), 'Sakura');
     assert.strictEqual(fn(), null);
     // Remove 'name_list.txt'
