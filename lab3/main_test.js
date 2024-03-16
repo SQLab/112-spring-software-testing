@@ -9,6 +9,7 @@ describe('Test Calculator.exp', () => {
     it('should throw error if input is not finite', () => {
         const err = new Error('unsupported operand type');
         
+        // test inputs should all produce error: unsupported operand type
         const testcases = [
             { input: [Infinity], expected: err },
             { input: [-Infinity], expected: err },
@@ -20,6 +21,8 @@ describe('Test Calculator.exp', () => {
          * Test Notes:
          * assert.throws() - fn should be a function name, not calling the function and throwing an error directly
          */
+
+        // expect the arrow function calling the class method exp() to throw error
         for (const tc of testcases) {
             assert.throws(() => calculator.exp.apply(this, tc.input), tc.expected);
         }
@@ -28,6 +31,7 @@ describe('Test Calculator.exp', () => {
     it('should throw error if result is Infinity', () => {
         const err = new Error('overflow');
 
+        // test inputs should all produce error: overflow
         const testcases = [
             { input: [Math.pow(10, 308)], expected: err },
             { input: [Math.pow(10, 100)], expected: err },
@@ -40,6 +44,8 @@ describe('Test Calculator.exp', () => {
     });
 
     it('should not throw any error', () => {
+        
+        // test inputs should not produce any error and return calculated value
         const testcases = [
             { input: [0], expected: 1 },
             { input: [1], expected: 2.718281828459045 },
@@ -56,8 +62,11 @@ describe('Tetst Calculator.log', () => {
     const calculator = new Calculator();
     
     it('should throw error if input is not finite', () => {
-        const err = new Error('unsupported operand type');
         
+        // using regex to match the error message
+        const err = /^Error: unsupported operand type$/;
+        
+        // test inputs should all produce error: unsupported operand type
         const testcases = [
             { input: [Infinity+1], expected: err },
             { input: [-Infinity+1], expected: err },
@@ -66,13 +75,14 @@ describe('Tetst Calculator.log', () => {
         ];
 
         for (const tc of testcases) {
-            assert.throws(() => calculator.log.apply(this, tc.input), /^Error: unsupported operand type$/);
+            assert.throws(() => calculator.log.apply(this, tc.input), tc.expected);
         }
     });
 
     it('should throw error if result is -Infinity', () => {
         const err = new Error('math domain error (1)');
 
+        // test input should all produce error: math domain error (1)
         const testcases = [
             { input: [0], expected: err },
         ];
@@ -85,6 +95,7 @@ describe('Tetst Calculator.log', () => {
     it('should throw error if result is NaN', () => {
         const err = new Error('math domain error (2)');
 
+        // test input should all produce error: math domain error (2)
         const testcases = [
             { input: [-1], expected: err },
             { input: [Math.pow(10, 308) * -1], expected: err },
@@ -97,6 +108,8 @@ describe('Tetst Calculator.log', () => {
     });
 
     it('should not throw any error', () => {
+        
+        // test inputs should not produce any error and return calculated value
         const testcases = [
             { input: [1], expected: 0 },
             { input: [Number.MAX_VALUE], expected: 709.782712893384 },
