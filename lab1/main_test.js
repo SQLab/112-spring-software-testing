@@ -60,6 +60,10 @@ test("Test Student's getName", () => {
 });
 
 /*
+    try invalid datatype input for function getSudentById()
+*/
+
+/*
     function calls are accumulated among the test suites
     that is, the data structure is shared among the test suites
 */

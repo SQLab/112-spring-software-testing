@@ -7,7 +7,8 @@ const writeFile = util.promisify(fs.writeFile);
 
 
 describe('Test MailSystem', (t) => {
-    /** Programming Notes:
+    /** 
+     * Programming Notes:
      * t.beforeEach((t) => t.mock.restoreAll()); is only available in test() function
      */
     beforeEach(() => mock.restoreAll());
@@ -26,7 +27,8 @@ describe('Test MailSystem', (t) => {
 
         // test spy on MailSystem.send()
         t.mock.method(mailsys, 'send');
-        /** Programming Notes:
+        /** 
+         * Programming Notes:
          * class.method (method) & instance_class.method (static method) are both undefined
          * => t.mock.method(MailSystem, 'send'); won't work
          */
@@ -70,7 +72,8 @@ describe('Test Application', async(t) => {
     await app.getNames();
 
     it('should get names from file', async (t) => {        
-        /* Problem: tried to mock readFile but failed
+        /* 
+        Problem: tried to mock readFile but failed
         cb = (err, data) => {
             if (err) {
                 console.log(err);
@@ -111,7 +114,8 @@ describe('Test Application', async(t) => {
     });
 
     it('should select next person', async (t) => {
-        /** Testing Notes:
+        /** 
+         * Testing Notes:
          * can apply test stub on Math.random() or Application.getRandomPerson() (if getRandomPerson() has been tested previously)
          */
 
@@ -142,7 +146,7 @@ describe('Test Application', async(t) => {
         assert.strictEqual(app.mailSystem.send.mock.calls.length, 0);
         assert.strictEqual(app.mailSystem.write.mock.calls.length, 0);
 
-        app.notifySelected();
+        assert.strictEqual(app.notifySelected(), undefined);
 
         // check that MailSystem.write() and MailSystem.send() have been called twice
         // (since there are two selected people)
@@ -156,7 +160,13 @@ describe('Test Application', async(t) => {
 });
 
 /**
+ * Testing Notes:
  * If returning the intended value, we still CAN'T ASSURE that the function is working properly
  * e.g., selectNextPerson() returns 'Korone' but the list of selected people is not updated
  * => check all DATA STRUCTURE that are INVOLVED in the function
+ */
+
+/**
+ * Programming Questions:
+ * Application.constructor() has then() to wait for getName() to finish, why still need to await 
  */
