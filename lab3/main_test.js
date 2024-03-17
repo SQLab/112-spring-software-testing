@@ -3,6 +3,7 @@ const assert = require('assert');
 const { Calculator } = require('./main');
 
 // TODO: write your tests here
+<<<<<<< HEAD
 
 // 使用 describe 定義一組關於 Calculator 的 Test
 describe('Calculator', () => {
@@ -66,3 +67,5 @@ describe('Calculator', () => {
         });
     });
 });
+=======
+>>>>>>> f62dd440e497618db0bdac13f0e14e0fa3fcf9e5
