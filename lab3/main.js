@@ -1,9 +1,9 @@
 class Calculator {
-    exp(x) {
-        if (!Number.isFinite(x)) {
+    exp(x) {                                               
+        if (!Number.isFinite(x)) {  //Number.isFinite(x) is used to determine whether the passed value x is a finite number.
             throw Error('unsupported operand type');
         }
-        const result = Math.exp(x);
+        const result = Math.exp(x);   // Math.exp(x) is e^x where e is Euler's number (approximately 2.71828) and  x is the exponent.
         if (result === Infinity) {
             throw Error('overflow');
         }
