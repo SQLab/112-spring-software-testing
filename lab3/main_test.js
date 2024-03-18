@@ -30,7 +30,7 @@ const { Calculator } = require('./main');
         }
     });
 
-    
+
     describe('log', () => {
 
         const wrong_testcase = [
@@ -56,4 +56,3 @@ const { Calculator } = require('./main');
             assert.strictEqual( calculator.log(tc.inputvalue) , tc.expected )
         }
     });
--
