@@ -25,13 +25,6 @@ it('error exp',(t)=>{
 			calculator.exp(tc.param);
 		},{message:tc.expected});
 	}
-
-	// assert.throws(()=>{
-	// 	calculator.exp('abc');
-	// },{message:"unsupported operand type"});
-	// assert.throws(()=>{
-	// 	calculator.exp(Infinity);
-	// },{message:"overflow"});
 });
 
 it('happy test log',(t)=>{
@@ -58,14 +51,4 @@ it('error log',(t)=>{
 			calculator.log(tc.param);
 		},{message:tc.expected});
 	}
-
-	// assert.throws(()=>{
-	// 	calculator.log('abc');
-	// },{message:"unsupported operand type"});
-	// assert.throws(()=>{
-	// 	calculator.log(-Infinity);
-	// },{message:"math domain error (1)"});
-	// assert.throws(()=>{
-	// 	calculator.log(-1);
-	// },{message:"math domain error (2)"});
 });
