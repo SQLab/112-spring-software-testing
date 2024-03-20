@@ -3,42 +3,57 @@ const assert = require('assert');
 const { Calculator } = require('./main');
 
 // TODO: write your tests here
-describe("test calculator funtions", ()=>{
-    it("exp", ()=>{
-        const calc = new Calculator;
-        const correct = [
-            {param: 0, expected: Math.exp(0)},
-            {param: 5, expected: Math.exp(5)},
-            {param: 10, expected: Math.exp(10)},
-        ];
-        for(const tc of correct)
-            assert.strictEqual(calc.exp(tc.param), tc.expected);
 
-        const error = [
-            {param: Infinity, expected: 'unsupported operand type'},
-            {param: 1000000000, expected: 'overflow'},
-        ];
-        for(const tc of error)
-        assert.throws(() => {calc.exp(tc.param)}, {message: tc.expected});
+describe("Test Calculator's exp", () => {
+
+    it("error case",()=>{
+    const cal=new Calculator();
+    const testcases=[{input:Infinity,output:{name:'Error',message:'unsupported operand type'}},{input:1000000,output:{name:'Error',message:'overflow'}}];
+    for(const ts of testcases)
+    {
+    	assert.throws(()=>{cal.exp(ts.input);},ts.output);
+    }
+
     });
 
-    it("log", ()=>{
-        const calc = new Calculator;
-        const correct = [
-            {param: 1, expected: Math.log(1)},
-            {param: 5, expected: Math.log(5)},
-            {param: 10, expected: Math.log(10)},
-        ];
-        for(const tc of correct)
-            assert.strictEqual(calc.log(tc.param), tc.expected);
+    it("normal case",()=>{
+    const cal=new Calculator();
+    const testcases=[{input:0,output:1},{input:1,output:Math.exp(1)},{input:2,output:Math.exp(2)}];
+    for(const ts of testcases)
+    {
+    	assert.strictEqual(cal.exp(ts.input),ts.output);
+    }
 
-        const error = [
-            {param: Infinity, expected: 'unsupported operand type'},
-            {param: 0, expected: 'math domain error (1)'},
-            {param: -1, expected: 'math domain error (2)'},
-        ];
-        for(const tc of error)
-            assert.throws(() => {calc.log(tc.param)}, {message: tc.expected});
     });
+
+});
+
+
+describe("Test Calculator's log", () => {
+
+    it("error case",()=>{
+    const cal=new Calculator();
+    const testcases=[{input:Infinity,output:{name:'Error',message:'unsupported operand type'}},{input:0,output:{name:'Error',message:'math domain error (1)'}},{input:-1,output:{name:'Error',message:'math domain error (2)'}}];
+    for(const ts of testcases)
+    {
+    	assert.throws(()=>{cal.log(ts.input);},ts.output);
+    }
+
+    });
+
+    it("normal case",()=>{
+    const cal=new Calculator();
+    const testcases=[{input:1,output:0},{input:10,output:Math.log(10)},{input:100,output:Math.log(100)}];
+    for(const ts of testcases)
+    {
+    	assert.strictEqual(cal.log(ts.input),ts.output);
+    }
+
+    });
+
+
+
+
+
 
 });
