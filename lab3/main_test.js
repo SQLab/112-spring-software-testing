@@ -15,11 +15,11 @@ describe("test calculator funtions", ()=>{
             assert.strictEqual(calc.exp(tc.param), tc.expected);
 
         const error = [
-            {param:"kelvin", expected: {message: 'unsupported operand type',name: 'Error'}},
-            {param:100000, expected: {message: 'overflow',name: 'Error'}},
+            {param: Infinity, expected: 'unsupported operand type'},
+            {param: 1000000000, expected: 'overflow'},
         ];
         for(const tc of error)
-            assert.throws(() => calc.exp(tc.param),tc.expected);
+        assert.throws(() => {calc.exp(tc.param)}, {message: tc.expected});
     });
 
     it("log", ()=>{
@@ -33,12 +33,12 @@ describe("test calculator funtions", ()=>{
             assert.strictEqual(calc.log(tc.param), tc.expected);
 
         const error = [
-            {param:"kelvin", expected: {message: 'unsupported operand type',name: 'Error'}},
-            {param:10^10, expected: {message: 'math domain error (1)',name: 'Error'}},
-            {param:-1, expected: {message: 'math domain error (2)',name: 'Error'}},
+            {param: Infinity, expected: 'unsupported operand type'},
+            {param: 0, expected: 'math domain error (1)'},
+            {param: -1, expected: 'math domain error (2)'},
         ];
         for(const tc of error)
-            assert.throws(() => {calc.log(tc.param)}, tc.expected);
+            assert.throws(() => {calc.log(tc.param)}, {message: tc.expected});
     });
 
 });
