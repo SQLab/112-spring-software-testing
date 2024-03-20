@@ -54,6 +54,3 @@ describe("Test Calculator's log", () => {
 
 
 
-
-
-});
