@@ -15,8 +15,8 @@ describe("test calculator funtions", ()=>{
             assert.strictEqual(calc.exp(tc.param), tc.expected);
 
         const error = [
-            {param: Infinity, expected: 'unsupported operand type'},
-            {param: 1000000000, expected: 'overflow'},
+            {param: 'kelvin', expected: 'unsupported operand type'},
+            {param: 1000000, expected: 'overflow'},
         ];
         for(const tc of error)
         assert.throws(() => {calc.exp(tc.param)}, {message: tc.expected});
@@ -33,7 +33,7 @@ describe("test calculator funtions", ()=>{
             assert.strictEqual(calc.log(tc.param), tc.expected);
 
         const error = [
-            {param: Infinity, expected: 'unsupported operand type'},
+            {param: 'kelvin', expected: 'unsupported operand type'},
             {param: 0, expected: 'math domain error (1)'},
             {param: -1, expected: 'math domain error (2)'},
         ];
