@@ -41,4 +41,4 @@ describe("test calculator funtions", ()=>{
             assert.throws(() => {calc.log(tc.param)}, {message: tc.expected});
     });
 
-});
+}); 
