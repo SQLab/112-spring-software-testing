@@ -3,42 +3,42 @@ const assert = require('assert');
 const { Calculator } = require('./main');
 
 // TODO: write your tests here
-describe("test calculator funtions", ()=>{
-    it("exp", ()=>{
-        const calc = new Calculator;
-        const correct = [
-            {param: 0, expected: Math.exp(0)},
-            {param: 5, expected: Math.exp(5)},
-            {param: 10, expected: Math.exp(10)},
+describe('Parameterize', ()=>{
+    it('exp', ()=>{
+        const cal = new Calculator;
+        const testcase = [
+            {param: 0, ans: Math.exp(0)},
+            {param: 1, ans: Math.exp(1)},
+            {param: 5, ans: Math.exp(5)},
+            {param: -5, ans: Math.exp(-5)},
         ];
-        for(const tc of correct)
-            assert.strictEqual(calc.exp(tc.param), tc.expected);
+        for(const tc of testcase)
+            assert.strictEqual(cal.exp(tc.param), tc.ans);
 
-        const error = [
-            {param: Infinity, expected: 'unsupported operand type'},
-            {param: 1000000000, expected: 'overflow'},
+        const excep_testcase = [
+            {param: Infinity, ans: 'unsupported operand type'},
+            {param: 1000000000, ans: 'overflow'},
         ];
-        for(const tc of error)
-        assert.throws(() => {calc.exp(tc.param)}, {message: tc.expected});
+        for(const tc of excep_testcase)
+            assert.throws(() => {cal.exp(tc.param)}, {message: tc.ans});
     });
 
-    it("log", ()=>{
-        const calc = new Calculator;
-        const correct = [
-            {param: 1, expected: Math.log(1)},
-            {param: 5, expected: Math.log(5)},
-            {param: 10, expected: Math.log(10)},
+    it('log', ()=>{
+        const cal = new Calculator;
+        const testcase = [
+            {param: 1, ans: Math.log(1)},
+            {param: 5, ans: Math.log(5)},
         ];
-        for(const tc of correct)
-            assert.strictEqual(calc.log(tc.param), tc.expected);
+        for(const tc of testcase)
+            assert.strictEqual(cal.log(tc.param), tc.ans);
 
-        const error = [
-            {param: Infinity, expected: 'unsupported operand type'},
-            {param: 0, expected: 'math domain error (1)'},
-            {param: -1, expected: 'math domain error (2)'},
+        const excep_testcase = [
+            {param: Infinity, ans: 'unsupported operand type'},
+            {param: 0, ans: 'math domain error (1)'},
+            {param: -1, ans: 'math domain error (2)'},
         ];
-        for(const tc of error)
-            assert.throws(() => {calc.log(tc.param)}, {message: tc.expected});
+        for(const tc of excep_testcase)
+            assert.throws(() => {cal.log(tc.param)}, {message: tc.ans});
     });
 
-}); 
+});
