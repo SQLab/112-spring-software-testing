@@ -19,6 +19,14 @@ describe("測試", () => {
         parameter: 0,
         expected: Math.exp(0),
       },
+      {
+        parameter: 1,
+        expected: Math.exp(1),
+      },
+      {
+        parameter: 2,
+        expected: Math.exp(2),
+      }
     ];
     testcase.map(({ parameter, expected, MessageErr }) => {
       if (expected == Error) {
@@ -44,6 +52,14 @@ describe("測試", () => {
       {
         parameter: 2,
         expected: Math.log(2),
+      },
+      {
+        parameter: 3,
+        expected: Math.log(3),
+      },
+      {
+        parameter: 4,
+        expected: Math.log(4),
       },
       {
         parameter: -1,
