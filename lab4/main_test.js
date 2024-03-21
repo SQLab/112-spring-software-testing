@@ -10,13 +10,15 @@ const puppeteer = require('puppeteer');
 
     // Hints:
     // Click search button
-    const searchButtonSelector = '.DocSearch-Button-Placeholder';
+    const searchButtonSelector = '.DocSearch.DocSearch-Button';
     await page.waitForSelector(searchButtonSelector);
     await page.click(searchButtonSelector);
 
     // Type into search box
     // Wait for search result
-    await page.type('#docsearch-input', 'chipi chipi chapa chapa', {delay:300});
+    const inputSeletor = '#docsearch-input';
+    await page.waitForSelector(inputSeletor);
+    await page.type(inputSeletor, 'chipi chipi chapa chapa', {delay:100});
     
     // Get the `Docs` result section
     // Click on first result in `Docs` section
