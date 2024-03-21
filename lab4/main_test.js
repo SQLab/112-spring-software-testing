@@ -29,4 +29,3 @@ const puppeteer = require('puppeteer');
     // Close the browser
     await browser.close();
 })();
-
