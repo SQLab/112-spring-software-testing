@@ -16,7 +16,7 @@ const puppeteer = require('puppeteer');
     // Type into search box
     const searchbarSelector = '.DocSearch-Input'
     await page.waitForSelector(searchbarSelector);
-    await page.type(searchbarSelector, 'chipi chipi chapa chapa', {delay: 100});
+    await page.type(searchbarSelector, 'chipi chipi chapa chapa', {delay: 500});
     
     // Click on first result in `Docs` section
     const firstDocResultSelector = '#docsearch-item-5';
