@@ -10,6 +10,7 @@ const puppeteer = require('puppeteer');
 
     // Hints:
     // Click search button
+
     await page.waitForSelector('.DocSearch-Button-Placeholder');
     await page.click('.DocSearch-Button-Placeholder');
 
@@ -19,10 +20,12 @@ const puppeteer = require('puppeteer');
     await page.waitForSelector(inputSearchSeletor);
     await page.type(inputSearchSeletor, inputStr, {delay:100});
 
+
     // Wait for search result
     // Get the `Docs` result section
     // Click on first result in `Docs` section
     // Locate the title
+
     const docsFirstItemSelector = '#docsearch-item-5';
     await page.waitForSelector(docsFirstItemSelector);
     await page.click(docsFirstItemSelector);
@@ -34,6 +37,7 @@ const puppeteer = require('puppeteer');
 
     // Print the title
     console.log(titleText)
+
     // Close the browser
     await browser.close();
 })();
