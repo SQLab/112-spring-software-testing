@@ -54,5 +54,6 @@ test("Test Calculator.log()", () => {
     for (const et of errorTestCases) {
         assert.throws(() => {cal.log(et.input)}, Error(et.expected));
     }
+    
 });
 
