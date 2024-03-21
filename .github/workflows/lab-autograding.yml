@@ -1,0 +1,55 @@
+name: Autograding
+
+on:
+    pull_request_target:
+        types: [labeled, synchronize, opened, reopened, ready_for_review]
+
+jobs:
+    build:
+        runs-on: ${{ matrix.os }}
+        strategy:
+            matrix:
+                os: [ubuntu-22.04]
+            fail-fast: false
+        steps:
+            - uses: actions/checkout@v4
+              with:
+                  ref: "${{ github.event.pull_request.merge_commit_sha }}"
+                  fetch-depth: 1
+            - uses: actions/setup-node@v4
+              with:
+                  node-version: latest
+            - name: Extract lab number and Check no changes other than specific files
+              uses: actions/github-script@v5
+              id: lab
+              with:
+                  result-encoding: string
+                  github-token: ${{ secrets.GITHUB_TOKEN }}
+                  script: |
+                      const { owner, repo, number: issue_number } = context.issue;
+                      const pr = await github.rest.pulls.get({ owner, repo, pull_number: issue_number });
+                      const labels = pr.data.labels;
+                      const lab = labels.find((label) => label.name.startsWith('lab'));
+                      if (!lab) {
+                        core.setFailed('No lab label found on the PR.');
+                        return { number: 0 };
+                      }
+                      const labNumberMatch = lab.name.match(/lab(\d+)/);
+                      if (!labNumberMatch) {
+                        core.setFailed('Invalid lab label found on the PR.');
+                        return { number: 0 };
+                      }
+                      const labNumber = labNumberMatch[1];
+                      console.log(`Lab number: ${labNumber}`)
+
+                      const files = await github.rest.pulls.listFiles({ owner, repo, pull_number: issue_number });
+                      const changedFiles = files.data.map((file) => file.filename);
+                      const allowedFileRegex = /^lab\d+\/main_test.js$/;
+                      if (!changedFiles.every((file) => allowedFileRegex.test(file))) {
+                        core.setFailed('The PR contains changes to files other than the allowed files.');
+                      }
+                      return labNumber;
+            - name: Grading
+              run: |
+                  cd lab${{ steps.lab.outputs.result }}
+                  ./validate.sh
