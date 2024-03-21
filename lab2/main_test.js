@@ -113,25 +113,25 @@ test('notify selected', async (t) => {
 test('select next person', async (t) => {
     const content = 'Quan\nHenry\nBilly';
 
-
     const fn = t.mock.fn(writeFile);
     await fn(content);
 
     const app = new Application();
     const [people, selected] = await app.getNames()
 
-    const getFn = mock.method(app, 'getRandomPerson');
-
-
     // all people are selected
-    app.selected = people;
+    app.selected = ['Quan', 'Henry', 'Billy']
+    // console.log(app.selected)
+    // console.log(app.people.length, app.selected.length)
     const res = app.selectNextPerson();
+    // console.log(res);
     assert.strictEqual(res, null);
 
     // select a person
     // already selected Quan
     // Make the first call return Quan
     // Make the second call return Henry
+    const getFn = mock.method(app, 'getRandomPerson');
     app.selected = ['Quan'];
     getFn.mock.mockImplementation(() => 'Henry');
     getFn.mock.mockImplementationOnce(() => 'Quan');
@@ -139,6 +139,5 @@ test('select next person', async (t) => {
     assert.strictEqual(person, 'Henry');
     assert.deepStrictEqual(app.selected.length, 2);
     await unlink();
-    
     // fs.unlinkSync(fileName);   
 })
