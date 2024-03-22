@@ -1,10 +1,8 @@
 const puppeteer = require('puppeteer');
-
 (async () => {
     // Launch the browser and open a new blank page
     const browser = await puppeteer.launch();
     const page = await browser.newPage();
-
     // Navigate the page to a URL
     await page.goto('https://pptr.dev/');
 
@@ -18,7 +16,7 @@ const puppeteer = require('puppeteer');
     await page.waitForSelector(InputSelector);
     await page.type(InputSelector, 'chipi chipi chapa chapa', { delay: 700 });
     // Wait for search result
-    const ResultSelector = '.DocSearch-Hit-title'
+    const ResultSelector = '#docsearch-item-5 > a'
 
     // Get the `Docs` result section
     await page.waitForSelector(ResultSelector)
@@ -30,6 +28,7 @@ const puppeteer = require('puppeteer');
     );
     const Title = await textSelector?.evaluate(el => el.textContent);
     // Print the title
+
     console.log(Title)
     // Close the browser
     await browser.close();
