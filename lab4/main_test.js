@@ -10,7 +10,7 @@ const puppeteer = require('puppeteer');
 
     // Hints:
     // Click search button
-    const searchButtonSelector = '.DocSearch-Button-Container';
+    const searchButtonSelector = '.DocSearch-Button-Placeholder';
     const searchButton = await page.waitForSelector(searchButtonSelector);
     await searchButton.click();
 
