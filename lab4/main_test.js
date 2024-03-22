@@ -10,6 +10,7 @@ const puppeteer = require('puppeteer');
 
     // Hints:
     // Click search button
+
     await page.waitForSelector('button.DocSearch.DocSearch-Button');
     await page.click('button.DocSearch.DocSearch-Button');
     // Type into search box
@@ -31,3 +32,4 @@ const puppeteer = require('puppeteer');
     console.log(fullTitle);
     await browser.close();
 })();
+
