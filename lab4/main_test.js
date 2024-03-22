@@ -15,17 +15,17 @@ const puppeteer = require('puppeteer');
     await page.waitForSelector(searchButton);
     await page.click(searchButton);
    
-    // Type into search box
+    // // Type into search box
     await page.waitForSelector('.DocSearch-Input');
     await page.type('.DocSearch-Input', 'chipi chipi chapa chapa', {delay: 500});  
 
-    // Wait for search result
-    //select the section where the search result is docs
-    // Get the `Docs` result section
-    // Click on first result in `Docs` section
-    const searchResult = "#docsearch-item-5"
-    const first_result = await page.waitForSelector(searchResult);
-    await first_result.click();
+    // // Wait for search result
+    // //select the section where the search result is docs
+    // // Get the `Docs` result section
+    // // Click on first result in `Docs` section
+    const searchResult = "[id='docsearch-item-5']";
+    await page.waitForSelector(searchResult);
+    await page.click(searchResult);
    
    
     // Locate the title
