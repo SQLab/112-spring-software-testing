@@ -10,6 +10,7 @@ const puppeteer = require('puppeteer');
 
     // Hints:
     // Click search button
+
     const searchButton =  ".DocSearch-Button-Placeholder";
     await page.waitForSelector(searchButton);
     await page.click(searchButton);
@@ -32,6 +33,7 @@ const puppeteer = require('puppeteer');
     const text = await page.evaluate(textselector => textselector.textContent, textselector);
     // Print the title
     console.log(text);
+
 
     // Close the browser
     await browser.close();
