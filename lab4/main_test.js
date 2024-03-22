@@ -28,7 +28,7 @@ const puppeteer = require('puppeteer');
    
    
     // Locate the title
-    const textselector = await page.waitForSelector('#__docusaurus_skipToContent_fallback > div > div > main > div > div > div > div > article > div.theme-doc-markdown.markdown > h1');
+    const textselector = await page.waitForSelector('.markdown h1:first-child');
     const text = await page.evaluate(textselector => textselector.textContent, textselector);
     // Print the title
     console.log(text);
