@@ -11,7 +11,7 @@ const puppeteer = require('puppeteer');
 
     const inputSelector = 'input.DocSearch-Input';
     const inputBox = await page.waitForSelector(inputSelector);
-    inputBox.focus();
+    await inputBox.focus();
     await inputBox.type('chipi chipi chapa chapa',{delay:500});
     const resultSelector = 'li#docsearch-item-5.DocSearch-Hit';
     const result = await page.waitForSelector(resultSelector);
