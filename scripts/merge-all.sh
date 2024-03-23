@@ -17,7 +17,7 @@ for branch in $(git branch -r | grep -v HEAD); do
             echo "Checkout failed for branch $branch"
             exit 1
         fi
-        git merge --squash -s recursive -X theirs main
+        git merge --squash main
         if [[ $? -ne 0 ]]; then
             echo "Merge failed for branch $branch"
             exit 1
@@ -25,5 +25,3 @@ for branch in $(git branch -r | grep -v HEAD); do
         git commit -m "$1"
     fi
 done
-
-git checkout main
