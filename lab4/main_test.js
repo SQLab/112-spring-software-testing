@@ -35,10 +35,13 @@ const puppeteer = require('puppeteer');
         const text = await section.$eval('.DocSearch-Hit-source', (el)=>el.innerHTML);
         if(text === "Docs"){
              const hit = await section.$(".DocSearch-Hit");
-            await hit.click();
+            page.waitForNavigation();
+            hit.click();
             break;
         }
     }
+   
+    await page.waitForNetworkIdle();
 
     // Locate the title
     const textSelector = await page.waitForSelector(
