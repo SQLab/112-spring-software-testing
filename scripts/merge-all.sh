@@ -1,7 +1,7 @@
 #!/bin/bash
 
 if [ $# -ne 1 ]; then
-    echo "./merge-all.sh <commit-message>"
+    echo "$0 <commit-message>"
     exit 1
 fi
 
@@ -17,7 +17,7 @@ for branch in $(git branch -r | grep -v HEAD); do
             echo "Checkout failed for branch $branch"
             exit 1
         fi
-        git merge --squash main
+        git merge --squash -s recursive -X theirs main
         if [[ $? -ne 0 ]]; then
             echo "Merge failed for branch $branch"
             exit 1
