@@ -10,6 +10,7 @@ const puppeteer = require('puppeteer');
 
     // Hints:
     // Click search button
+
     const searchResultSelector = '.DocSearch-Button';
     await page.waitForSelector(searchResultSelector);
     await page.click(searchResultSelector);
@@ -48,6 +49,7 @@ const puppeteer = require('puppeteer');
    
     // Print the title
     console.log(fullTitle);
+
 
     // Close the browser
     await browser.close();
