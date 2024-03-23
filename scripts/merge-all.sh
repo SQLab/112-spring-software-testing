@@ -25,5 +25,4 @@ for branch in $(git branch -r | grep -v HEAD); do
         git commit -m "$1"
     fi
 done
-
 git checkout main
