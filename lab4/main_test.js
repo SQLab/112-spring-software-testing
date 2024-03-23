@@ -7,7 +7,7 @@ const puppeteer = require('puppeteer');
 
     // Navigate the page to a URL
     await page.goto('https://pptr.dev/');
-
+ 
     // Click search button
     await page.waitForSelector('svg.DocSearch-Search-Icon');
     const searchBtn = await page.$('svg.DocSearch-Search-Icon');
