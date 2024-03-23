@@ -26,3 +26,4 @@ for branch in $(git branch -r | grep -v HEAD); do
     fi
 done
 
+git checkout main
