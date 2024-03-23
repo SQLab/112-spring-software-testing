@@ -8,14 +8,14 @@ const puppeteer = require('puppeteer');
     // Navigate the page to a URL
     await page.goto('https://pptr.dev/');
 
-    // Hints:
     // Click search button
     const searchSelector = '.DocSearch-Button-Placeholder';
-    // await page.waitForSelector(searchSelector);
     await page.click(searchSelector);
-    await page.waitForSelector(searchSelector);
+
+    const docSearchSelector = '#docsearch-input';
+    await page.waitForSelector(docSearchSelector);
     // Type into search box
-    await page.type('#docsearch-input', 'chipi chipi chapa chapa', {delay: 500});
+    await page.type(docSearchSelector, 'chipi chipi chapa chapa', {delay: 500});
     // Wait for search result
     // Get the `Docs` result section
     // Click on first result in `Docs` section
