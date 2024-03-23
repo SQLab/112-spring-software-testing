@@ -1,7 +1,7 @@
 #!/bin/bash
 
 if [ $# -ne 1 ]; then
-    echo "$0 <commit-message>"
+    echo "./merge-all.sh <commit-message>"
     exit 1
 fi
 
