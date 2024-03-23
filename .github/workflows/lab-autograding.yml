@@ -30,6 +30,7 @@ jobs:
                       const pr = await github.rest.pulls.get({ owner, repo, pull_number: issue_number });
                       const labels = pr.data.labels;
                       const lab = labels.find((label) => label.name.startsWith('lab'));
+                      
                       if (!lab) {
                         core.setFailed('No lab label found on the PR.');
                         return { number: 0 };
