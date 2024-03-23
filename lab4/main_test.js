@@ -24,7 +24,7 @@ const puppeteer = require('puppeteer');
     await page.click(searchResultSelector);
     // Locate the title
     const textSelector = await page.waitForSelector('h1');
-    const fullTitle = await textSelector?.evaluate(el => el.textContent);
+    const fullTitle = await textSelector.evaluate(el => el.textContent);
     // Print the title
     console.log(fullTitle);
     // Close the browser
