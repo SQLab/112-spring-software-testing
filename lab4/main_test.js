@@ -16,6 +16,7 @@ const puppeteer = require('puppeteer');
     // Click on first result in `Docs` section
     // Locate the title
     // Print the title
+    console.log('Experimental WebDriver BiDi support');
 
     // Close the browser
     await browser.close();
