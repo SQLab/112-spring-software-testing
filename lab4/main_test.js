@@ -20,7 +20,7 @@ const puppeteer = require('puppeteer');
     await page.waitForSelector('.docItemContainer_Djhp');
     const title = await page.title();
     // Print the title
-    console.log(title);
+    console.log(title.split(' | Puppeteer')[0]);
     // Close the browser
     await browser.close();
 })();
