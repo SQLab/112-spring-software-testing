@@ -2,11 +2,14 @@ const puppeteer = require('puppeteer');
 
 (async () => {
     // Launch the browser and open a new blank page
+
     const browser = await puppeteer.launch({headless: false});
+
     const page = await browser.newPage();
 
     // Navigate the page to a URL
     await page.goto('https://pptr.dev/');
+
     // Hints:
     // Click search button
     await page.click('.DocSearch-Button-Placeholder');
@@ -23,6 +26,7 @@ const puppeteer = require('puppeteer');
     const title = await page.title();
     // Print the title
     console.log(title);
+
     // Close the browser
     await browser.close();
 })();
