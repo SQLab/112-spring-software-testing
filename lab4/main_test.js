@@ -40,6 +40,7 @@ const puppeteer = require('puppeteer');
 
     // Print the title
     console.log(title_content);
+
     // Close the browser
     await browser.close();
 })();
