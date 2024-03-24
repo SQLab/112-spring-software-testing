@@ -16,11 +16,12 @@ const puppeteer = require('puppeteer');
     // Get the `Docs` result section
     await page.click('#docsearch-item-5', { delay: 1000 });
     // Click on first result in `Docs` section
-    // Locate the title
-    await page.waitForSelector('.docItemContainer_Djhp');
-    const title = await page.title();
+     // Locate the title
+    const text_selector = await page.waitForSelector('.theme-doc-markdown.markdown h1');
+    // Get the text content of the h1 element
+    const title_content = await page.evaluate(text_selector => text_selector.textContent, text_selector);
     // Print the title
-    console.log(title.split(' | Puppeteer')[0]);
+    console.log(title_content);
     // Close the browser
     await browser.close();
 })();
