@@ -15,6 +15,7 @@ if [ $ret -ne 0 ] ; then
   exit 1
 else
   coverage=$(echo "$result" | grep 'all files' | awk -F '|' '{print $2}' | sed 's/ //g')
+  echo $result
   if (( $(echo "$coverage < 100" | bc -l) )); then
     echo "[!] Coverage is only $coverage%"
     exit 1
