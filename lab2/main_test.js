@@ -4,13 +4,27 @@ const util = require('util');
 const assert = require('assert');
 const { Application, MailSystem } = require('./main');
 
+// const fs = require('fs');
+const filePath = 'name_list.txt';
+// const content = 'Quan\nHenry\nBilly';
+
+ function writeFile(content) {
+     return new Promise((resolve) => {
+         fs.writeFile(filePath, content, resolve);
+     });
+ }
+
+ function unlink() {
+     return new Promise((resolve) => {
+         fs.unlink(filePath, resolve);
+     });
+ }
+
 // TODO: write your tests here
 // Remember to use Stub, Mock, and Spy when necessary
 
-const unlink = util.promisify(fs.unlink);
-const writeFile = util.promisify(fs.writeFile);
-
-
+// const unlink = util.promisify(fs.unlink);
+// const writeFile = util.promisify(fs.writeFile);
 
 test('should write a mail for a given name', () => {
     const mailSystem = new MailSystem();
@@ -22,7 +36,6 @@ test('should write a mail for a given name', () => {
 test('send email to a given name', (context) => {
     const mailSystem = new MailSystem();
     const name = 'John';
-    const res = 'Congrats, John!';
 
     mock.method(Math, 'random', () => 0.6);
     const success = mailSystem.send(name, context);
@@ -31,55 +44,58 @@ test('send email to a given name', (context) => {
     mock.method(Math, 'random', () => 0.4);
     const failure = mailSystem.send(name, context);
     assert.strictEqual(failure, false);
+
 })
 
 
-test('create Application instance', async () => {
+test('create Application instance', async (t) => {
     
-    const content = 'Quan\nHenry\nBilly';
-    const fileName = 'name_list.txt';
-
-    await writeFile(fileName, content, 'utf8');
-    // fs.writeFileSync(fileName, content, 'utf8');
-    // test.mock.method(fs, "readFile", (path, encoding, callback) => {
-    //     callback(null, content)
-    // });
+   
+    const fun = t.mock.fn(writeFile);
+    await fun('Quan\nHenry\nBilly');
     
     const app = new Application();
 
-    const people = await app.getNames();
-    assert.deepStrictEqual(people, [['Quan', 'Henry', 'Billy'], []]);
+    const res = await app.getNames();
     assert.deepStrictEqual(app.people.length, 3);
     assert.deepStrictEqual(app.selected.length, 0);
-    fs.unlinkSync(fileName);    
+    assert.deepStrictEqual(res, [['Quan', 'Henry', 'Billy'], []]);
+    assert.deepStrictEqual(app.people, ['Quan', 'Henry', 'Billy']);
+    assert.deepStrictEqual(app.selected, []);
+
+    // fs.unlinkSync(fileName);   
+    await unlink();
+
 })
 
-test('get random person', async () => {
-    const content = 'Quan\nHenry\nBilly';
-    const fileName = 'name_list.txt'
-    await writeFile(fileName, content, 'utf8');
+test('get random person', async (t) => {
+    const fn = t.mock.fn(writeFile);
+    await fn('Quan\nHenry\nBilly');
+    // await writeFile(fileName, content, 'utf8');
 
     const app = new Application();
     const [people, selected] = await app.getNames()
-
+    
     mock.method(Math, 'random', () => 0.5);
     const index = Math.floor(0.5 * people.length)
     const person = app.getRandomPerson();
     // console.log(person);
 
     assert.strictEqual(person, people[index])
+    await unlink();
+ 
 
-    // fs.unlinkSync(fileName);
-    
-    await unlink(fileName);
 })
 
 
 
-test('notify selected', async () => {
-    const content = 'Quan\nHenry\nBilly';
-    const fileName = 'name_list.txt';
-    await writeFile(fileName, content, 'utf8');
+test('notify selected', async (t) => {
+    // const content = 'Quan\nHenry\nBilly';
+    // const fileName = 'name_list.txt';
+    // await writeFile(fileName, content, 'utf8');
+
+    const fun = t.mock.fn(writeFile);
+    await fun('Quan\nHenry\nBilly');
 
     const app = new Application();
 
@@ -90,18 +106,21 @@ test('notify selected', async () => {
     app.notifySelected();
     assert.deepStrictEqual(write.mock.calls.length, 3);
     assert.deepStrictEqual(send.mock.calls.length, 3);
-    unlink(fileName);
+    await unlink();
+
 })
 
-test('select next person', async () => {
+test('select next person', async (t) => {
     const content = 'Quan\nHenry\nBilly';
-    const fileName = 'name_list.txt';
-    await writeFile(fileName, content, 'utf8');
+
+
+    const fn = t.mock.fn(writeFile);
+    await fn(content);
 
     const app = new Application();
     const [people, selected] = await app.getNames()
 
-    const fn = mock.method(app, 'getRandomPerson');
+    const getFn = mock.method(app, 'getRandomPerson');
 
 
     // all people are selected
@@ -114,10 +133,12 @@ test('select next person', async () => {
     // Make the first call return Quan
     // Make the second call return Henry
     app.selected = ['Quan'];
-    fn.mock.mockImplementation(() => 'Henry');
-    fn.mock.mockImplementationOnce(() => 'Quan');
+    getFn.mock.mockImplementation(() => 'Henry');
+    getFn.mock.mockImplementationOnce(() => 'Quan');
     const person = app.selectNextPerson();
     assert.strictEqual(person, 'Henry');
     assert.deepStrictEqual(app.selected.length, 2);
-    unlink(fileName);
+    await unlink();
+    
+    // fs.unlinkSync(fileName);   
 })
