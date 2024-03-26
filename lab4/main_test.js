@@ -1,22 +1,36 @@
 const puppeteer = require('puppeteer');
 
 (async () => {
-    // Launch the browser and open a new blank page
     const browser = await puppeteer.launch();
     const page = await browser.newPage();
 
-    // Navigate the page to a URL
     await page.goto('https://pptr.dev/');
 
-    // Hints:
-    // Click search button
-    // Type into search box
-    // Wait for search result
-    // Get the `Docs` result section
-    // Click on first result in `Docs` section
-    // Locate the title
-    // Print the title
+    await page.click('.DocSearch-Button') ;
 
-    // Close the browser
+    const searchBox = '.DocSearch-Input' ;
+    const searchKey = 'chipi chipi chapa chapa' ;
+    await page.waitForSelector(searchBox) ;
+    await page.type(searchBox, searchKey) ;
+    await page.waitForSelector('section.DocSearch-Hits > ul#docsearch-list > li.DocSearch-Hit > a[href="/webdriver-bidi/#measuring-progress"]') ;
+
+    const searchList = await page.$$('section.DocSearch-Hits') ;
+    for (const listItem of searchList) {
+        try {
+            const docsResult = await page.evaluate(el => 
+                el.querySelector('.DocSearch-Hit-source').textContent, listItem 
+            ) ;
+            if (docsResult === "Docs") {
+                await page.click('ul#docsearch-list > li.DocSearch-Hit > a[href="/webdriver-bidi/#measuring-progress"]') ;
+                await page.waitForSelector('h2.anchor > a[href="#measuring-progress"]') ; 
+                const title = await page.title() ;
+                const title_string = await page.evaluate(() => document.querySelector('h1').textContent, title) ;
+                console.log(title_string) ;
+                break ;
+            }
+        }
+        catch (error) {}
+    }
+    
     await browser.close();
 })();
