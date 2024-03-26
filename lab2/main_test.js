@@ -79,4 +79,4 @@ test('test Application', async () => {
 
     fs.unlinkSync('name_list.txt');  // delete test file
 
-});
+}); 
