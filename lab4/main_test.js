@@ -14,8 +14,6 @@ const puppeteer = require('puppeteer');
     await page.waitForSelector(searchInputSelector);
     await page.type(searchInputSelector, 'chipi chipi chapa chapa', {delay: 100});
 
-    await page.waitForTimeout(100);
-
     const docResultSelector = '#docsearch-item-5';
     await page.waitForSelector(docResultSelector);
 
