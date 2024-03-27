@@ -17,6 +17,18 @@ const puppeteer = require('puppeteer');
     // Locate the title
     // Print the title
 
+    await page.click('button[class="DocSearch DocSearch-Button"]');
+
+    await page.waitForSelector('input[class="DocSearch-Input"]');
+    await page.type('input[class="DocSearch-Input"]', 'chipi chipi chapa chapa', { delay: 100 });
+
+    await page.waitForSelector('#docsearch-item-5');
+    await page.click('#docsearch-item-5');
+    
+    const titleSelector = await page.waitForSelector('h1');
+    const title = await titleSelector?.evaluate(el => el.textContent);
+    console.log(title);
+
     // Close the browser
     await browser.close();
 })();
