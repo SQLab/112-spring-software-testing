@@ -16,7 +16,7 @@ const puppeteer = require('puppeteer');
 
     await page.waitForTimeout(100);
 
-    const docResultSelector = '[id^=docsearch-item-]';
+    const docResultSelector = '#docsearch-item-5';
     await page.waitForSelector(docResultSelector);
 
     const firstDocResult = await page.$(docResultSelector);
