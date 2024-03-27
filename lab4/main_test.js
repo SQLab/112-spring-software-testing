@@ -6,7 +6,7 @@ const puppeteer = require('puppeteer');
 
     await page.goto('https://pptr.dev/');
 
-    const buttonSelector = '.DocSearch.DocSearch-Button';
+    const buttonSelector = '.DocSearch-Button';
     await page.waitForSelector(buttonSelector);
     await page.click(buttonSelector);
 
