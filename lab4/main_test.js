@@ -11,7 +11,7 @@ const puppeteer = require('puppeteer');
     await page.click('.DocSearch-Button');
 
     await page.waitForSelector('.DocSearch-Input');
-    await page.type('.DocSearch-Input', 'chipi chipi chapa chapa', {delay: 500}); 
+    await page.type('.DocSearch-Input', 'chipi chipi chapa chapa', {delay: 1000}); 
 
     await page.waitForSelector("#docsearch-item-5");
     await page.click("#docsearch-item-5");
