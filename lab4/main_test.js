@@ -11,29 +11,10 @@ const puppeteer = require('puppeteer');
     await page.click(serachButton);
     await page.waitForSelector('#docsearch-input');
     await page.type('#docsearch-input','chipi chipi chapa chapa');
-    // const searchBar = await page.waitForSelector('.DocSearch-Dropdown-Container');
-    // const Docs = await searchBar?.$$('.DocSearch-Hits');
-    const pageButton = '#docsearch-item-5';
+    const pageButton = 'body > div:nth-child(1) > div > div > div > div > section:nth-child(2) > ul > li > a ';
     const button = await page.waitForSelector(pageButton);
-    const b = await button?.waitForSelector('.DocSearch-Hit-Select-Icon');
-    const a = await b?.evaluate(element => {
-        if (element) {
-          // Extract information about the element
-          return {
-            tagName: element.tagName,
-            textContent: element.textContent,
-            attributes: Array.from(element.attributes).map(attr => ({ name: attr.name, value: attr.value }))
-          };
-        } else {
-          return null; // If element is not found, return null
-        }
-      });
-    console.log(a);
-    try{await b.click();}catch(error){console.error(error)}
-    // await page.waitForNavigation();
-    console.log('Navigation complete. Current URL:', page.url());
-    const pageSelector = await page.waitForSelector('.theme-doc-markdown.markdown ul');
-    // const titleSelector = await pageSelector.waitForSelector('.h1');
+    try{await page.click(pageButton);}catch(error){console.error(error)}
+    const pageSelector = await page.waitForSelector('.theme-doc-markdown.markdown h1');
     const title = await pageSelector?.evaluate(element=>element.textContent);
     console.log(title);
 
