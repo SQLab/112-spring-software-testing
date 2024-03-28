@@ -1,33 +1,24 @@
 const puppeteer = require('puppeteer');
 
 (async () => {
+
     const browser = await puppeteer.launch();
     const page = await browser.newPage();
 
     await page.goto('https://pptr.dev/');
 
-    const buttonSelector = '.DocSearch-Button';
-    await page.waitForSelector(buttonSelector);
-    await page.click(buttonSelector);
+    await page.waitForSelector('.DocSearch-Button');
+    await page.click('.DocSearch-Button');
 
-    const searchInputSelector = '.DocSearch-Input';
-    await page.waitForSelector(searchInputSelector);
-    await page.type(searchInputSelector, 'chipi chipi chapa chapa', {delay: 100});
+    await page.waitForSelector('.DocSearch-Input');
+    await page.type('.DocSearch-Input', 'chipi chipi chapa chapa', {delay: 500}); 
 
-    const docResultSelector = '#docsearch-item-5';
-    await page.waitForSelector(docResultSelector);
+    await page.waitForSelector("#docsearch-item-5");
+    await page.click("#docsearch-item-5");
 
-    const firstDocResult = await page.$(docResultSelector);
-    await firstDocResult.click();
+    const titleSelector = await page.waitForSelector('.markdown h1');
+    const title = await page.evaluate(titleSelector => titleSelector.textContent, titleSelector);
+    
+    console.log(title);
 
-    await page.waitForNavigation();
-
-    const titleSelector = '.markdown h1:first-child';
-    await page.waitForSelector(titleSelector);
-
-    const titleText = await page.$eval(titleSelector, element => element.textContent);
-
-    console.log(titleText);
-
-    await browser.close();
 })();
