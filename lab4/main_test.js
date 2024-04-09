@@ -10,12 +10,28 @@ const puppeteer = require('puppeteer');
 
     // Hints:
     // Click search button
+    const searchButtonSelector = '.DocSearch-Button-Placeholder';
+    await page.waitForSelector(searchButtonSelector);
+    await page.click(searchButtonSelector);
+
     // Type into search box
     // Wait for search result
+    const inputSelector = '#docsearch-input';
+    await page.waitForSelector(inputSelector);
+    await page.type(inputSelector, 'chipi chipi chapa chapa', {delay:500});
+    
     // Get the `Docs` result section
     // Click on first result in `Docs` section
+    const searchResultSelector = '#docsearch-item-5';
+    await page.waitForSelector(searchResultSelector);
+    await page.click(searchResultSelector);
+
     // Locate the title
+    const textSelector = await page.waitForSelector('h1');
+    const fullTitle = await textSelector?.evaluate(el=>el.textContent);
+    
     // Print the title
+    console.log(fullTitle);
 
     // Close the browser
     await browser.close();
