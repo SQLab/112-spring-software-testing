@@ -20,20 +20,18 @@ describe('Test on exp', async () => {
         }
     });
     it('With error', () => {
-        // !Number.isFinite(x)
-        assert.throws(() =>{
-            fn(Infinity);
-        }, {
-            name: 'Error',
-            message: 'unsupported operand type'
-        });
-        // result === Infinity
-        assert.throws(() =>{
-            fn(Number.MAX_SAFE_INTEGER);
-        }, {
-            name: 'Error',
-            message: 'overflow'
-        });
+        const testcases = [
+            {param: [Infinity], expected: 'unsupported operand type'},
+            {param: [Number.MAX_SAFE_INTEGER], expected: 'overflow'}
+        ];
+        for (const tc of testcases) {
+            assert.throws(() =>{
+                fn.apply(this, tc.param);
+            }, {
+                name: 'Error',
+                message: tc.expected
+            });
+        }
     });
 });
 
@@ -53,26 +51,18 @@ describe('Test on log', async () => {
         }
     });
     it('With error', () => {
-        // !Number.isFinite(x)
-        assert.throws(() =>{
-            fn(Infinity);
-        }, {
-            name: 'Error',
-            message: 'unsupported operand type'
-        });
-        // result === -Infinity
-        assert.throws(() =>{
-            fn(0);
-        }, {
-            name: 'Error',
-            message: 'math domain error (1)'
-        });
-        // Number.isNaN(result)
-        assert.throws(() =>{
-            fn(-1);
-        }, {
-            name: 'Error',
-            message: 'math domain error (2)'
-        });
+        const testcases = [
+            {param: [Infinity], expected: 'unsupported operand type'},
+            {param: [0], expected: 'math domain error (1)'},
+            {param: [-1], expected: 'math domain error (2)'}
+        ];
+        for (const tc of testcases) {
+            assert.throws(() =>{
+                fn.apply(this, tc.param);
+            }, {
+                name: 'Error',
+                message: tc.expected
+            });
+        }
     });
 });
