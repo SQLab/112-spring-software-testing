@@ -85,3 +85,4 @@ test("Application", async () => {
     assert.deepStrictEqual(app.mailSystem.send.mock.calls.map(call => call.arguments[0]), app.selected);
 });
 
+
