@@ -483,4 +483,4 @@ Runs normally without any error.
 
 ### Why
 
-Since local array `a` and `b` will be surrounded by red-zones, and be aligned to 32-byte address, the size of the red-zone between `a` and `b` is 32 - 8 = 24 bytes. Therefore, accessing `a[32]` is actually accessing `b[0]`. ASan detected out-of-bound access by checking if red-zone is accessed. If a OOB access skips red-zones, it will not be detected by ASan.
+Since local array `a` and `b` will be surrounded by red-zones and be aligned to 32-byte address, the size of the red-zone between `a` and `b` is 32 - 8 = 24 bytes. Therefore, accessing `a[32]` is actually accessing `b[0]`. ASan detected out-of-bound access by checking if red-zone is accessed. If a OOB access skips red-zones, it will not be detected by ASan.
