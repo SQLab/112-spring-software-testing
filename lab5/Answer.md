@@ -480,7 +480,7 @@ int main(void){
 
     b[0] = 'b';
     a[offset] = 'a';
-    printf("b[0] = %c\n", a[offset]);
+    printf("b[0] = %c\n", b[0]);
     free(a);
     free(b);
 
