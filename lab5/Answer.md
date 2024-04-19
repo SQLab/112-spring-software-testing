@@ -4,6 +4,12 @@ Name: 鄭博薪
 
 ID: 312555020
 
+## Environment
+
+OS: Ubuntu 22.04.4 LTS x86_64
+
+Compiler: gcc version 11.4.0 (Ubuntu 11.4.0-1ubuntu1~22.04)
+
 ## Test Valgrind and ASan
 ### Result
 |                      | Valgrind | Asan |
@@ -393,7 +399,7 @@ Shadow byte legend (one shadow byte represents 8 application bytes):
 ### Use-after-return
 #### Source code
 ```c
-volatile char* x;
+char* x;
 
 void foo() {
     char stack_buffer[56];
@@ -480,8 +486,24 @@ Shadow byte legend (one shadow byte represents 8 application bytes):
 
 ## ASan Out-of-bound Write bypass Redzone
 ### Source code
-```
+```c
+#include <stdio.h>
 
+int main() {
+    int a[] = {1, 2, 3, 4};
+    int b[] = {5, 6, 7, 8};
+
+    a[8] = 56;
+    printf("a[8] = %d\n", a[8]);
+    
+    return 0;
+}
 ```
 ### Why
 
+ASan不能找出Out-of-bound Write，因為讀寫的Address剛好越過了redzone，而輸出結果為：
+```
+gcc -fsanitize=address -Og -g -o test_asan source.c
+./test_asan
+a[8] = 56
+```
