@@ -346,19 +346,19 @@ Shadow byte legend (one shadow byte represents 8 application bytes):
 #include <stdlib.h>
 #include <string.h>
 
-int use_after_return(void){
+char *re;
+
+void use_after_return(){
     char func[3];
     func[2] = 'F';
-    return &func;
+    re = &func[2];
 }
 
 int main(void)
 {
-        int func_addr;
-
-        // Use-after-return
-        func_addr = use_after_return();
-        printf("Use-after-free func[2] = %c", *((char*)func_addr + 2));
+         // Use-after-return
+        use_after_return();
+        printf("func[2] = %c\n", *re);
 
         return 0;
 }
@@ -366,29 +366,103 @@ int main(void)
 ```
 #### Valgrind Report
 ```
-==47431== Invalid read of size 1
-==47431==    at 0x109233: main (in /home/neil/112-spring-software-testing/lab5/lab5_test)
-==47431==  Address 0xffffffffff000067 is not stack'd, malloc'd or (recently) free'd
-==47431==
-==47431==
-==47431== Process terminating with default action of signal 11 (SIGSEGV)
-==47431==  Access not within mapped region at address 0xFFFFFFFFFF000067
-==47431==    at 0x109233: main (in /home/neil/112-spring-software-testing/lab5/lab5_test)
-==47431==  If you believe this happened as a result of a stack
-==47431==  overflow in your program's main thread (unlikely but
-==47431==  possible), you can try to increase the size of the
-==47431==  main thread stack using the --main-stacksize= flag.
-==47431==  The main thread stack size used in this run was 8388608.
+
+==90058== Memcheck, a memory error detector
+==90058== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
+==90058== Using Valgrind-3.18.1 and LibVEX; rerun with -h for copyright info
+==90058== Command: ./lab5_test
+==90058==
+==90058== Conditional jump or move depends on uninitialised value(s)
+==90058==    at 0x48EEE1D: _IO_file_overflow@@GLIBC_2.2.5 (fileops.c:782)
+==90058==    by 0x48D93DB: __vfprintf_internal (vfprintf-internal.c:1517)
+==90058==    by 0x48C279E: printf (printf.c:33)
+==90058==    by 0x10925A: main (in /home/neil/112-spring-software-testing/lab5/lab5_test)
+==90058==
+==90058== Syscall param write(buf) points to uninitialised byte(s)
+==90058==    at 0x4976887: write (write.c:26)
+==90058==    by 0x48ECEEC: _IO_file_write@@GLIBC_2.2.5 (fileops.c:1180)
+==90058==    by 0x48EE9E0: new_do_write (fileops.c:448)
+==90058==    by 0x48EE9E0: _IO_new_do_write (fileops.c:425)
+==90058==    by 0x48EE9E0: _IO_do_write@@GLIBC_2.2.5 (fileops.c:422)
+==90058==    by 0x48ED6D4: _IO_new_file_xsputn (fileops.c:1243)
+==90058==    by 0x48ED6D4: _IO_file_xsputn@@GLIBC_2.2.5 (fileops.c:1196)
+==90058==    by 0x48D7FC9: outstring_func (vfprintf-internal.c:239)
+==90058==    by 0x48D7FC9: __vfprintf_internal (vfprintf-internal.c:1593)
+==90058==    by 0x48C279E: printf (printf.c:33)
+==90058==    by 0x10925A: main (in /home/neil/112-spring-software-testing/lab5/lab5_test)
+==90058==  Address 0x4a8e09a is 10 bytes inside a block of size 1,024 alloc'd
+==90058==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==90058==    by 0x48E0BA3: _IO_file_doallocate (filedoalloc.c:101)
+==90058==    by 0x48EFCDF: _IO_doallocbuf (genops.c:347)
+==90058==    by 0x48EEF5F: _IO_file_overflow@@GLIBC_2.2.5 (fileops.c:744)
+==90058==    by 0x48ED6D4: _IO_new_file_xsputn (fileops.c:1243)
+==90058==    by 0x48ED6D4: _IO_file_xsputn@@GLIBC_2.2.5 (fileops.c:1196)
+==90058==    by 0x48D714C: outstring_func (vfprintf-internal.c:239)
+==90058==    by 0x48D714C: __vfprintf_internal (vfprintf-internal.c:1263)
+==90058==    by 0x48C279E: printf (printf.c:33)
+==90058==    by 0x10925A: main (in /home/neil/112-spring-software-testing/lab5/lab5_test)
+==90058==
+func[2] = F
+==90058==
+==90058== HEAP SUMMARY:
+==90058==     in use at exit: 0 bytes in 0 blocks
+==90058==   total heap usage: 2 allocs, 2 frees, 1,027 bytes allocated
+==90058==
+==90058== All heap blocks were freed -- no leaks are possible
+==90058==
+==90058== Use --track-origins=yes to see where uninitialised values come from
+==90058== For lists of detected and suppressed errors, rerun with: -s
+==90058== ERROR SUMMARY: 2 errors from 2 contexts (suppressed: 0 from 0)
 ```
 ### ASan Report
 ```
-==48042==ERROR: AddressSanitizer: SEGV on unknown address (pc 0x55ba27be03d9 bp 0x000000000001 sp 0x7ffc9b4d3700 T0)
-==48042==The signal is caused by a READ memory access.
-==48042==Hint: this fault was caused by a dereference of a high value address (see register values below).  Dissassemble the provided pc to learn which register was used.
-    #0 0x55ba27be03d9 in main /home/neil/112-spring-software-testing/lab5/lab5_test.c:38
-    #1 0x7feb88d2ed8f in __libc_start_call_main ../sysdeps/nptl/libc_start_call_main.h:58
-    #2 0x7feb88d2ee3f in __libc_start_main_impl ../csu/libc-start.c:392
-    #3 0x55ba27be01c4 in _start (/home/neil/112-spring-software-testing/lab5/lab5_test_asan+0x11c4)
+==89397==ERROR: AddressSanitizer: stack-use-after-return on address 0x7f165ec00022 at pc 0x56488a60542a bp 0x7fff9c8050f0 sp 0x7fff9c8050e0
+READ of size 1 at 0x7f165ec00022 thread T0
+    #0 0x56488a605429 in main /home/neil/112-spring-software-testing/lab5/lab5_test.c:38
+    #1 0x7f1660d1dd8f in __libc_start_call_main ../sysdeps/nptl/libc_start_call_main.h:58
+    #2 0x7f1660d1de3f in __libc_start_main_impl ../csu/libc-start.c:392
+    #3 0x56488a6051c4 in _start (/home/neil/112-spring-software-testing/lab5/lab5_test_asan+0x11c4)
+
+Address 0x7f165ec00022 is located in stack of thread T0 at offset 34 in frame
+    #0 0x56488a605298 in use_after_return /home/neil/112-spring-software-testing/lab5/lab5_test.c:8
+
+  This frame has 1 object(s):
+    [32, 35) 'func' (line 9) <== Memory access at offset 34 is inside this variable
+HINT: this may be a false positive if your program uses some custom stack unwind mechanism, swapcontext or vfork
+      (longjmp and C++ exceptions *are* supported)
+SUMMARY: AddressSanitizer: stack-use-after-return /home/neil/112-spring-software-testing/lab5/lab5_test.c:38 in main
+Shadow bytes around the buggy address:
+  0x0fe34bd77fb0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0x0fe34bd77fc0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0x0fe34bd77fd0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0x0fe34bd77fe0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0x0fe34bd77ff0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+=>0x0fe34bd78000: f5 f5 f5 f5[f5]f5 f5 f5 00 00 00 00 00 00 00 00
+  0x0fe34bd78010: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0x0fe34bd78020: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0x0fe34bd78030: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0x0fe34bd78040: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0x0fe34bd78050: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+Shadow byte legend (one shadow byte represents 8 application bytes):
+  Addressable:           00
+  Partially addressable: 01 02 03 04 05 06 07
+  Heap left redzone:       fa
+  Freed heap region:       fd
+  Stack left redzone:      f1
+  Stack mid redzone:       f2
+  Stack right redzone:     f3
+  Stack after return:      f5
+  Stack use after scope:   f8
+  Global redzone:          f9
+  Global init order:       f6
+  Poisoned by user:        f7
+  Container overflow:      fc
+  Array cookie:            ac
+  Intra object redzone:    bb
+  ASan internal:           fe
+  Left alloca redzone:     ca
+  Right alloca redzone:    cb
+==89397==ABORTING
 ```
 
 ## ASan Out-of-bound Write bypass Redzone
@@ -406,7 +480,7 @@ int main(void){
 
     b[0] = 'b';
     a[offset] = 'a';
-    printf("b[0] = %c\n", b[0]);
+    printf("b[0] = %c\n", a[offset]);
     free(a);
     free(b);
 
