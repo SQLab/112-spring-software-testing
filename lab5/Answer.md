@@ -1,15 +1,15 @@
 # Answer
 
+
 Name: 謝翔丞
 ID: 312551183
 
 ## GCC Version
 gcc version 11.4.0 (Ubuntu 11.4.0-1ubuntu1~22.04) 
+
 ## Valgrind Version
 valgrind-3.18.1
 
-
-## 
 
 ## Test Valgrind and ASan
 ### Result
@@ -20,6 +20,8 @@ valgrind-3.18.1
 | Global out-of-bounds |    No    |  Yes |
 | Use-after-free       |   Yes    |  Yes |
 | Use-after-return     |    No    |  Yes |
+
+
 
 ### Heap out-of-bounds
 #### Source code
@@ -71,7 +73,7 @@ int main(){
 ==53== 
 ==53== For lists of detected and suppressed errors, rerun with: -s
 ==53== ERROR SUMMARY: 2 errors from 2 contexts (suppressed: 0 from 0)
-
+=======
 ```
 ### ASan Report
 ```
@@ -284,6 +286,7 @@ Shadow byte legend (one shadow byte represents 8 application bytes):
   Shadow gap:              cc
 ==91==ABORTING
 ```
+
 
 ### Use-after-free
 #### Source code
@@ -501,3 +504,5 @@ So in above source code , using a[8+8] is viewed as safe by ASan.
 docker@61b7ed00c33f:~/workspace$ ./bpz 
 100
 ```
+
+

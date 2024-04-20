@@ -5,4 +5,5 @@ void antiasan(unsigned long addr)
     unsigned long *shadow = (unsigned long *)((addr >> 3) + 0x7fff8000);
     //set to zero as addressable
     *shadow = 0x00;
+
 }
