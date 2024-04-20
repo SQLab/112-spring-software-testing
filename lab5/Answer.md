@@ -1,13 +1,19 @@
 # Answer
 
+<<<<<<< HEAD
 Name: 鍾博笙
 ID: 109502529
 Compiler: gcc version 11.4.0 (Ubuntu 11.4.0-1ubuntu1~22.04)
+=======
+Name: 
+ID: 
+>>>>>>> origin/b122521
 
 ## Test Valgrind and ASan
 ### Result
 |                      | Valgrind | Asan |
 | -------------------- | -------- | ---- |
+<<<<<<< HEAD
 | Heap out-of-bounds   | V        | V    |
 | Stack out-of-bounds  | X        | V    |
 | Global out-of-bounds | X        | V    |
@@ -106,11 +112,32 @@ Shadow byte legend (one shadow byte represents 8 application bytes):
   Right alloca redzone:    cb
   Shadow gap:              cc
 ==5775==ABORTING
+=======
+| Heap out-of-bounds   |          |      |
+| Stack out-of-bounds  |          |      |
+| Global out-of-bounds |          |      |
+| Use-after-free       |          |      |
+| Use-after-return     |          |      |
+
+### Heap out-of-bounds
+#### Source code
+```
+
+```
+#### Valgrind Report
+```
+
+```
+### ASan Report
+```
+
+>>>>>>> origin/b122521
 ```
 
 ### Stack out-of-bounds
 #### Source code
 ```
+<<<<<<< HEAD
 #include <stdio.h>
 int main() {
     int a[10];
@@ -207,11 +234,23 @@ Shadow byte legend (one shadow byte represents 8 application bytes):
   Right alloca redzone:    cb
   Shadow gap:              cc
 ==6158==ABORTING
+=======
+
+```
+#### Valgrind Report
+```
+
+```
+### ASan Report
+```
+
+>>>>>>> origin/b122521
 ```
 
 ### Global out-of-bounds
 #### Source code
 ```
+<<<<<<< HEAD
 #include <stdio.h>
 int a[10];
 int main() {
@@ -283,11 +322,23 @@ Shadow byte legend (one shadow byte represents 8 application bytes):
   Right alloca redzone:    cb
   Shadow gap:              cc
 ==6290==ABORTING
+=======
+
+```
+#### Valgrind Report
+```
+
+```
+### ASan Report
+```
+
+>>>>>>> origin/b122521
 ```
 
 ### Use-after-free
 #### Source code
 ```
+<<<<<<< HEAD
 #include <stdio.h>
 #include <stdlib.h>
 int main() {
@@ -387,11 +438,23 @@ Shadow byte legend (one shadow byte represents 8 application bytes):
   Right alloca redzone:    cb
   Shadow gap:              cc
 ==6525==ABORTING
+=======
+
+```
+#### Valgrind Report
+```
+
+```
+### ASan Report
+```
+
+>>>>>>> origin/b122521
 ```
 
 ### Use-after-return
 #### Source code
 ```
+<<<<<<< HEAD
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -504,11 +567,23 @@ Shadow byte legend (one shadow byte represents 8 application bytes):
   Right alloca redzone:    cb
   Shadow gap:              cc
 ==8544==ABORTING
+=======
+
+```
+#### Valgrind Report
+```
+
+```
+### ASan Report
+```
+
+>>>>>>> origin/b122521
 ```
 
 ## ASan Out-of-bound Write bypass Redzone
 ### Source code
 ```
+<<<<<<< HEAD
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -540,4 +615,9 @@ int main(){
 ```
 ### Why
 因為ASan是透過redzone的更動，來偵測out-of-bound write，若直接越過redzone寫入，ASan不會偵測到。
+=======
+
+```
+### Why
+>>>>>>> origin/b122521
 
