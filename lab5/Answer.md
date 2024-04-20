@@ -10,11 +10,11 @@ ID: 312551080
 ### Result
 |                      | Valgrind | Asan |
 | -------------------- | -------- | ---- |
-| Heap out-of-bounds   |    v     |  v   |
-| Stack out-of-bounds  |    x     |  v   |
-| Global out-of-bounds |    x     |  v   |
-| Use-after-free       |    v     |  v   |
-| Use-after-return     |    x     |  v   |
+| Heap out-of-bounds   |    O     |  O   |
+| Stack out-of-bounds  |    X     |  O   |
+| Global out-of-bounds |    X     |  O   |
+| Use-after-free       |    O     |  O   |
+| Use-after-return     |    X     |  O   |
 
 ### Heap out-of-bounds
 #### Source code
