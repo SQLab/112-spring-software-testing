@@ -454,5 +454,5 @@ int main(void)
 }
 ```
 ### Why
-ASan can only checks data in reszone , so it can't detect when data exceed redzone range 
+ASan can only checks data in redzone , so it can't detect when data exceed redzone range 
 
