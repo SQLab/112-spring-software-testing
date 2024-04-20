@@ -510,7 +510,7 @@ int main(){
   0x100006af5640: f2 f2 00 00 00 00 f3 f3 f3 f3 00 00 00 00 00 00
 ```
 
-可以發現在 a 陣列後有 4 個 8 bytes 的 redzone，只要忽略該 8 個 bytes 的 redzone，並寫入在 ASan 標示為 addressable 的地方，即可繞過 ASan 的檢查，如本 Source Code 中，略過 a 與 b 陣列間的 redzone，直接寫入 b 陣列的第一個元素，並成功印出更改後的值。
+可以發現在 a 陣列後有 4 個 8 bytes 的 redzone，只要忽略該 32 個 bytes 的 redzone，並寫入在 ASan 標示為 addressable 的地方，即可繞過 ASan 的檢查，如本 Source Code 中，略過 a 與 b 陣列間的 redzone，直接寫入 b 陣列的第一個元素，並成功印出更改後的值。
 
 ```
 b[0] = 100
