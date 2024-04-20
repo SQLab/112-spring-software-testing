@@ -100,6 +100,7 @@ Shadow byte legend (one shadow byte represents 8 application bytes):
   Right alloca redzone:    cb
   Shadow gap:              cc
 ==37873==ABORTING
+=======
 ```
 
 ### Stack out-of-bounds
@@ -183,6 +184,7 @@ Shadow byte legend (one shadow byte represents 8 application bytes):
   Right alloca redzone:    cb
   Shadow gap:              cc
 ==38507==ABORTING
+=======
 ```
 
 ### Global out-of-bounds
@@ -256,6 +258,7 @@ Shadow byte legend (one shadow byte represents 8 application bytes):
   Right alloca redzone:    cb
   Shadow gap:              cc
 ==41974==ABORTING
+=======
 ```
 
 ### Use-after-free
@@ -347,6 +350,7 @@ Shadow byte legend (one shadow byte represents 8 application bytes):
   Right alloca redzone:    cb
   Shadow gap:              cc
 ==43807==ABORTING
+=======
 ```
 
 ### Use-after-return
@@ -431,6 +435,7 @@ Shadow byte legend (one shadow byte represents 8 application bytes):
   Right alloca redzone:    cb
   Shadow gap:              cc
 ==46449==ABORTING
+=======
 ```
 
 ## ASan Out-of-bound Write bypass Redzone
@@ -450,3 +455,4 @@ int main(){
 a | redzone | b | redzone...
 a[b-a]相當於b[0]的記憶體位址
 改b[0]視為是合法的, ASan找不出來
+=======
