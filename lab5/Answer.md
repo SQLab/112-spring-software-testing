@@ -19,7 +19,7 @@ ID:
 | Global out-of-bounds | X        | V    |
 | Use-after-free       | V        | V    |
 | Use-after-return     | V        | V    |
-V:有偵測到, X:沒偵測到
+- V:有偵測到, X:沒偵測到
 ### Heap out-of-bounds
 #### Source code
 ```
