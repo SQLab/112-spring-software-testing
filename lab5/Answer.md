@@ -13,7 +13,7 @@ Compiler: gcc version 11.4.0 (Ubuntu 11.4.0-1ubuntu1~22.04)
 | Global out-of-bounds | X        | V    |
 | Use-after-free       | V        | V    |
 | Use-after-return     | V        | V    |
-V:有偵測到, X:沒偵測到
+- V:有偵測到, X:沒偵測到
 ### Heap out-of-bounds
 #### Source code
 ```
