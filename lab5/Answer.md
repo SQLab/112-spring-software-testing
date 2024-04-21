@@ -16,7 +16,7 @@ ID: 312551148
 
 ### Heap out-of-bounds
 #### Source code
-```
+``` C
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -107,7 +107,7 @@ Shadow byte legend (one shadow byte represents 8 application bytes):
 
 ### Stack out-of-bounds
 #### Source code
-```
+``` C
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -188,7 +188,7 @@ Shadow byte legend (one shadow byte represents 8 application bytes):
 
 ### Global out-of-bounds
 #### Source code
-```
+``` C
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -262,7 +262,7 @@ Shadow byte legend (one shadow byte represents 8 application bytes):
 
 ### Use-after-free
 #### Source code
-```
+``` C
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -355,7 +355,7 @@ Shadow byte legend (one shadow byte represents 8 application bytes):
 
 ### Use-after-return
 #### Source code
-```
+``` C
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -471,7 +471,7 @@ Shadow byte legend (one shadow byte represents 8 application bytes):
 
 ## ASan Out-of-bound Write bypass Redzone
 ### Source code
-```
+``` C
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
