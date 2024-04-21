@@ -7,6 +7,7 @@ ID: 110550098
 ### Environment
 - gcc: `11.4.0 (Ubuntu 11.4.0-1ubuntu1~22.04) `
 - valgrind: `3.18.1`
+- use `export ASAN_OPTIONS=detect_stack_use_after_return=1` to show the `stack_use_after_return`
 
 ### Result
 |                      | Valgrind | Asan |
@@ -460,7 +461,12 @@ Shadow byte legend (one shadow byte represents 8 application bytes):
 ## ASan Out-of-bound Write bypass Redzone
 ### Source code
 ```
-
+#include <stdio.h>
+int main () {
+    char a[8];
+    char b[8];
+    a[32] = 'a';
+}
 ```
 ### Why
-
+沒有對 redzone 進行讀寫操作，addressSentinizer 無法偵測。 
