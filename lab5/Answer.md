@@ -363,7 +363,12 @@ Shadow byte legend (one shadow byte represents 8 application bytes):
 
 ### Use-after-return
 #### Source code
+
 ```
+//if run stack
+//export ASAN_OPTIONS=detect_stack_use_after_return=1
+//if run heap
+//export ASAN_OPTIONS=detect_heap_use_after_return=1
 #include <stdio.h>
 #include <stdlib.h>
 int* res;
