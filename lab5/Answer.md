@@ -576,8 +576,12 @@ int main(){
     int *a_rrz = &a[8];
     int *b_lrz = &b[-8];
 
-    printf("&a[8] is poisoned : %20p\n", __asan_region_is_poisoned(a_rrz, 1));
-    printf("&b[-8] is poisoned: %20p\n", __asan_region_is_poisoned(b_lrz, 1));
+    if(__asan_region_is_poisoned(a_rrz, 1)){
+        printf("&a[8] is poisoned : %20p\n", __asan_region_is_poisoned(a_rrz, 1));
+    }
+    if(__asan_region_is_poisoned(b_lrz, 1)){
+        printf("&b[-8] is poisoned: %20p\n", __asan_region_is_poisoned(b_lrz, 1));
+    }
 }
 ```
 
