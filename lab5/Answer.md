@@ -554,7 +554,13 @@ Shadow byte legend (one shadow byte represents 8 application bytes):
 ## ASan Out-of-bound Write bypass Redzone
 ### Source code
 ```
+int main(){
+    int a[8];
+    int b[8];
 
+    /* oob & write in b's region */
+    a[16] = 10;
+}
 ```
 ### Why
 
@@ -602,3 +608,31 @@ int main(){
     a[16] = 10;
 }
 ```
+
+During the test, I found that the redzone is 32 bytes long, so if I write the
+region that 32 bytes away from the start / end of redzone, the ASan will not
+detect the out-of-bound write. The following is the example:
+
+```
+int main(){
+    int a[8];
+    int b[8];
+
+    // check if the memory is poisoned
+    int *a_rrz = &a[8];
+    int *b_lrz = &b[-8];
+
+    printf("&a[8] is poisoned : %20p\n", __asan_region_is_poisoned(a_rrz, 1));
+    printf("&b[-8] is poisoned: %20p\n", __asan_region_is_poisoned(b_lrz, 1));
+
+    /* oob & beyond left redzone */
+    a[-9] = 10;
+
+    /* oob & beyond b's right redzone */
+    a[32] = 10;
+}
+```
+
+The `ASAN` will not detect the out-of-bound write in the above case,
+but I think it might be trade-off since the instrumented code will be slower
+if the redzone is too long.
