@@ -12,6 +12,11 @@ ID: 312551074
 | Global out-of-bounds |    X     |   V  |
 | Use-after-free       |    V     |   V  |
 | Use-after-return     |    X     |   V  |
+| Heap out-of-bounds   |          |      |
+| Stack out-of-bounds  |          |      |
+| Global out-of-bounds |          |      |
+| Use-after-free       |          |      |
+| Use-after-return     |          |      |
 
 ### Heap out-of-bounds
 #### Source code
