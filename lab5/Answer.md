@@ -1,6 +1,6 @@
 # Answer
 
-Name: 
+Name: 鄭宇傑
 ID: 312551011
 
 ## Test Valgrind and ASan
@@ -103,6 +103,12 @@ Shadow byte legend (one shadow byte represents 8 application bytes):
   Right alloca redzone:    cb
   Shadow gap:              cc
 ==11588==ABORTING
+=======
+| Heap out-of-bounds   |          |      |
+| Stack out-of-bounds  |          |      |
+| Global out-of-bounds |          |      |
+| Use-after-free       |          |      |
+| Use-after-return     |          |      |
 ```
 
 ### Stack out-of-bounds
@@ -174,6 +180,7 @@ Shadow byte legend (one shadow byte represents 8 application bytes):
   Right alloca redzone:    cb
   Shadow gap:              cc
 ==12633==ABORTING
+=======
 ```
 
 ### Global out-of-bounds
@@ -246,6 +253,7 @@ Shadow byte legend (one shadow byte represents 8 application bytes):
   Right alloca redzone:    cb
   Shadow gap:              cc
 ==14002==ABORTING
+=======
 ```
 
 ### Use-after-free
@@ -339,6 +347,7 @@ Shadow byte legend (one shadow byte represents 8 application bytes):
   Right alloca redzone:    cb
   Shadow gap:              cc
 ==14629==ABORTING
+=======
 ```
 
 ### Use-after-return
@@ -421,8 +430,7 @@ Shadow byte legend (one shadow byte represents 8 application bytes):
   Left alloca redzone:     ca
   Right alloca redzone:    cb
   Shadow gap:              cc
-==46449==ABORTING
-=======
+==46449==ABORTING==============
 ```
 
 ## ASan Out-of-bound Write bypass Redzone
