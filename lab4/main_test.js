@@ -1,22 +1,32 @@
-const puppeteer = require('puppeteer');
+const puppeteer = require("puppeteer");
 
 (async () => {
-    // Launch the browser and open a new blank page
+    // open website
     const browser = await puppeteer.launch();
     const page = await browser.newPage();
+    await page.goto("https://pptr.dev/");
+    
+    // click search box
+    const searchArea = ".DocSearch-Button"
+    await page.waitForSelector(searchArea);
+    await page.click(searchArea);
+    
+    // type and srearch
+    const searchBox = ".DocSearch-Input";
+    const searchText = "chipi chipi chapa chapa";
+    await page.waitForSelector(searchBox);
+    await page.type(searchBox, searchText, { delay: 1000 });
+    
+    // click search item
+    const docsSearchItem = "#docsearch-item-5"
+    await page.waitForSelector(docsSearchItem);
+    await page.click(docsSearchItem);
+    
+    // select and print text
+    const title = await page.waitForSelector('.markdown h1');
+    const titleText = await page.evaluate(x => x.textContent, title);
+    console.log(titleText);
 
-    // Navigate the page to a URL
-    await page.goto('https://pptr.dev/');
-
-    // Hints:
-    // Click search button
-    // Type into search box
-    // Wait for search result
-    // Get the `Docs` result section
-    // Click on first result in `Docs` section
-    // Locate the title
-    // Print the title
-
-    // Close the browser
+    // close browser
     await browser.close();
 })();
