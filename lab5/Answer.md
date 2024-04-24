@@ -6,6 +6,7 @@ ID: 312552057
 > 整份 Lab5 皆是使用 GCC 11.4.0
 
 ## Test Valgrind and ASan
+
 ### Result
 
 |                      | Valgrind | Asan |
@@ -19,7 +20,6 @@ ID: 312552057
 ### Heap out-of-bounds
 
 #### Source code
-
 ```c
 #include <stdio.h>
 #include <stdlib.h>
@@ -33,7 +33,6 @@ int main() {
 ```
 
 #### Valgrind Report✔️
-
 ```
 ==14617==ABORTING
 ==14624== Memcheck, a memory error detector
@@ -59,7 +58,6 @@ int main() {
 ```
 
 #### ASan Report✔️
-
 ```
 =================================================================
 ==14617==ERROR: AddressSanitizer: heap-buffer-overflow on address 0x604000000038 at pc 0x56155981a222 bp 0x7fff562d4e40 sp 0x7fff562d4e30
@@ -111,8 +109,8 @@ Shadow byte legend (one shadow byte represents 8 application bytes):
 ```
 
 ### Stack out-of-bounds
-#### Source code
 
+#### Source code
 ```c
 #include <stdio.h>
 
@@ -124,7 +122,6 @@ int main() {
 ```
 
 #### Valgrind Report✔️
-
 ```
 ==12996==ABORTING
 ==13003== Memcheck, a memory error detector
@@ -157,7 +154,6 @@ Aborted
 ```
 
 #### ASan Report✔️
-
 ```
 =================================================================
 ==12996==ERROR: AddressSanitizer: stack-buffer-overflow on address 0x7fffc7005238 at pc 0x557ef03f029b bp 0x7fffc70051d0 sp 0x7fffc70051c0
@@ -222,6 +218,7 @@ int main() {
     return 0;
 }
 ```
+
 #### Valgrind Report❌
 ```
 ==16446==ABORTING
@@ -240,6 +237,7 @@ int main() {
 ==16453== For lists of detected and suppressed errors, rerun with: -s
 ==16453== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
 ```
+
 #### ASan Report✔️
 ```
 =================================================================
@@ -287,6 +285,7 @@ Shadow byte legend (one shadow byte represents 8 application bytes):
 ```
 
 ### Use-after-free
+
 #### Source code
 ```c
 #include <stdio.h>
@@ -299,6 +298,7 @@ int main() {
     return 0;
 }
 ```
+
 #### Valgrind Report✔️
 ```
 ==15875==ABORTING
@@ -326,6 +326,7 @@ int main() {
 ==15882== For lists of detected and suppressed errors, rerun with: -s
 ==15882== ERROR SUMMARY: 1 errors from 1 contexts (suppressed: 0 from 0)
 ```
+
 #### ASan Report✔️
 ```
 =================================================================
@@ -383,6 +384,7 @@ Shadow byte legend (one shadow byte represents 8 application bytes):
 ```
 
 ### Use-after-return
+
 #### Source code
 ```c
 #include <stdio.h>
@@ -398,6 +400,7 @@ int main() {
     return 0;
 }
 ```
+
 #### Valgrind Report✔️
 ```
 ==29181==ABORTING
@@ -434,6 +437,7 @@ int main() {
 ==29188== ERROR SUMMARY: 2 errors from 2 contexts (suppressed: 0 from 0)
 Segmentation fault
 ```
+
 #### ASan Report✔️
 ```
 AddressSanitizer:DEADLYSIGNAL
@@ -451,6 +455,7 @@ SUMMARY: AddressSanitizer: SEGV (/home/pudding/112-spring-software-testing/lab5/
 ```
 
 ## ASan Out-of-bound Write bypass Redzone
+
 ### Source code
 ```c
 #include <stdio.h>
@@ -462,8 +467,10 @@ int main() {
     return 0;
 }
 ```
+
 ### Why
 
 ​	Asan 的原理是在變數記憶體區段的前後插入 redzone，若是程式讀寫到 redzone 的部分，就會拋出 exception，但實際上只會檢查是否有碰到 redzone，並不會檢查是否為同一個變數理應涉入的範圍，因此在這個範例，Asan 並不會檢查出問題。
 
 ​	另外，我發現甚至不一定要是被宣告過的記憶體區段，似乎是 redzone 有一定的大小，實驗後發現若 $arr$ 是整數陣列，當 $i \ge 16$ 或 $i \le -9$，讀寫 $arr[i]$ 不會被 Asan 檢查出問題。
+
