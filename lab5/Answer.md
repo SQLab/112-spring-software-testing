@@ -1,9 +1,11 @@
 # Answer
 
+
 Name: 廖韓溢\
 ID: 310552064\
 compiler: g++\
 version: 9.4.0
+
 
 ## Test Valgrind and ASan
 ### Result
@@ -15,9 +17,11 @@ version: 9.4.0
 | Use-after-free       |    Yes   | Yes  |
 | Use-after-return     |    Yes   | Yes  |
 
+
 ### Heap out-of-bounds
 #### Source code
 ```
+
 #include <iostream>
 using namespace std;
 int main(){
@@ -106,11 +110,13 @@ Shadow byte legend (one shadow byte represents 8 application bytes):
   Shadow gap:              cc
 ==1905==ABORTING
 
+
 ```
 
 ### Stack out-of-bounds
 #### Source code
 ```
+
 #include <iostream>
 using namespace std;
 int main(){
@@ -211,9 +217,11 @@ int main(){
     arr[3] = 4;
 }
 
+
 ```
 #### Valgrind Report
 ```
+
 ==5097== Memcheck, a memory error detector
 ==5097== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
 ==5097== Using Valgrind-3.15.0 and LibVEX; rerun with -h for copyright info
@@ -229,9 +237,11 @@ int main(){
 ==5097== For lists of detected and suppressed errors, rerun with: -s
 ==5097== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
 
+
 ```
 ### ASan Report
 ```
+
 SUMMARY: AddressSanitizer: global-buffer-overflow /mnt/e/veture7275/.data/home/veture7275/st/gob.cpp:8 in main
 Shadow bytes around the buggy address:
   0x0acafbef53c0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
@@ -266,11 +276,13 @@ Shadow byte legend (one shadow byte represents 8 application bytes):
   Right alloca redzone:    cb
   Shadow gap:              cc
 ==5103==ABORTING
+
 ```
 
 ### Use-after-free
 #### Source code
 ```
+
 #include <iostream>
 using namespace std;
 int main(){
@@ -309,9 +321,11 @@ int main(){
 ==5213== For lists of detected and suppressed errors, rerun with: -s
 ==5213== ERROR SUMMARY: 1 errors from 1 contexts (suppressed: 0 from 0)
 
+
 ```
 ### ASan Report
 ```
+
 ==5231==ERROR: AddressSanitizer: heap-use-after-free on address 0x602000000018 at pc 0x5567de7c9375 bp 0x7ffe381cbfc0 sp 0x7ffe381cbfb0
 READ of size 4 at 0x602000000018 thread T0
     #0 0x5567de7c9374 in main /mnt/e/veture7275/.data/home/veture7275/st/uaf.cpp:9
@@ -362,11 +376,13 @@ Shadow byte legend (one shadow byte represents 8 application bytes):
   Shadow gap:              cc
 ==5231==ABORTING
 
+
 ```
 
 ### Use-after-return
 #### Source code
 ```
+
 #include <iostream>
 using namespace std;
 int*add(){
@@ -408,9 +424,11 @@ int main(){
 ==5356== For lists of detected and suppressed errors, rerun with: -s
 ==5356== ERROR SUMMARY: 1 errors from 1 contexts (suppressed: 0 from 0)
 
+
 ```
 ### ASan Report
 ```
+
 ==5370==ERROR: AddressSanitizer: SEGV on unknown address 0x000000000000 (pc 0x55751bec730b bp 0x000000000000 sp 0x7ffe5776b3e0 T0)==5370==The signal is caused by a READ memory access.
 ==5370==Hint: address points to the zero page.
     #0 0x55751bec730a in main /mnt/e/veture7275/.data/home/veture7275/st/uar.cpp:9
@@ -420,11 +438,13 @@ int main(){
 AddressSanitizer can not provide additional info.
 SUMMARY: AddressSanitizer: SEGV /mnt/e/veture7275/.data/home/veture7275/st/uar.cpp:9 in main
 ==5370==ABORTING
+
 ```
 
 ## ASan Out-of-bound Write bypass Redzone
 ### Source code
 ```
+
 #include <iostream>
 using namespace std;
 int main(){
@@ -438,5 +458,3 @@ int main(){
 ```
 ### Why
 沒辦法偵測出來，因為ASan只會對目標位置做檢查，並不會對經過的位置做檢查。
-
-
