@@ -1,3 +1,4 @@
+
 Name: 詹詠淇
 ID: 312551063
 
@@ -28,10 +29,12 @@ american fuzzy lop 2.57b (bmpcomp)
 │        trim : 100.00%/39, 0.00%                     ├────────────────────────┘
 └─────────────────────────────────────────────────────┘          [cpu001:118%]
 
+
 ```
 
 ### Run Crash Result
 ```
+
 size of Herder 54
 AddressSanitizer:DEADLYSIGNAL
 =================================================================
@@ -43,4 +46,5 @@ AddressSanitizer:DEADLYSIGNAL
 
 SUMMARY: AddressSanitizer: stack-overflow /home/ubuntu/112-spring-software-testing/lab6/src/hw0302.c:46 in main
 ==17527==ABORTING
+
 ```
