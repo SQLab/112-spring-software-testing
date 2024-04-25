@@ -1,6 +1,7 @@
 # Answer
 
 
+
 Name: 詹詠淇
 ID: 312551063
 
@@ -19,9 +20,11 @@ Version: 11.4.0
 | Use-after-return     |     YES     |   YES   |
 
 
+
 ### Heap out-of-bounds
 #### Source code
 ```
+
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -128,11 +131,13 @@ Shadow byte legend (one shadow byte represents 8 application bytes):
   Shadow gap:              cc
 ==29984==ABORTING
 
+
 ```
 
 ### Stack out-of-bounds
 #### Source code
 ```
+
 
 #include <stdio.h>
 
@@ -280,11 +285,13 @@ Shadow byte legend (one shadow byte represents 8 application bytes):
   Shadow gap:              cc
 ==29995==ABORTING
 
+
 ```
 
 ### Global out-of-bounds
 #### Source code
 ```
+
 
 #include <stdio.h>
 
@@ -360,11 +367,13 @@ Shadow byte legend (one shadow byte represents 8 application bytes):
   Shadow gap:              cc
 ==29978==ABORTING
 
+
 ```
 
 ### Use-after-free
 #### Source code
 ```
+
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -481,11 +490,13 @@ Shadow byte legend (one shadow byte represents 8 application bytes):
   Shadow gap:              cc
 ==30006==ABORTING
 
+
 ```
 
 ### Use-after-return
 #### Source code
 ```
+
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -560,11 +571,13 @@ AddressSanitizer can not provide additional info.
 SUMMARY: AddressSanitizer: SEGV /home/ubuntu/uar.c:15 in main
 ==30070==ABORTING
 
+
 ```
 
 ## ASan Out-of-bound Write bypass Redzone
 ### Source code
 ```
+
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -583,4 +596,5 @@ int main() {
 ```
 ### Why
 ASan launches No detection because the address of out-of-bound write is legal to read and write.
+
 
