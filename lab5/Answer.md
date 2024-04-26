@@ -1,5 +1,6 @@
 # Answer
 
+
 Name: 翁愉媃
 ID: 312551035
 
@@ -11,9 +12,11 @@ ID: 312551035
 | Use-after-free       |    yes      |   yes   |
 | Use-after-return     |    no      |  yes    |
 
+
 ### Heap out-of-bounds
 #### Source code
 ```
+
 #include <stdio.h>
 #include <stdlib.h>
 int main(void){
@@ -102,11 +105,13 @@ Shadow byte legend (one shadow byte represents 8 application bytes):
   Right alloca redzone:    cb
   Shadow gap:              cc
 ==8191==ABORTING
+
 ```
 
 ### Stack out-of-bounds
 #### Source code
 ```
+
 #include <stdio.h>
 int main(){
     int stack[4] = {3,4,5,6};
@@ -183,11 +188,13 @@ Shadow byte legend (one shadow byte represents 8 application bytes):
   Right alloca redzone:    cb
   Shadow gap:              cc
 ==8298==ABORTING
+
 ```
 
 ### Global out-of-bounds
 #### Source code
 ```
+
 #include <stdio.h>
 #include <stdlib.h>
 int glob[4];
@@ -260,11 +267,13 @@ Shadow byte legend (one shadow byte represents 8 application bytes):
   Right alloca redzone:    cb
   Shadow gap:              cc
 ==10481==ABORTING
+
 ```
 
 ### Use-after-free
 #### Source code
 ```
+
 #include <stdlib.h>
 int main() {
     int* ptr = (int*)malloc(sizeof(int));
@@ -362,11 +371,13 @@ Shadow byte legend (one shadow byte represents 8 application bytes):
   Right alloca redzone:    cb
   Shadow gap:              cc
 ==11038==ABORTING
+
 ```
 
 ### Use-after-return
 #### Source code
 ```
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -446,11 +457,13 @@ Shadow byte legend (one shadow byte represents 8 application bytes):
   Right alloca redzone:    cb
   Shadow gap:              cc
 ==173992==
+
 ```
 
 ## ASan Out-of-bound Write bypass Redzone
 ### Source code
 ```
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdio.h>
