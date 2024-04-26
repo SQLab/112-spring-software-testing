@@ -1,3 +1,4 @@
+
 Name: 吳明憲
 ID: 312551148
 
@@ -27,7 +28,6 @@ ID: 312551148
 │       havoc : 0/0, 0/0                              │ stability : 100.00%    │
 │        trim : 100.00%/47, 0.00%                     ├────────────────────────┘
 └─────────────────────────────────────────────────────┘          [cpu007: 53%]
-```
 
 ### Run Crash Result
 ```
@@ -41,4 +41,4 @@ AddressSanitizer:DEADLYSIGNAL
 
 SUMMARY: AddressSanitizer: stack-overflow /home/hsien/112-spring-software-testing/lab6/src/hw0302.c:46 in main
 ==1696402==ABORTING
-```
+=======
