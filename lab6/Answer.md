@@ -1,3 +1,4 @@
+
 Name: 翁愉媃
 ID:   312551035
 
@@ -51,10 +52,12 @@ ID:   312551035
 
 ^C────────────────────────────────────────────────────┘          [cpu001: 58%]
 
+
 ```
 
 ### Run Crash Result
 ```
+
 size of Herder 54
 
 AddressSanitizer:DEADLYSIGNAL
@@ -76,5 +79,6 @@ AddressSanitizer:DEADLYSIGNAL
 SUMMARY: AddressSanitizer: stack-overflow /home/emily/Documents/112-spring-software-testing/lab6/src/hw0302.c:46 in main
 
 ==88245==ABORTING
+
 
 ```
