@@ -34,7 +34,6 @@ ID: 312552058
 
 ### Run Crash Result
 ```   
-annie@DESKTOP-99MH8R8:~/lab6/fuzz$ ../src/bmpcomp out/crashes/id\:000000\,sig\:06\,src\:000000\,op\:flip1\,pos\:20
 size of Herder 54
 AddressSanitizer:DEADLYSIGNAL
 =================================================================
