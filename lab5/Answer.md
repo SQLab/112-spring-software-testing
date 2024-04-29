@@ -499,5 +499,6 @@ int main(){
 }
 ```
 ### Why
-ASAN抓不到錯誤。 建兩個array a[6], b[6] 然後write a[16]會跨過a的redzone區域改到另一個合法區域
+ASAN抓不到錯誤。 連續建兩個array a[6], b[6] 然後write a[16]會跨過a的redzone區域改到另一個合法區域(b中)
+
 
