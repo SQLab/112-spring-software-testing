@@ -457,8 +457,8 @@ SUMMARY: AddressSanitizer: SEGV (/home/parallels/Desktop/v5+0xc14) in main
 
 	int main() {
 
-	int *a = (int *)malloc(8);
-	int *b = (int *)malloc(6);
+	int *a = (int *)malloc(8*sizeof(int));
+	int *b = (int *)malloc(6*sizeof(int));
 	int gap=b-a;
 	
 	b[0]=3;
@@ -469,8 +469,7 @@ SUMMARY: AddressSanitizer: SEGV (/home/parallels/Desktop/v5+0xc14) in main
 	
 	free(a);
 	free(b);
-    
-    return 0;
+     return 0;
  }
 ```
 ### Why
