@@ -39,6 +39,7 @@ ID: 312551011
 
 +++ Testing aborted by user +++
 [+] We're done here. Have a nice day!
+=======
 ```
 
 ### Run Crash Result
@@ -53,4 +54,5 @@ AddressSanitizer:DEADLYSIGNAL
 
 SUMMARY: AddressSanitizer: stack-overflow /workspaces/112-spring-software-testing/lab6/src/hw0302.c:46 in main
 ==24429==ABORTING
+=======
 ```
