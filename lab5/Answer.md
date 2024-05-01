@@ -1,88 +1,3 @@
-linhengpei
-linhengpei
-線上
-
-Dr.Verylong — 2024/02/29 23:01
-test("Test Student's setName", () => {     const student = new Student();     // 测试setName对非字符串参数的处理     student.setName(123); // 尝试使用非字符串值设置     assert.strictEqual(student.name, "John Doe", "setName should not update name with non-string values");          student.setName("John Doe");     // 使用assert.strictEqual来断言student的name属性是否被正确设置     assert.strictEqual(student.name, "John Doe", "setName should set the name property correctly");      });  test("Test Student's getName", () => {     const student = new Student();     // 测试在name未定义时，getName是否返回空字符串     assert.strictEqual(student.getName(), '', "getName should return an empty string if name is undefined");          // 设置name并测试getName的返回值     student.setName("Jane Doe");     assert.strictEqual(student.getName(), "Jane Doe", "getName should return the name property value"); });
-test("Test Student's setName", () => {
-    const student = new Student();
-    // 测试setName对非字符串参数的处理
-    student.setName(123); // 尝试使用非字符串值设置
-    assert.strictEqual(student.name, "John Doe", "setName should not update name with non-string values");
-    
-    student.setName("John Doe");
-    // 使用assert.strictEqual来断言student的name属性是否被正确设置
-    assert.strictEqual(student.name, "John Doe", "setName should set the name property correctly");
-    
-});
-
-test("Test Student's getName", () => {
-    const student = new Student();
-    // 测试在name未定义时，getName是否返回空字符串
-    assert.strictEqual(student.getName(), '', "getName should return an empty string if name is undefined");
-    
-    // 设置name并测试getName的返回值
-    student.setName("Jane Doe");
-    assert.strictEqual(student.getName(), "Jane Doe", "getName should return the name property value");
-});
-Dr.Verylong — 2024/04/22 01:52
-https://discord.gg/SVYymbRE
-linhengpei — 今天 01:03
-https://discord.gg/YzRkUtaN
-Dr.Verylong — 今天 02:12
-drverylong
-wphard6583167
-Name: 劉洸源
-ID: 312555016
-
-### Fuzz Monitor
-```
-                       american fuzzy lop 2.57b (bmpcomp)
-
-┌─ process timing ─────────────────────────────────────┬─ overall results ─────┐
-│        run time : 0 days, 0 hrs, 2 min, 48 sec       │  cycles done : 0      │
-│   last new path : 0 days, 0 hrs, 0 min, 46 sec       │  total paths : 6      │
-│ last uniq crash : 0 days, 0 hrs, 1 min, 0 sec        │ uniq crashes : 1      │
-│  last uniq hang : 0 days, 0 hrs, 0 min, 40 sec       │   uniq hangs : 4      │
-├─ cycle progress ────────────────────┬─ map coverage ─┴───────────────────────┤
-│  now processing : 0 (0.00%)         │    map density : 0.04% / 0.04%         │
-│ paths timed out : 0 (0.00%)         │ count coverage : 1.50 bits/tuple       │
-├─ stage progress ────────────────────┼─ findings in depth ────────────────────┤
-│  now trying : bitflip 2/1           │ favored paths : 1 (16.67%)             │
-│ stage execs : 33/223 (14.80%)       │  new edges on : 2 (33.33%)             │
-│ total execs : 347                   │ total crashes : 10 (1 unique)          │
-│  exec speed : 2.05/sec (zzzz...)    │  total tmouts : 35 (4 unique)          │
-├─ fuzzing strategy yields ───────────┴───────────────┬─ path geometry ────────┤
-│   bit flips : 6/224, 0/0, 0/0                       │    levels : 2          │
-│  byte flips : 0/0, 0/0, 0/0                         │   pending : 6          │
-│ arithmetics : 0/0, 0/0, 0/0                         │  pend fav : 1          │
-│  known ints : 0/0, 0/0, 0/0                         │ own finds : 5          │
-│  dictionary : 0/0, 0/0, 0/0                         │  imported : n/a        │
-│       havoc : 0/0, 0/0                              │ stability : 100.00%    │
-│        trim : 100.00%/37, n/a                       ├────────────────────────┘
-└─────────────────────────────────────────────────────┘          [cpu010: 10%]
-```
-
-### Run Crash Result
-```
-tremolo@TREMOLO:/mnt/c/Users/88690/Desktop/112-spring-software-testing/lab6/fuzz$ ../src/bmpcomp out/crashes/id\:000
-000\,sig\:06\,src\:000000\,op\:flip1\,pos\:20
-size of Herder 54
-AddressSanitizer:DEADLYSIGNAL
-=================================================================
-==208133==ERROR: AddressSanitizer: stack-overflow on address 0x7ffd4df72db8 (pc 0x55dd0db65fef bp 0x7ffd4e771210 sp 0x7ffd4df71dc0 T0)
-    #0 0x55dd0db65fef in main /mnt/c/Users/88690/Desktop/112-spring-software-testing/lab6/src/hw0302.c:46
-    #1 0x7fb223996d8f in __libc_start_call_main ../sysdeps/nptl/libc_start_call_main.h:58
-    #2 0x7fb223996e3f in __libc_start_main_impl ../csu/libc-start.c:392
-    #3 0x55dd0db66be4 in _start (/mnt/c/Users/88690/Desktop/112-spring-software-testing/lab6/src/bmpcomp+0x2be4)
-
-SUMMARY: AddressSanitizer: stack-overflow /mnt/c/Users/88690/Desktop/112-spring-software-testing/lab6/src/hw0302.c:46 in main
-==208133==ABORTING
-```
-收起
-Answer.md
-4 KB
-Dr.Verylong — 今天 02:21
 # Answer
 
 Name: 劉洸源
@@ -102,6 +17,8 @@ void antiasan(unsigned long addr)
 antiasan.c
 1 KB
 ﻿
+Dr.Verylong
+dr.verylong
 # Answer
 
 Name: 劉洸源
