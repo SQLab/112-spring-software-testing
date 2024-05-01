@@ -32,9 +32,7 @@ int main(int argc, char **argv) {
 	char output[11] = {'o', 'u', 't', 'p', 'u', 't', '.', 'b', 'm', 'p', '\0'};
 	FILE *pR = fopen(output, "wb");
 	Header H[9], res;
-
 	printf("size of Herder %d\n", sizeof(Header));
-
 	for ( int i=0; i<9; ++i )	fread(H+i, sizeof(Header), 1, pF[i]);
 	res = H[0];
 	res.height = H[0].height + H[3].height + H[6].height;
