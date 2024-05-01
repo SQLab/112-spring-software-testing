@@ -447,7 +447,21 @@ Shadow byte legend (one shadow byte represents 8 application bytes):
 ## ASan Out-of-bound Write bypass Redzone
 ### Source code
 ```
-
+#include <stdio.h>
+int main() {
+    int a[8] = {0};
+    int b[8] = {0};
+    a[16] = -1; //the address of a[16] equals to the address of b[0]
+    a[32] = -2;
+    printf("%d\n", b[0]); // Output -1
+    printf("%d\n", b[16]); // Output -2
+    return 0;
+}
+```
+### Output
+```
+-1
 ```
 ### Why
-
+因為a的合法連續記憶體存取區與b的合法連續記憶體存取區之間有32 byte的redzone（為8個int的大小），當我們嘗試寫入a\[8]~a\[15]，ASAN會判定為非法存取。
+a\[16]~a\[23]可以映射到b[0]~b\[7]的合法連續記憶體存取區。同理，b\[8]~b\[15]為redzone，b\[16](或a\[32])又是合法存取。因此，我們可以成功寫入a[16]以及a[32]。
