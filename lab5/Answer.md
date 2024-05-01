@@ -4,27 +4,6 @@ Name: 劉洸源
 ID: 312555016
 
 ## Test Valgrind and ASan
-展開
-Answer.md
-21 KB
-
-void antiasan(unsigned long addr)
-{
-
-    char *ptr = (addr >> 3) + 0x7fff8000;
-    *ptr = 0; 
-展開
-antiasan.c
-1 KB
-﻿
-Dr.Verylong
-dr.verylong
-# Answer
-
-Name: 劉洸源
-ID: 312555016
-
-## Test Valgrind and ASan
 ### Result
 |                      | Valgrind | Asan |
 | -------------------- | -------- | ---- |
