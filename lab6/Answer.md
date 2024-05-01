@@ -1,3 +1,4 @@
+
 Name: 廖韓溢\
 ID: 310552064
 
@@ -26,10 +27,12 @@ x       havoc : 0/0, 0/0                              x stability : 100.00%    x
 x        trim : 100.00%/37, n/a                       tqqqqqqqqqqqqqqqqqqqqqqqqj
 mqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqj          [cpu010: 12%]
 
+
 ```
 
 ### Run Crash Result
 ```
+
 size of Herder 54
 AddressSanitizer:DEADLYSIGNAL
 =================================================================
@@ -41,5 +44,6 @@ AddressSanitizer:DEADLYSIGNAL
 SUMMARY: AddressSanitizer: stack-overflow /mnt/e/112交大課程/software_testing/112-spring-software-testing/lab6/src/hw0302.c:46 in 
 main
 ==7362==ABORTING
+
 
 ```
