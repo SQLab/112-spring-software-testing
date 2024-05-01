@@ -8,14 +8,15 @@ ID:
 |                      | Valgrind | Asan |
 | -------------------- | -------- | ---- |
 | Heap out-of-bounds   | Yes      | Yes  |
-| Stack out-of-bounds  |          |      |
-| Global out-of-bounds |          |      |
-| Use-after-free       |          |      |
-| Use-after-return     |          |      |
+| Stack out-of-bounds  | Yes      | Yes  |
+| Global out-of-bounds | No       | Yes  |
+| Use-after-free       | Yes      | Yes  |
+| Use-after-return     | Yes      | Yes  |
 
 ### Heap out-of-bounds
 #### Source code
 ```
+
 #include<stdio.h>
 #include<stdlib.h>
 
@@ -113,7 +114,10 @@ Shadow byte legend (one shadow byte represents 8 application bytes):
   Right alloca redzone:    cb
   Shadow gap:              cc
 ==211964==ABORTING
+=======
+
 ```
+
 
 ### Stack out-of-bounds
 #### Source code
@@ -222,6 +226,7 @@ Shadow byte legend (one shadow byte represents 8 application bytes):
   Right alloca redzone:    cb
   Shadow gap:              cc
 ==223722==ABORTING
+=======
 ```
 
 ### Global out-of-bounds
@@ -298,6 +303,8 @@ Shadow byte legend (one shadow byte represents 8 application bytes):
   Right alloca redzone:    cb
   Shadow gap:              cc
 ==225687==ABORTING
+=======
+
 ```
 
 ### Use-after-free
@@ -399,6 +406,8 @@ Shadow byte legend (one shadow byte represents 8 application bytes):
   Right alloca redzone:    cb
   Shadow gap:              cc
 ==228100==ABORTING
+=======
+
 ```
 
 ### Use-after-return
@@ -520,23 +529,25 @@ Shadow byte legend (one shadow byte represents 8 application bytes):
   Right alloca redzone:    cb
   Shadow gap:              cc
 ==232680==ABORTING
+=======
 ```
 
 ## ASan Out-of-bound Write bypass Redzone
 ### Source code
 ```
-#include<stdio.h>
-
 int main(){
 
     int a[4] = {1, 2, 3, 4,};   
     int b[4] = {1, 2, 3, 4,};   
 
-    printf("I'm so good at reading stack %d\n", a[9]);
-    
+    printf("I'm so good at reading stack %d\n", a[8]);
+    // if we do nothing to b, it will be optimized out.
+    printf("I'm so good at reading stack %d\n", b[9]);
     return 0;
 
 }
 ```
 ### Why
 When declaring two arrays, their memories will be allocated consecutively. ASAN will put red zones before, between, and after them. Suppose we access the first array out of bounds to a specific degree. In that case, it is possible for us to access the data in the second without touching the red zone between the two arrays, avoiding being detected by ASAN.
+
+
