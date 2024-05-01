@@ -1,3 +1,4 @@
+
 Name: 宋承諺
 ID: 111550054
 
@@ -27,7 +28,6 @@ ID: 111550054
 │       havoc : 5/4096, 0/0                           │ stability : 100.00%    │
 │        trim : 99.99%/43, 0.00%                      ├────────────────────────┘
 └─────────────────────────────────────────────────────┘          [cpu010: 13%]
-
 ```
 
 ### Run Crash Result
@@ -44,4 +44,5 @@ AddressSanitizer:DEADLYSIGNAL
 
 SUMMARY: AddressSanitizer: stack-overflow /home/chysong/Homeworks/112-spring-software-testing/lab6/src/hw0302.c:46 in main
 ==37170==ABORTING
+=======
 ```
