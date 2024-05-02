@@ -45,7 +45,7 @@ jobs:
                       const files = await github.rest.pulls.listFiles({ owner, repo, pull_number: issue_number });
                       const changedFiles = files.data.map((file) => file.filename);
                       const allowedFileRegex = /^lab\d+\/main_test.js$/;
-                      const specialChangedFiles = ["lab5/Answer.md", "lab5/antiasan.c", "lab6/Answer.md"];
+                      const specialChangedFiles = ["lab5/Answer.md", "lab5/antiasan.c", "lab6/Answer.md", "lab7/sol.py"];
                       if (!changedFiles.every((file) => (allowedFileRegex.test(file) || specialChangedFiles.includes(file)))) {
                         core.setFailed('The PR contains changes to files other than the allowed files.');
                       }
