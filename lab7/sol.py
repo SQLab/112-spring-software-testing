@@ -10,5 +10,6 @@ def fail_condition(state):
 
 simulation.explore(find=success_condition, avoid=fail_condition)
 
-for solution in simulation.found:
-    print(solution.posix.dumps(sys.stdin.fileno()))
+solution = simulation.found[0]
+
+print(solution.posix.dumps(sys.stdin.fileno()))
