@@ -1,5 +1,6 @@
 # Answer
 
+
 Name: 游嘉鈞
 ID: 311555030
 
@@ -19,19 +20,33 @@ Thread model: posix
 Supported LTO compression algorithms: zlib zstd
 gcc version 11.4.0 (Ubuntu 11.4.0-1ubuntu1~22.04)
 ```
+
+Name: 
+ID: 
+
+
 ## Test Valgrind and ASan
 ### Result
 |                      | Valgrind | Asan |
 | -------------------- | -------- | ---- |
+
 | Heap out-of-bounds   |   Yes      |    Yes  |
 | Stack out-of-bounds  |   No      |    Yes   |
 | Global out-of-bounds |   No      |    Yes   |
 | Use-after-free       |   Yes       |   Yes   |
 | Use-after-return     |   No       |   Yes   |
 
+| Heap out-of-bounds   |          |      |
+| Stack out-of-bounds  |          |      |
+| Global out-of-bounds |          |      |
+| Use-after-free       |          |      |
+| Use-after-return     |          |      |
+
+
 ### Heap out-of-bounds
 #### Source code
 ```
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -118,11 +133,23 @@ Shadow byte legend (one shadow byte represents 8 application bytes):
 #### Result
 ```
 ASan 能 , Valgrind 能
+
+
+```
+#### Valgrind Report
+```
+
+```
+### ASan Report
+```
+
+
 ```
 
 ### Stack out-of-bounds
 #### Source code
 ```
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -209,11 +236,23 @@ Shadow byte legend (one shadow byte represents 8 application bytes):
 #### Result
 ```
 ASan 能 , Valgrind 不能
+
+
+```
+#### Valgrind Report
+```
+
+```
+### ASan Report
+```
+
+
 ```
 
 ### Global out-of-bounds
 #### Source code
 ```
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -295,11 +334,22 @@ Shadow byte legend (one shadow byte represents 8 application bytes):
 #### Result
 ```
 ASan 能 , Valgrind 不能
+
+
+```
+#### Valgrind Report
+```
+
+```
+### ASan Report
+```
+
 ```
 
 ### Use-after-free
 #### Source code
 ```
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -399,6 +449,17 @@ Shadow byte legend (one shadow byte represents 8 application bytes):
 #### Result
 ```
 ASan 能 , Valgrind 能
+
+
+```
+#### Valgrind Report
+```
+
+```
+### ASan Report
+```
+
+
 ```
 
 ### Use-after-return
@@ -492,11 +553,23 @@ Shadow byte legend (one shadow byte represents 8 application bytes):
 #### Result
 ```
 ASan 能 , Valgrind 不能
+
+
+```
+#### Valgrind Report
+```
+
+```
+### ASan Report
+```
+
+
 ```
 
 ## ASan Out-of-bound Write bypass Redzone
 ### Source code
 ```
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -519,4 +592,9 @@ After changing, b[0]'s value is 10.
 從執行結果可得知，在A的陣列做Out-of-bound Write是成功的。
 由於b[0]的位址不是在redzone中，且a[b-a]的位址剛好為b[0]的位址，所以在a[b-a]做寫入新的data時，ASan並不會察覺。
 ```
+
+
+```
+### Why
+
 
