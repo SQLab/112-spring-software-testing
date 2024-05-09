@@ -2,7 +2,7 @@
 all: uaf_asan
 
 uaf_asan: uaf.c libantiasan.so
-	gcc -Og -g -o $@ $< -lantiasan -L.
+	gcc -fsanitize=address -Og -g -o $@ $< -lantiasan -L.
 
 libantiasan.so: antiasan.c
 	gcc -g -fPIC -c antiasan.c

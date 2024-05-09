@@ -483,4 +483,5 @@ int main(void)
 }
 ```
 ### Why
-
+The way ASan detects out-of-bound read/write by adding shadow memory that maps to variables in the program, and by inserting redzones between these variables.
+In this program, the out-of-bound write operation on string `a` bypasses the redzones and directly into string `b`. Because the redzones are not accessed, no error is produced.
