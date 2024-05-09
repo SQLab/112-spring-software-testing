@@ -6,6 +6,7 @@ def success_condition(state):
 def fail_condition(state):
     return b"Login failed" in state.posix.dumps(sys.stdout.fileno())
 
+
 proj = angr.Project('./login')
 init_state = proj.factory.entry_state()
 simulation = proj.factory.simgr(init_state)
