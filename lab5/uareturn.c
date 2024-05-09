@@ -1,17 +1,18 @@
 #include <stdio.h>
 
-char *ptr = NULL;
-
-void foo()
+char* foo()
 {
     char str[8] = "Hello";
-    ptr = &str[0];
+    char *ptr = &str[0];
+    return ptr;
 }
 
 int main(void)
 {
-    foo();
-    putchar(*ptr);
+    char *ptr = foo();
     *ptr = 'P';
     return 0;
 }
+
+// test: when executing arm program at x86_64 computer, wsl execute qemu-aarch64 automatically
+// ASAN_OPTIONS=detect_stack_use_after_return=1 ./uareturn to enable detecting use-after-return bugs at run-time

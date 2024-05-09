@@ -66,90 +66,211 @@ int main(void)
 ```
 ### ASan Report
 ```
+=================================================================
+==51524==ERROR: AddressSanitizer: heap-buffer-overflow on address 0x602000000016 at pc 0x56070ac70308 bp 0x7fff33ef0c80 sp 0x7fff33ef0c70
+WRITE of size 1 at 0x602000000016 thread T0
+    #0 0x56070ac70307 in main /home/timmy/112-spring-software-testing/lab5/heap_ofb_rw.c:9
+    #1 0x7fc23d009082 in __libc_start_main ../csu/libc-start.c:308
+    #2 0x56070ac701ad in _start (/home/timmy/112-spring-software-testing/lab5/heap+0x11ad)
 
+0x602000000016 is located 0 bytes to the right of 6-byte region [0x602000000010,0x602000000016)
+allocated by thread T0 here:
+    #0 0x7fc23d2e4808 in __interceptor_malloc ../../../../src/libsanitizer/asan/asan_malloc_linux.cc:144
+    #1 0x56070ac70277 in main /home/timmy/112-spring-software-testing/lab5/heap_ofb_rw.c:7
+
+SUMMARY: AddressSanitizer: heap-buffer-overflow /home/timmy/112-spring-software-testing/lab5/heap_ofb_rw.c:9 in main
+Shadow bytes around the buggy address:
+  0x0c047fff7fb0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0x0c047fff7fc0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0x0c047fff7fd0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0x0c047fff7fe0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0x0c047fff7ff0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+=>0x0c047fff8000: fa fa[06]fa fa fa fa fa fa fa fa fa fa fa fa fa
+  0x0c047fff8010: fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa
+  0x0c047fff8020: fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa
+  0x0c047fff8030: fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa
+  0x0c047fff8040: fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa
+  0x0c047fff8050: fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa
+Shadow byte legend (one shadow byte represents 8 application bytes):
+  Addressable:           00
+  Partially addressable: 01 02 03 04 05 06 07 
+  Heap left redzone:       fa
+  Freed heap region:       fd
+  Stack left redzone:      f1
+  Stack mid redzone:       f2
+  Stack right redzone:     f3
+  Stack after return:      f5
+  Stack use after scope:   f8
+  Global redzone:          f9
+  Global init order:       f6
+  Poisoned by user:        f7
+  Container overflow:      fc
+  Array cookie:            ac
+  Intra object redzone:    bb
+  ASan internal:           fe
+  Left alloca redzone:     ca
+  Right alloca redzone:    cb
+  Shadow gap:              cc
+==51524==ABORTING
 ```
 
 ### Stack out-of-bounds
 #### Source code
 ```
 #include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 
 int main(void)
 {
-    char str1[8] = "Hello W";
-    char str2[8] = "1234567";
-    strncpy(str1, "Hello Peko", 10);
-    puts(str1);
-    puts(str2);
+    char str[8] = "Hello";
+    str[8] = '!';
+    putchar(str[8]);
     return 0;
 }
 ```
 #### Valgrind Report
 ```
-==119818== Memcheck, a memory error detector
-==119818== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
-==119818== Using Valgrind-3.18.1 and LibVEX; rerun with -h for copyright info
-==119818== Command: ./stack
-==119818== 
-Hello Peko34567
-ko34567
-==119818== 
-==119818== HEAP SUMMARY:
-==119818==     in use at exit: 0 bytes in 0 blocks
-==119818==   total heap usage: 1 allocs, 1 frees, 1,024 bytes allocated
-==119818== 
-==119818== All heap blocks were freed -- no leaks are possible
-==119818== 
-==119818== For lists of detected and suppressed errors, rerun with: -s
-==119818== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+==52179== Memcheck, a memory error detector
+==52179== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
+==52179== Using Valgrind-3.15.0 and LibVEX; rerun with -h for copyright info
+==52179== Command: ./stack
+==52179== 
+!==52179== 
+==52179== HEAP SUMMARY:
+==52179==     in use at exit: 0 bytes in 0 blocks
+==52179==   total heap usage: 1 allocs, 1 frees, 1,024 bytes allocated
+==52179== 
+==52179== All heap blocks were freed -- no leaks are possible
+==52179== 
+==52179== For lists of detected and suppressed errors, rerun with: -s
+==52179== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
 ```
 ### ASan Report
 ```
+=================================================================
+==52264==ERROR: AddressSanitizer: stack-buffer-overflow on address 0x7ffe0737b658 at pc 0x55bba5df7351 bp 0x7ffe0737b620 sp 0x7ffe0737b610
+WRITE of size 1 at 0x7ffe0737b658 thread T0
+    #0 0x55bba5df7350 in main /home/timmy/112-spring-software-testing/lab5/stack_ofb_rw.c:7
+    #1 0x7f98558a0082 in __libc_start_main ../csu/libc-start.c:308
+    #2 0x55bba5df716d in _start (/home/timmy/112-spring-software-testing/lab5/stack+0x116d)
 
+Address 0x7ffe0737b658 is located in stack of thread T0 at offset 40 in frame
+    #0 0x55bba5df7238 in main /home/timmy/112-spring-software-testing/lab5/stack_ofb_rw.c:5
+
+  This frame has 1 object(s):
+    [32, 40) 'str' (line 6) <== Memory access at offset 40 overflows this variable
+HINT: this may be a false positive if your program uses some custom stack unwind mechanism, swapcontext or vfork
+      (longjmp and C++ exceptions *are* supported)
+SUMMARY: AddressSanitizer: stack-buffer-overflow /home/timmy/112-spring-software-testing/lab5/stack_ofb_rw.c:7 in main
+Shadow bytes around the buggy address:
+  0x100040e67670: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0x100040e67680: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0x100040e67690: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0x100040e676a0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0x100040e676b0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+=>0x100040e676c0: 00 00 00 00 00 00 f1 f1 f1 f1 00[f3]f3 f3 00 00
+  0x100040e676d0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0x100040e676e0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0x100040e676f0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0x100040e67700: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0x100040e67710: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+Shadow byte legend (one shadow byte represents 8 application bytes):
+  Addressable:           00
+  Partially addressable: 01 02 03 04 05 06 07 
+  Heap left redzone:       fa
+  Freed heap region:       fd
+  Stack left redzone:      f1
+  Stack mid redzone:       f2
+  Stack right redzone:     f3
+  Stack after return:      f5
+  Stack use after scope:   f8
+  Global redzone:          f9
+  Global init order:       f6
+  Poisoned by user:        f7
+  Container overflow:      fc
+  Array cookie:            ac
+  Intra object redzone:    bb
+  ASan internal:           fe
+  Left alloca redzone:     ca
+  Right alloca redzone:    cb
+  Shadow gap:              cc
+==52264==ABORTING
 ```
 
 ### Global out-of-bounds
 #### Source code
 ```
 #include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 
-char str1[8] = "Hello W";
-char str2[8] = "1234567";
+    char str[8] = "Hello";
 
 int main(void)
 {
-    strncpy(str1, "Hello Peko", 10);
-    puts(str1);
-    puts(str2);
+    str[8] = '!';
+    putchar(str[8]);
     return 0;
 }
 ```
 #### Valgrind Report
 ```
-==119988== Memcheck, a memory error detector
-==119988== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
-==119988== Using Valgrind-3.18.1 and LibVEX; rerun with -h for copyright info
-==119988== Command: ./global
-==119988== 
-Hello Peko34567
-ko34567
-==119988== 
-==119988== HEAP SUMMARY:
-==119988==     in use at exit: 0 bytes in 0 blocks
-==119988==   total heap usage: 1 allocs, 1 frees, 1,024 bytes allocated
-==119988== 
-==119988== All heap blocks were freed -- no leaks are possible
-==119988== 
-==119988== For lists of detected and suppressed errors, rerun with: -s
-==119988== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+==52620== Memcheck, a memory error detector
+==52620== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
+==52620== Using Valgrind-3.15.0 and LibVEX; rerun with -h for copyright info
+==52620== Command: ./global
+==52620== 
+!==52620== 
+==52620== HEAP SUMMARY:
+==52620==     in use at exit: 0 bytes in 0 blocks
+==52620==   total heap usage: 1 allocs, 1 frees, 1,024 bytes allocated
+==52620== 
+==52620== All heap blocks were freed -- no leaks are possible
+==52620== 
+==52620== For lists of detected and suppressed errors, rerun with: -s
+==52620== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
 ```
 ### ASan Report
 ```
+=================================================================
+==52696==ERROR: AddressSanitizer: global-buffer-overflow on address 0x56366fe7b028 at pc 0x56366fe7826a bp 0x7ffcf6b916d0 sp 0x7ffcf6b916c0
+WRITE of size 1 at 0x56366fe7b028 thread T0
+    #0 0x56366fe78269 in main /home/timmy/112-spring-software-testing/lab5/global_ofb_rw.c:7
+    #1 0x7fdd4d476082 in __libc_start_main ../csu/libc-start.c:308
+    #2 0x56366fe7814d in _start (/home/timmy/112-spring-software-testing/lab5/global+0x114d)
 
+0x56366fe7b028 is located 0 bytes to the right of global variable 'str' defined in 'global_ofb_rw.c:3:10' (0x56366fe7b020) of size 8
+SUMMARY: AddressSanitizer: global-buffer-overflow /home/timmy/112-spring-software-testing/lab5/global_ofb_rw.c:7 in main
+Shadow bytes around the buggy address:
+  0x0ac74dfc75b0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0x0ac74dfc75c0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0x0ac74dfc75d0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0x0ac74dfc75e0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0x0ac74dfc75f0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+=>0x0ac74dfc7600: 00 00 00 00 00[f9]f9 f9 f9 f9 f9 f9 00 00 00 00
+  0x0ac74dfc7610: f9 f9 f9 f9 f9 f9 f9 f9 00 00 00 00 00 00 00 00
+  0x0ac74dfc7620: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0x0ac74dfc7630: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0x0ac74dfc7640: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0x0ac74dfc7650: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+Shadow byte legend (one shadow byte represents 8 application bytes):
+  Addressable:           00
+  Partially addressable: 01 02 03 04 05 06 07 
+  Heap left redzone:       fa
+  Freed heap region:       fd
+  Stack left redzone:      f1
+  Stack mid redzone:       f2
+  Stack right redzone:     f3
+  Stack after return:      f5
+  Stack use after scope:   f8
+  Global redzone:          f9
+  Global init order:       f6
+  Poisoned by user:        f7
+  Container overflow:      fc
+  Array cookie:            ac
+  Intra object redzone:    bb
+  ASan internal:           fe
+  Left alloca redzone:     ca
+  Right alloca redzone:    cb
+  Shadow gap:              cc
+==52696==ABORTING
 ```
 
 ### Use-after-free
@@ -206,7 +327,56 @@ int main(void)
 ```
 ### ASan Report
 ```
+=================================================================
+==52937==ERROR: AddressSanitizer: heap-use-after-free on address 0x602000000010 at pc 0x55fd8f4762ed bp 0x7ffe79981cf0 sp 0x7ffe79981ce0
+WRITE of size 1 at 0x602000000010 thread T0
+    #0 0x55fd8f4762ec in main /home/timmy/112-spring-software-testing/lab5/uafree.c:10
+    #1 0x7fee7128e082 in __libc_start_main ../csu/libc-start.c:308
+    #2 0x55fd8f4761ad in _start (/home/timmy/112-spring-software-testing/lab5/uafree+0x11ad)
 
+0x602000000010 is located 0 bytes inside of 6-byte region [0x602000000010,0x602000000016)
+freed by thread T0 here:
+    #0 0x7fee7156940f in __interceptor_free ../../../../src/libsanitizer/asan/asan_malloc_linux.cc:122
+    #1 0x55fd8f476296 in main /home/timmy/112-spring-software-testing/lab5/uafree.c:9
+
+previously allocated by thread T0 here:
+    #0 0x7fee71569808 in __interceptor_malloc ../../../../src/libsanitizer/asan/asan_malloc_linux.cc:144
+    #1 0x55fd8f476277 in main /home/timmy/112-spring-software-testing/lab5/uafree.c:7
+
+SUMMARY: AddressSanitizer: heap-use-after-free /home/timmy/112-spring-software-testing/lab5/uafree.c:10 in main
+Shadow bytes around the buggy address:
+  0x0c047fff7fb0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0x0c047fff7fc0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0x0c047fff7fd0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0x0c047fff7fe0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0x0c047fff7ff0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+=>0x0c047fff8000: fa fa[fd]fa fa fa fa fa fa fa fa fa fa fa fa fa
+  0x0c047fff8010: fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa
+  0x0c047fff8020: fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa
+  0x0c047fff8030: fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa
+  0x0c047fff8040: fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa
+  0x0c047fff8050: fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa
+Shadow byte legend (one shadow byte represents 8 application bytes):
+  Addressable:           00
+  Partially addressable: 01 02 03 04 05 06 07 
+  Heap left redzone:       fa
+  Freed heap region:       fd
+  Stack left redzone:      f1
+  Stack mid redzone:       f2
+  Stack right redzone:     f3
+  Stack after return:      f5
+  Stack use after scope:   f8
+  Global redzone:          f9
+  Global init order:       f6
+  Poisoned by user:        f7
+  Container overflow:      fc
+  Array cookie:            ac
+  Intra object redzone:    bb
+  ASan internal:           fe
+  Left alloca redzone:     ca
+  Right alloca redzone:    cb
+  Shadow gap:              cc
+==52937==ABORTING
 ```
 
 ### Use-after-return
@@ -214,58 +384,103 @@ int main(void)
 ```
 #include <stdio.h>
 
-char *ptr = NULL;
-
-void foo()
+char* foo()
 {
     char str[8] = "Hello";
-    ptr = &str[0];
+    char *ptr = &str[0];
+    return ptr;
 }
 
 int main(void)
 {
-    foo();
-    putchar(*ptr);
+    char *ptr = foo();
     *ptr = 'P';
     return 0;
 }
 ```
 #### Valgrind Report
 ```
-==120760== Memcheck, a memory error detector
-==120760== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
-==120760== Using Valgrind-3.18.1 and LibVEX; rerun with -h for copyright info
-==120760== Command: ./uareturn
-==120760== 
-==120760== Invalid read of size 1
-==120760==    at 0x1088D4: main (in /home/yles94214/112-spring-software-testing/lab5/uareturn)
-==120760==  Address 0x1ffefffdb0 is on thread 1's stack
-==120760==  16 bytes below stack pointer
-==120760== 
-==120760== Invalid write of size 1
-==120760==    at 0x1088EC: main (in /home/yles94214/112-spring-software-testing/lab5/uareturn)
-==120760==  Address 0x1ffefffdb0 is on thread 1's stack
-==120760==  16 bytes below stack pointer
-==120760== 
-H==120760== 
-==120760== HEAP SUMMARY:
-==120760==     in use at exit: 0 bytes in 0 blocks
-==120760==   total heap usage: 1 allocs, 1 frees, 1,024 bytes allocated
-==120760== 
-==120760== All heap blocks were freed -- no leaks are possible
-==120760== 
-==120760== For lists of detected and suppressed errors, rerun with: -s
-==120760== ERROR SUMMARY: 2 errors from 2 contexts (suppressed: 0 from 0)
+==58691== Memcheck, a memory error detector
+==58691== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
+==58691== Using Valgrind-3.15.0 and LibVEX; rerun with -h for copyright info
+==58691== Command: ./uareturn
+==58691== 
+==58691== 
+==58691== HEAP SUMMARY:
+==58691==     in use at exit: 0 bytes in 0 blocks
+==58691==   total heap usage: 0 allocs, 0 frees, 0 bytes allocated
+==58691== 
+==58691== All heap blocks were freed -- no leaks are possible
+==58691== 
+==58691== For lists of detected and suppressed errors, rerun with: -s
+==58691== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
 ```
 ### ASan Report
 ```
+=================================================================
+==58493==ERROR: AddressSanitizer: stack-use-after-return on address 0x7efc556ce020 at pc 0x55a2550bc328 bp 0x7ffdeb6e3120 sp 0x7ffdeb6e3110
+WRITE of size 1 at 0x7efc556ce020 thread T0
+    #0 0x55a2550bc327 in main /home/timmy/112-spring-software-testing/lab5/uareturn.c:13
+    #1 0x7efc58efe082 in __libc_start_main ../csu/libc-start.c:308
+    #2 0x55a2550bc12d in _start (/home/timmy/112-spring-software-testing/lab5/uareturn+0x112d)
 
+Address 0x7efc556ce020 is located in stack of thread T0 at offset 32 in frame
+    #0 0x55a2550bc1f8 in foo /home/timmy/112-spring-software-testing/lab5/uareturn.c:4
+
+  This frame has 1 object(s):
+    [32, 40) 'str' (line 5) <== Memory access at offset 32 is inside this variable
+HINT: this may be a false positive if your program uses some custom stack unwind mechanism, swapcontext or vfork
+      (longjmp and C++ exceptions *are* supported)
+SUMMARY: AddressSanitizer: stack-use-after-return /home/timmy/112-spring-software-testing/lab5/uareturn.c:13 in main
+Shadow bytes around the buggy address:
+  0x0fe00aad1bb0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0x0fe00aad1bc0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0x0fe00aad1bd0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0x0fe00aad1be0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0x0fe00aad1bf0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+=>0x0fe00aad1c00: f5 f5 f5 f5[f5]f5 f5 f5 00 00 00 00 00 00 00 00
+  0x0fe00aad1c10: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0x0fe00aad1c20: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0x0fe00aad1c30: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0x0fe00aad1c40: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0x0fe00aad1c50: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+Shadow byte legend (one shadow byte represents 8 application bytes):
+  Addressable:           00
+  Partially addressable: 01 02 03 04 05 06 07 
+  Heap left redzone:       fa
+  Freed heap region:       fd
+  Stack left redzone:      f1
+  Stack mid redzone:       f2
+  Stack right redzone:     f3
+  Stack after return:      f5
+  Stack use after scope:   f8
+  Global redzone:          f9
+  Global init order:       f6
+  Poisoned by user:        f7
+  Container overflow:      fc
+  Array cookie:            ac
+  Intra object redzone:    bb
+  ASan internal:           fe
+  Left alloca redzone:     ca
+  Right alloca redzone:    cb
+  Shadow gap:              cc
+==58493==ABORTING
 ```
 
 ## ASan Out-of-bound Write bypass Redzone
 ### Source code
 ```
+#include <stdio.h>
 
+int main(void)
+{
+    char a[8] = "Hello";
+    char b[8] = "World";
+    a[32] = 'P';
+    printf("a = %p, b = %p\n", a, b);
+    printf("*a = %s, *b = %s\n", a, b);
+    return 0;
+}
 ```
 ### Why
 

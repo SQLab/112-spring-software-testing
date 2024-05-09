@@ -1,14 +1,18 @@
 #include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 
-char str1[8] = "Hello W";
-char str2[8] = "1234567";
+    char str[8] = "Hello";
 
 int main(void)
 {
-    strncpy(str1, "Hello Peko", 10);
-    puts(str1);
-    puts(str2);
+    str[8] = '!';
+    putchar(str[8]);
     return 0;
 }
+
+// gcc -Og -g -o global global_obf_rw.c
+// ./global output error
+// Fatal error: glibc detected an invalid stdio handle
+// Aborted
+
+// gcc -o global global_ofb_rw.c
+// ./global doesn't produce error

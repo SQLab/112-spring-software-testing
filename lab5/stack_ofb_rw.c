@@ -1,13 +1,17 @@
 #include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 
 int main(void)
 {
-    char str1[8] = "Hello W";
-    char str2[8] = "1234567";
-    strncpy(str1, "Hello Peko", 10);
-    puts(str1);
-    puts(str2);
+    char str[8] = "Hello";
+    str[8] = '!';
+    putchar(str[8]);
     return 0;
 }
+
+// gcc -o stack stack_ofb_rw.c
+// ./stack produce error
+// *** stack smashing detected ***: terminated
+// Aborted
+
+// gcc -Og -g -o stack stack_obf_rw.c
+// ./stack doesn't produce error
