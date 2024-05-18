@@ -12,6 +12,6 @@ init_state = proj.factory.entry_state() ## initialize
 
 simulation = proj.factory.simgr(init_state)
 
-simulation.explore(find = success_condition,avoid=fail_condition)
+simulation.explore( find = success_condition,avoid=fail_condition)
 
 print(simulation.found[0].posix.dumps(sys.stdin.fileno()))
