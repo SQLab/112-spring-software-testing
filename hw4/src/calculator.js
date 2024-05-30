@@ -34,9 +34,9 @@ class Calculator {
             // ignore 0 index
             let daysIn = [0, 31, 0, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
             if (this.#isLeapYear(year))
-                daysIn[2] = 28;
-            else
                 daysIn[2] = 29;
+            else
+                daysIn[2] = 28;
 
             numDays = day2 + (daysIn[month1] - day1);
 
