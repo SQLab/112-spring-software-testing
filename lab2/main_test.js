@@ -107,4 +107,3 @@ test('spies on a mailsystem', async () => {
     test.mock.reset();
     await util.promisify(fs.unlink)('name_list.txt');
   });
-
