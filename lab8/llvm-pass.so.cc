@@ -16,6 +16,7 @@ PreservedAnalyses LLVMPass::run(Module &M, ModuleAnalysisManager &MAM) {
 
   for (auto &F : M) {
     errs() << "func: " << F.getName() << "\n";
+    errs() << "func: " << F.getName() << "\n";
 
   }
   return PreservedAnalyses::none();
