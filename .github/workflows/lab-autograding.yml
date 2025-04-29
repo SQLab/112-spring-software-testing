@@ -53,4 +53,8 @@ jobs:
             - name: Grading
               run: |
                   cd lab${{ steps.lab.outputs.result }}
+                  if () {
+                  if [ ${{ steps.lab.outputs.result }} -eq 8 ]; then
+                    sudo apt install -y llvm-14
+                  fi
                   ./validate.sh
