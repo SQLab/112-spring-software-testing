@@ -1,0 +1,15 @@
+{
+    "name": "hw4",
+    "version": "1.0.0",
+    "description": "software testing hw4",
+    "main": "src/calculator.js",
+    "scripts": {
+        "test": "node --test",
+        "mutate": "npx stryker run"
+    },
+    "dependencies": {},
+    "devDependencies": {
+        "@stryker-mutator/core": "^8.2.6"
+    },
+    "license": "MIT"
+}
